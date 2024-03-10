@@ -25,4 +25,5 @@ class Record(BM, Base):
     assessedBy = relationship("HCW")
 
     status = Column(Boolean, default=False)
+    diagnosis = Column(String(2048))
     notes = Column(String(2048))
