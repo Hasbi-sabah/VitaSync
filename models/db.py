@@ -1,7 +1,6 @@
 from models.base import Base, BM
 from models.hcw import HCW
 from models.drug import Drug
-from models.drug_version import DrugVersion
 from models.drug_prescribed import DrugPrescribed
 from models.prescription import Prescription
 from models.patient import Patient
@@ -24,6 +23,8 @@ class DB:
 
     __engine = None
     __session = None
+    classes = [HCW, Drug, DrugPrescribed, Prescription, Patient, Vital, MedInfo,
+               Vaccine, Procedure, Record]
 
     def __init__(self):
         """Instantiate a DBStorage object"""
@@ -40,6 +41,18 @@ class DB:
         if ENV == "test":
             Base.metadata.drop_all(self.__engine)
 
+    def get_all(self, cls=None):
+        if cls:
+            cls = eval(cls)
+        res = {}
+        for c in self.classes:
+            if not cls or cls == c:
+                query = self.__session.query(c).all()
+                if cls == c:
+                    return query
+                res[c.__name__] = query
+        return res
+    
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)

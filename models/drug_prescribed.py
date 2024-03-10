@@ -9,9 +9,6 @@ class DrugPrescribed(BM, Base):
     drugId = Column(String(60), ForeignKey("drugs.id"))
     drug = relationship("Drug", uselist=False)
 
-    drugVersionId = Column(String(40), ForeignKey("drugVersions.id"))
-    drugVersion = relationship("DrugVersion", uselist=False)
-
     prescriptionId = Column(String(40), ForeignKey("prescriptions.id"))
     prescription = relationship("Prescription", back_populates="drugs")
 

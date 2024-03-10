@@ -20,3 +20,4 @@ class BM:
         """updates the attribute 'updated_at' with the current datetime"""
         models.database.new(self)
         models.database.save()
+        
