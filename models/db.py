@@ -53,6 +53,14 @@ class DB:
                 res[c.__name__] = query
         return res
     
+    def get_by_id(self, cls=None, objId=None):
+        if cls:
+            cls = eval(cls)
+        return self.__session.query(cls).filter_by(id=objId).first()
+    
+    def search():
+        pass
+    
     def new(self, obj):
         """add the object to the current database session"""
         self.__session.add(obj)
@@ -72,6 +80,7 @@ class DB:
         """delete from the current database session obj if not None"""
         if obj is not None:
             self.__session.delete(obj)
+        self.save()
 
     def close(self):
         """call remove() method on the private session attribute"""

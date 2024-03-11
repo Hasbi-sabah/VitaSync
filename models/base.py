@@ -20,4 +20,14 @@ class BM:
         """updates the attribute 'updated_at' with the current datetime"""
         models.database.new(self)
         models.database.save()
-        
+
+    def delete(self):
+        """delete the current instance from the storage"""
+        models.database.delete(self)
+
+    def to_dict(self):
+        """returns a dictionary containing all keys/values of the instance"""
+        new_dict = self.__dict__.copy()
+        if "_sa_instance_state" in new_dict:
+            del new_dict["_sa_instance_state"]
+        return new_dict
