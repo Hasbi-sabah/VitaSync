@@ -17,8 +17,7 @@ def generate_qr_code(user_id):
     img = qr.make_image(fill_color="black", back_color="white")
 
     # Save or display the image
-    img.save(f"user_id_{user_id}_qr.png")
-    img.show()
+    img.save(f"{id}.png")
 
 # Example usage
 user_id = "5d4c0dbf-79de-40e6-9476-14133992f93c"

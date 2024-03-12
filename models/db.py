@@ -52,7 +52,12 @@ class DB:
         return res
     
     def get_by_id(self, cls=None, objId=None):
-        return self.__session.query(cls).filter_by(id=objId).first()
+        for c in self.classes:
+            if not cls or cls == c:
+                query = self.__session.query(c).filter_by(id=objId).first()
+                if query:
+                    break
+        return query
     
     def search(self, cls=None, **kwargs):
         return self.__session.query(cls).filter_by(**kwargs).all()
