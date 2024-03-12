@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.orm import relationship
-from models.base import BM, Base
+from models.base import BM, User, Base
 
 
-class Patient(BM, Base):
+class Patient(User, BM, Base):
     __tablename__ = "patients"
 
     firstName = Column(String(60))

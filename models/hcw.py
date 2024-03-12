@@ -1,8 +1,8 @@
 from sqlalchemy import Column, String
-from models.base import BM, Base
+from models.base import BM, User, Base
 
 
-class HCW(BM, Base):
+class HCW(User, BM, Base):
     __tablename__ = "hcws"
 
     columns = ['firstName', 'lastName', 'CIN', 'licence', 'workAddress']
