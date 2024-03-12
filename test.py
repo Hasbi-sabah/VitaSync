@@ -8,6 +8,7 @@ from models.med_info import MedInfo
 from models.vaccine import Vaccine
 from models.procedure import Procedure
 from models.record import Record
+from models.user import User
 import random
 
 

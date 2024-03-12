@@ -1,0 +1,5 @@
+.env
+api/__pycache__
+api/drug/__pycache__
+api/hcw/__pycache__
+models/__pycache__

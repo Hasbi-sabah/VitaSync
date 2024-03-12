@@ -9,6 +9,7 @@ from models.med_info import MedInfo
 from models.vaccine import Vaccine
 from models.procedure import Procedure
 from models.record import Record
+from models.user import User
 from sqlalchemy import create_engine
 from os import getenv
 from dotenv import load_dotenv
@@ -24,7 +25,7 @@ class DB:
     __engine = None
     __session = None
     classes = [HCW, Drug, DrugPrescribed, Prescription, Patient, Vital, MedInfo,
-               Vaccine, Procedure, Record]
+               Vaccine, Procedure, Record, User]
 
     def __init__(self):
         """Instantiate a DBStorage object"""
