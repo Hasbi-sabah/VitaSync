@@ -5,6 +5,8 @@ from models.base import BM, Base
 class HCW(BM, Base):
     __tablename__ = "hcws"
 
+    columns = ['firstName', 'lastName', 'CIN', 'licence', 'role', 'workAddress']
+    
     firstName = Column(String(60))
     lastName = Column(String(60))
     CIN = Column(String(20))  # identity card number
