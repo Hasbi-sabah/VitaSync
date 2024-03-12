@@ -2,10 +2,15 @@ from flask import jsonify, request
 from api import api
 from models import database
 from models.hcw import HCW
+from models.user import User
 
 @api.route('/hcw', methods=['GET'] ,strict_slashes=False)
 def get_all_hcws():
-    res = [hcw.to_dict() for hcw in database.get_all(HCW)]
+    res = []
+    for hcw in database.get_all(HCW):
+        hcw_dict = hcw.to_dict()
+        hcw_dict.update(database.get_by_id(User, str(hcw.userId)).to_dict())
+        res.append(hcw_dict)
     return jsonify(res)
 
 @api.route('/hcw/<uuid:hcwId>', methods=['GET'], strict_slashes=False)

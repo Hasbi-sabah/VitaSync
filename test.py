@@ -12,14 +12,18 @@ from models.user import User
 import random
 
 
-doc = HCW(role='doctor')
-print('doc', doc.id)
-patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male')
-patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female')
-patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
-patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
-patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')
-patient6 = Patient(firstName='Fiona', lastName='Apple', sex='Female')
+patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient')
+patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient')
+doc1 = HCW(firstName='John', lastName='Doe', email='john.doe@example.com', role='doctor')
+doc2 = HCW(firstName='Jane', lastName='Smith', email='jane.smith@example.com', role='doctor')
+nurse1 = HCW(firstName='Alice', lastName='Johnson', email='alice.johnson@example.com', role='nurse')
+nurse2 = HCW(firstName='Bob', lastName='Williams', email='bob.williams@example.com', role='nurse')
+pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.com', role='pharmacist')
+pharmacist2 = HCW(firstName='Tom', lastName='Jones', email='tom.jones@example.com', role='pharmacist')
+# patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
+# patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
+# patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')
+# patient6 = Patient(firstName='Fiona', lastName='Apple', sex='Female')
 
 drug_entries = [
     {'commercialName': 'Aspirin', 'activeIngredient': 'Acetylsalicylic Acid', 'distributor': 'Pharma Inc.',

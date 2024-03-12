@@ -31,8 +31,3 @@ class BM:
         if "_sa_instance_state" in new_dict:
             del new_dict["_sa_instance_state"]
         return new_dict
-    
-class User(BM):
-    email = Column(String(250))
-    username = Column(String(20))
-    password = Column(String(20))
