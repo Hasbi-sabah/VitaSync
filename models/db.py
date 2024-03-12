@@ -42,8 +42,6 @@ class DB:
             Base.metadata.drop_all(self.__engine)
 
     def get_all(self, cls=None):
-        if cls:
-            cls = eval(cls)
         res = {}
         for c in self.classes:
             if not cls or cls == c:
@@ -54,12 +52,13 @@ class DB:
         return res
     
     def get_by_id(self, cls=None, objId=None):
-        if cls:
-            cls = eval(cls)
         return self.__session.query(cls).filter_by(id=objId).first()
     
-    def search():
-        pass
+    def search(self, cls=None, **kwargs):
+        return self.__session.query(cls).filter_by(**kwargs).all()
+        
+    def drug_lookup(self, name):
+        return self.__session.query(Drug).filter(Drug.commercialName.like(f'%{name}%'))
     
     def new(self, obj):
         """add the object to the current database session"""
