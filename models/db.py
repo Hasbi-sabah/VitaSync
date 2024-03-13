@@ -60,6 +60,9 @@ class DB:
                     break
         return query
     
+    def get_by_username(self, username=None):
+        return self.__session.query(User).filter_by(username=username).first()
+    
     def search(self, cls=None, **kwargs):
         return self.__session.query(cls).filter_by(**kwargs).all()
         

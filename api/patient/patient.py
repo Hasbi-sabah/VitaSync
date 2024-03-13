@@ -5,7 +5,7 @@ from models.patient import Patient
 from api.auth_middleware import token_required
 
 
-@api.route('/patient', methods=['GET'] ,strict_slashes=False)
+@api.route('/patient', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse'])
 def get_all_patients(current_user):
     print(current_user.to_dict())
