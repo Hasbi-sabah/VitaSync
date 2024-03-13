@@ -4,14 +4,30 @@ from models import database
 from models.hcw import HCW
 from models.user import User
 
-@api.route('/hcw', methods=['GET'] ,strict_slashes=False)
-def get_all_hcws():
+@api.route('/hcw_extended', methods=['GET'] ,strict_slashes=False)
+def get_all_extended_hcws():
     res = []
     for hcw in database.get_all(HCW):
         hcw_dict = hcw.to_dict()
         hcw_dict.update(database.get_by_id(User, str(hcw.userId)).to_dict())
         res.append(hcw_dict)
     return jsonify(res)
+
+@api.route('/hcw', methods=['GET'] ,strict_slashes=False)
+def get_all_hcws():
+    res = [hcw.to_dict() for hcw in database.get_all(HCW)]
+    return jsonify(res)
+
+@api.route('/hcw_extended/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
+def get_hcw_extended(hcwId):
+    hcw = database.get_by_id(HCW, str(hcwId))
+    if not hcw:
+        return jsonify({"error": "Health Care Worker not found"}), 404
+    hcw_dict = hcw.to_dict()
+    user_dict = database.get_by_id(User, str(hcw.userId)).to_dict()
+    user_dict.pop('id', None)
+    hcw_dict.update(user_dict)
+    return jsonify(hcw_dict)
 
 @api.route('/hcw/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
 def get_hcw(hcwId):

@@ -7,6 +7,8 @@ from models.user import User
 class Patient(BM, Base):
     __tablename__ = "patients"
 
+    columns = ['firstName', 'lastName', 'CIN', 'sex', 'birthDate', 'phoneNumber', 'address']
+
     firstName = Column(String(60))
     lastName = Column(String(60))
     CIN = Column(String(20))  # identity card number
@@ -33,3 +35,4 @@ class Patient(BM, Base):
         userDict['profileId'] = self.id
         user = User(**userDict)
         setattr(self, 'userId', user.id)
+        self.save()

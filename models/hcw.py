@@ -25,3 +25,4 @@ class HCW(BM, Base):
         userDict['profileId'] = self.id
         user = User(**userDict)
         setattr(self, 'userId', user.id)
+        self.save()
