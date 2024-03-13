@@ -24,3 +24,4 @@ class User(BM, Base):
         if not kwargs.get('password', None):
             kwargs['password'] = secrets.token_urlsafe(10)
         super().__init__(**kwargs)
+

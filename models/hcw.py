@@ -6,14 +6,14 @@ from models.user import User
 class HCW(BM, Base):
     __tablename__ = "hcws"
 
-    columns = ['firstName', 'lastName', 'CIN', 'licence', 'workAddress']
+    columns = ['firstName', 'lastName', 'CIN', 'licence', 'workAddress', 'profileId']
     
     firstName = Column(String(60))
     lastName = Column(String(60))
     CIN = Column(String(20))  # identity card number
     licence = Column(String(20))  # medical licence number
     workAddress = Column(String(2048))
-    userId = Column(String(40))
+    profileId = Column(String(40))
 
     def __init__(self, **kwargs):
         """initializes hcw"""

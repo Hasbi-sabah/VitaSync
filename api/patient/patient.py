@@ -2,9 +2,13 @@ from flask import jsonify, request
 from api import api
 from models import database
 from models.patient import Patient
+from api.auth_middleware import token_required
+
 
 @api.route('/patient', methods=['GET'] ,strict_slashes=False)
-def get_all_patients():
+@token_required(['doctor', 'nurse'])
+def get_all_patients(current_user):
+    print(current_user.to_dict())
     res = [patient.to_dict() for patient in database.get_all(Patient)]
     return jsonify(res)
 
@@ -17,6 +21,7 @@ def get_patient(patientId):
 
 
 @api.route('/patient', methods=['POST'], strict_slashes=False)
+@token_required(['doctor', 'pharmacist'])
 def add_patient():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
