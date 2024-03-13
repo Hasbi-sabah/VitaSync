@@ -2,13 +2,21 @@ from flask import jsonify, request
 from api import api
 from models import database
 from models.patient import Patient
+from models.user import User
 from api.auth_middleware import token_required
 
+@api.route('/patient_extended', methods=['GET'] ,strict_slashes=False)
+def get_all_extended_patients():
+    res = []
+    for patient in database.get_all(Patient):
+        patient_dict = patient.to_dict()
+        patient_dict.update(database.get_by_id(User, str(patient.userId)).to_dict())
+        res.append(patient_dict)
+    return jsonify(res)
 
 @api.route('/patient', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse'])
 def get_all_patients(current_user):
-    print(current_user.to_dict())
     res = [patient.to_dict() for patient in database.get_all(Patient)]
     return jsonify(res)
 
@@ -19,6 +27,16 @@ def get_patient(patientId):
         return jsonify({"error": "Patient not found"}), 404
     return jsonify(patient.to_dict())
 
+@api.route('/patient_extended/<uuid:patientId>', methods=['GET'], strict_slashes=False)
+def get_patient_extended(patientId):
+    patient = database.get_by_id(Patient, str(patientId))
+    if not patient:
+        return jsonify({"error": "Patient not found"}), 404
+    patient_dict = patient.to_dict()
+    user_dict = database.get_by_id(User, str(patient.userId)).to_dict()
+    user_dict.pop('id', None)
+    patient_dict.update(user_dict)
+    return jsonify(patient_dict)
 
 @api.route('/patient', methods=['POST'], strict_slashes=False)
 @token_required(['doctor', 'pharmacist'])

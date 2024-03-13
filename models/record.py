@@ -6,6 +6,8 @@ from models.base import BM, Base
 class Record(BM, Base):
     __tablename__ = "records"
 
+    columns = ['diagnosis', 'notes']
+
     patientId = Column(String(40), ForeignKey("patients.id"))
     patient = relationship("Patient", back_populates="records")
 
@@ -24,6 +26,5 @@ class Record(BM, Base):
     assessedById = Column(String(40), ForeignKey("hcws.id"))
     assessedBy = relationship("HCW")
 
-    status = Column(Boolean, default=False)
     diagnosis = Column(String(2048))
     notes = Column(String(2048))
