@@ -4,7 +4,6 @@ from json import JSONEncoder
 from models.drug import Drug
 from os import getenv
 
-
 class CustomJSONEncoder(JSONEncoder):
     def default(self, obj):
         if isinstance(obj, Drug):
