@@ -10,3 +10,4 @@ def get_all_patient_records(patientId):
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
     return jsonify([record.to_dict() for record in patient.records])
+

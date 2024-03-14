@@ -1,10 +1,12 @@
 from flask import jsonify, request
 from api import api
+from api.auth_middleware import token_required
 from models import database
 from models.drug import Drug
 
 @api.route('/drug', methods=['GET'] ,strict_slashes=False)
-def get_all_drugs():
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def get_all_drugs(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -17,7 +19,8 @@ def get_all_drugs():
     return jsonify(res)
 
 @api.route('/drug_lookup', methods=['GET'] ,strict_slashes=False)
-def drug_lookup():
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def drug_lookup(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -27,7 +30,8 @@ def drug_lookup():
     return jsonify(res)
 
 @api.route('/drug/<uuid:drugId>', methods=['GET'], strict_slashes=False)
-def get_drug(drugId):
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def get_drug(drugId, current_user):
     drug = database.get_by_id(Drug, str(drugId))
     if not drug:
         return jsonify({"error": "Drug not found"}), 404
@@ -35,7 +39,8 @@ def get_drug(drugId):
 
 
 @api.route('/drug', methods=['POST'], strict_slashes=False)
-def add_drug():
+@token_required(['pharmacist'])
+def add_drug(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -45,7 +50,8 @@ def add_drug():
     return jsonify(database.get_by_id(Drug, str(drug.id)).to_dict())
 
 @api.route('/drug/<uuid:drugId>', methods=['PUT'], strict_slashes=False)
-def update_drug(drugId):
+@token_required(['pharmacist'])
+def update_drug(drugId, current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -61,9 +67,10 @@ def update_drug(drugId):
     return jsonify(database.get_by_id(Drug, str(drugId)).to_dict())
 
 @api.route('/drug/<uuid:drugId>', methods=['DELETE'], strict_slashes=False)
-def delete_drug(drugId):
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def delete_drug(drugId, current_user):
     drug = database.get_by_id(Drug, str(drugId))
     if not drug:
         return jsonify({"error": "Drug not found"}), 404
-    drug.delete()
+    drug.archive()
     return jsonify({})

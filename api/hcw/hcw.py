@@ -1,11 +1,13 @@
 from flask import jsonify, request
 from api import api
+from api.auth_middleware import token_required
 from models import database
 from models.hcw import HCW
 from models.user import User
 
 @api.route('/hcw_extended', methods=['GET'] ,strict_slashes=False)
-def get_all_extended_hcws():
+@token_required([])
+def get_all_extended_hcws(current_user):
     res = []
     for hcw in database.get_all(HCW):
         hcw_dict = hcw.to_dict()
@@ -16,12 +18,14 @@ def get_all_extended_hcws():
     return jsonify(res)
 
 @api.route('/hcw', methods=['GET'] ,strict_slashes=False)
-def get_all_hcws():
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def get_all_hcws(current_user):
     res = [hcw.to_dict() for hcw in database.get_all(HCW)]
     return jsonify(res)
 
 @api.route('/hcw_extended/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
-def get_hcw_extended(hcwId):
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def get_hcw_extended(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
@@ -32,7 +36,8 @@ def get_hcw_extended(hcwId):
     return jsonify(hcw_dict)
 
 @api.route('/hcw/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
-def get_hcw(hcwId):
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def get_hcw(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
@@ -40,7 +45,8 @@ def get_hcw(hcwId):
 
 
 @api.route('/hcw', methods=['POST'], strict_slashes=False)
-def add_hcw():
+@token_required([])
+def add_hcw(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -55,7 +61,8 @@ def add_hcw():
     return jsonify(database.get_by_id(HCW, str(hcw.id)).to_dict())
 
 @api.route('/hcw/<uuid:hcwId>', methods=['PUT'], strict_slashes=False)
-def update_hcw(hcwId):
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def update_hcw(hcwId, current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -71,10 +78,11 @@ def update_hcw(hcwId):
     return jsonify(database.get_by_id(HCW, str(hcwId)).to_dict())
 
 @api.route('/hcw/<uuid:hcwId>', methods=['DELETE'], strict_slashes=False)
-def delete_hcw(hcwId):
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def delete_hcw(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
-    hcw.delete()
+    hcw.archive()
     return jsonify({})
 

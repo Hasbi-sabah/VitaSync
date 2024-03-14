@@ -14,9 +14,7 @@ def token_required(allowed_roles=None):
                 token = request.headers["Authorization"].split(" ")[1]
             if not token:
                 return {
-                    "message": "Authentication Token is missing!",
-                    "data": None,
-                    "error": "Unauthorized"
+                    "error": "Missing Authentication Token!"
                 }, 401
             try:
                 data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
@@ -27,36 +25,39 @@ def token_required(allowed_roles=None):
                 user = db.get_by_id(User, objId=user_id)
                 if not user:
                     return {
-                        "message": "User not found!",
-                        "data": None,
-                        "error": "Unauthorized"
+                        "error": "User not found!"
                     }, 401
 
                 if user.role not in allowed_roles + ['admin']:
                     return {
-                        "message": "Insufficient privileges!",
-                        "data": None,
-                        "error": "Unauthorized"
+                        "error": "Insufficient privileges!"
                     }, 403
+                if user.role == 'patient':
+                    patientId = kwargs.get('patientId', None)
+                    if patientId and user.profileId != str(patientId):
+                        return {
+                                "error": "Insufficient privileges!"
+                            }, 403
+                else:
+                    hcwId = kwargs.get('hcwId', None)
+                    if hcwId and user.profileId != str(hcwId):
+                        return {
+                                "error": "Insufficient privileges!"
+                            }, 403
 
                 kwargs['current_user'] = user
 
             except jwt.ExpiredSignatureError:
                 return {
-                    "message": "Token has expired!",
-                    "data": None,
-                    "error": "Unauthorized"
+                    "error": "Token has expired!"
                 }, 401
             except jwt.InvalidTokenError:
                 return {
-                    "message": "Invalid token!",
-                    "data": None,
-                    "error": "Unauthorized"
+                    "error": "Invalid token!"
                 }, 401
             except Exception as e:
                 return {
                     "message": "Something went wrong",
-                    "data": None,
                     "error": str(e)
                 }, 500
 

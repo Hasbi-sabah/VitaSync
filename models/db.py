@@ -46,7 +46,7 @@ class DB:
         res = {}
         for c in self.classes:
             if not cls or cls == c:
-                query = self.__session.query(c).all()
+                query = self.__session.query(c).filter_by(archived=False).all()
                 if cls == c:
                     return query
                 res[c.__name__] = query
@@ -56,24 +56,24 @@ class DB:
         query = None
         for c in self.classes:
             if not cls or cls == c:
-                query = self.__session.query(c).filter_by(id=objId).first()
+                query = self.__session.query(c).filter_by(id=objId, archived=False).first()
                 if query:
                     break
         return query
     
     def get_by_username(self, username=None):
-        return self.__session.query(User).filter_by(username=username).first()
+        return self.__session.query(User).filter_by(username=username, archived=False).first()
     
     def search(self, cls=None, **kwargs):
-        return self.__session.query(cls).filter_by(**kwargs).all()
+        return self.__session.query(cls).filter_by(**kwargs, archived=False).all()
     
     def get_profile(self, profileId):
-        hcw = self.__session.query(HCW).filter_by(id=profileId).first()
-        patient = self.__session.query(Patient).filter_by(id=profileId).first()
+        hcw = self.__session.query(HCW).filter_by(id=profileId, archived=False).first()
+        patient = self.__session.query(Patient).filter_by(id=profileId, archived=False).first()
         return hcw if hcw else patient
         
     def drug_lookup(self, name):
-        return self.__session.query(Drug).filter(Drug.commercialName.like(f'%{name}%'))
+        return self.__session.query(Drug).filter_by(archived=False).filter(Drug.commercialName.like(f'%{name}%'))
     
     def new(self, obj):
         """add the object to the current database session"""

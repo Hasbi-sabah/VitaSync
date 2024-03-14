@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 from models.hcw import HCW
 from models.drug import Drug
 from models.drug_prescribed import DrugPrescribed

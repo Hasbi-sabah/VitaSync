@@ -3,7 +3,9 @@ import jwt
 import sys
 
 payload = {
-    "user_id": sys.argv[1]
+    "user_id": sys.argv[1],
+    "iat": 1710419384,
+    "exp": 1710419385,
 }
 
 secret_key = "SOmeRandomKeySeriouslySecureRandom"

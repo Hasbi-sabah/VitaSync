@@ -26,19 +26,14 @@ def get_all_patients(current_user):
 @api.route('/patient/<uuid:patientId>', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
 def get_patient(patientId, current_user):
-    if current_user.profileId != str(patientId):
-        return {
-                "message": "Insufficient privileges!",
-                "data": None,
-                "error": "Unauthorized"
-            }, 403
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
     return jsonify(patient.to_dict())
 
 @api.route('/patient_extended/<uuid:patientId>', methods=['GET'], strict_slashes=False)
-def get_patient_extended(patientId):
+@token_required(['patient'])
+def get_patient_extended(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
@@ -49,8 +44,8 @@ def get_patient_extended(patientId):
     return jsonify(patient_dict)
 
 @api.route('/patient', methods=['POST'], strict_slashes=False)
-@token_required(['doctor', 'pharmacist'])
-def add_patient():
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def add_patient(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -63,7 +58,8 @@ def add_patient():
     return jsonify(database.get_by_id(Patient, str(patient.id)).to_dict())
 
 @api.route('/patient/<uuid:patientId>', methods=['PUT'], strict_slashes=False)
-def update_patient(patientId):
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def update_patient(patientId, current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
@@ -79,10 +75,11 @@ def update_patient(patientId):
     return jsonify(database.get_by_id(Patient, str(patientId)).to_dict())
 
 @api.route('/patient/<uuid:patientId>', methods=['DELETE'], strict_slashes=False)
-def delete_patient(patientId):
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def delete_patient(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
-    patient.delete()
+    patient.archive()
     return jsonify({})
 
