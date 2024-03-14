@@ -20,6 +20,8 @@ nurse1 = HCW(firstName='Alice', lastName='Johnson', email='alice.johnson@example
 nurse2 = HCW(firstName='Bob', lastName='Williams', email='bob.williams@example.com', role='nurse')
 pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.com', role='pharmacist')
 pharmacist2 = HCW(firstName='Tom', lastName='Jones', email='tom.jones@example.com', role='pharmacist')
+admin = HCW(firstName='admin', username='admin', password='admin', role='admin')
+print(admin.userId)
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
 # patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')

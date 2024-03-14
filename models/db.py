@@ -53,6 +53,7 @@ class DB:
         return res
     
     def get_by_id(self, cls=None, objId=None):
+        query = None
         for c in self.classes:
             if not cls or cls == c:
                 query = self.__session.query(c).filter_by(id=objId).first()
@@ -65,6 +66,11 @@ class DB:
     
     def search(self, cls=None, **kwargs):
         return self.__session.query(cls).filter_by(**kwargs).all()
+    
+    def get_profile(self, profileId):
+        hcw = self.__session.query(HCW).filter_by(id=profileId).first()
+        patient = self.__session.query(Patient).filter_by(id=profileId).first()
+        return hcw if hcw else patient
         
     def drug_lookup(self, name):
         return self.__session.query(Drug).filter(Drug.commercialName.like(f'%{name}%'))

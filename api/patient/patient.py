@@ -6,22 +6,32 @@ from models.user import User
 from api.auth_middleware import token_required
 
 @api.route('/patient_extended', methods=['GET'] ,strict_slashes=False)
-def get_all_extended_patients():
+@token_required([])
+def get_all_extended_patients(current_user):
     res = []
     for patient in database.get_all(Patient):
         patient_dict = patient.to_dict()
-        patient_dict.update(database.get_by_id(User, str(patient.userId)).to_dict())
+        user_dict = database.get_by_id(User, str(patient.userId)).to_dict()
+        user_dict.pop('id', None)
+        patient_dict.update(user_dict)
         res.append(patient_dict)
     return jsonify(res)
 
 @api.route('/patient', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse'])
+@token_required(['doctor', 'nurse', 'pharmacist'])
 def get_all_patients(current_user):
     res = [patient.to_dict() for patient in database.get_all(Patient)]
     return jsonify(res)
 
 @api.route('/patient/<uuid:patientId>', methods=['GET'], strict_slashes=False)
-def get_patient(patientId):
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def get_patient(patientId, current_user):
+    if current_user.profileId != str(patientId):
+        return {
+                "message": "Insufficient privileges!",
+                "data": None,
+                "error": "Unauthorized"
+            }, 403
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404

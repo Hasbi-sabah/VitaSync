@@ -20,7 +20,7 @@ def token_required(allowed_roles=None):
                 }, 401
             try:
                 data = jwt.decode(token, current_app.config["SECRET_KEY"], algorithms=["HS256"])
-                user_id = data.get('user_id')
+                user_id = data.get('user_id', None)
                 if not user_id:
                     raise Exception("Invalid token")
                 
@@ -32,7 +32,7 @@ def token_required(allowed_roles=None):
                         "error": "Unauthorized"
                     }, 401
 
-                if allowed_roles and user.role not in allowed_roles:
+                if user.role not in allowed_roles + ['admin']:
                     return {
                         "message": "Insufficient privileges!",
                         "data": None,

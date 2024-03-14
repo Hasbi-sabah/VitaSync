@@ -13,7 +13,7 @@ class HCW(BM, Base):
     CIN = Column(String(20))  # identity card number
     licence = Column(String(20))  # medical licence number
     workAddress = Column(String(2048))
-    profileId = Column(String(40))
+    userId = Column(String(40))
 
     def __init__(self, **kwargs):
         """initializes hcw"""

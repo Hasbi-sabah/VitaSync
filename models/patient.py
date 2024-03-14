@@ -22,7 +22,7 @@ class Patient(BM, Base):
     )
     vaccines = relationship("Vaccine", uselist=True, back_populates="administeredFor")
     records = relationship("Record", uselist=True, back_populates="patient")
-    profileId = Column(String(40))
+    userId = Column(String(40))
 
 
     def __init__(self, **kwargs):

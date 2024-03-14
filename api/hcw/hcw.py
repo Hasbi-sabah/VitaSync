@@ -9,7 +9,9 @@ def get_all_extended_hcws():
     res = []
     for hcw in database.get_all(HCW):
         hcw_dict = hcw.to_dict()
-        hcw_dict.update(database.get_by_id(User, str(hcw.userId)).to_dict())
+        user_dict = database.get_by_id(User, str(hcw.userId)).to_dict()
+        user_dict.pop('id', None)
+        hcw_dict.update(user_dict)
         res.append(hcw_dict)
     return jsonify(res)
 
