@@ -5,7 +5,7 @@ from models.hcw import HCW
 from models.patient import Patient
 from models.user import User
 
-@api.route('/login', strict_slashes=False)
+@api.route('/login', methods=['POST'], strict_slashes=False)
 def login():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
