@@ -29,6 +29,11 @@ def get_patient(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
+    if current_user.role == 'patient':
+        if current_user.profileId != str(patientId):
+            return {
+                    "error": "Insufficient privileges!"
+                }, 403
     return jsonify(patient.to_dict())
 
 @api.route('/patient_extended/<uuid:patientId>', methods=['GET'], strict_slashes=False)
@@ -37,6 +42,11 @@ def get_patient_extended(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
+    if current_user.role == 'patient':
+        if current_user.profileId != str(patientId):
+            return {
+                    "error": "Insufficient privileges!"
+                }, 403
     patient_dict = patient.to_dict()
     user_dict = database.get_by_id(User, str(patient.userId)).to_dict()
     user_dict.pop('id', None)
@@ -75,7 +85,7 @@ def update_patient(patientId, current_user):
     return jsonify(database.get_by_id(Patient, str(patientId)).to_dict())
 
 @api.route('/patient/<uuid:patientId>', methods=['DELETE'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@token_required([])
 def delete_patient(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:

@@ -13,6 +13,6 @@ class Vaccine(BM, Base):
     administeredBy = relationship("HCW")
 
     drugId = Column(String(60), ForeignKey("drugs.id"))
-    drug = relationship("Drug", uselist=False)
+    drug = relationship("Drug", uselist=True)
 
     notes = Column(String(2048))

@@ -29,6 +29,11 @@ def get_hcw_extended(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
+    if current_user.role != 'admin':
+        if current_user.profileId != str(hcwId):
+            return {
+                    "error": "Insufficient privileges!"
+                }, 403
     hcw_dict = hcw.to_dict()
     user_dict = database.get_by_id(User, str(hcw.userId)).to_dict()
     user_dict.pop('id', None)
@@ -41,6 +46,11 @@ def get_hcw(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
+    if current_user.role != 'admin':
+        if current_user.profileId != str(hcwId):
+            return {
+                    "error": "Insufficient privileges!"
+                }, 403
     return jsonify(hcw.to_dict())
 
 
@@ -71,6 +81,11 @@ def update_hcw(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
+    if current_user.role != 'admin':
+        if current_user.profileId != str(hcwId):
+            return {
+                    "error": "Insufficient privileges!"
+                }, 403
     for key, value in data.items():
         if key in HCW.columns:
             setattr(hcw, key, value)
@@ -78,11 +93,16 @@ def update_hcw(hcwId, current_user):
     return jsonify(database.get_by_id(HCW, str(hcwId)).to_dict())
 
 @api.route('/hcw/<uuid:hcwId>', methods=['DELETE'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@token_required([])
 def delete_hcw(hcwId, current_user):
     hcw = database.get_by_id(HCW, str(hcwId))
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
+    if current_user.role != 'admin':
+        if current_user.profileId != str(hcwId):
+            return {
+                    "error": "Insufficient privileges!"
+                }, 403
     hcw.archive()
     return jsonify({})
 

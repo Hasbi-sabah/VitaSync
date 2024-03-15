@@ -8,3 +8,4 @@ from api.patient.patient import *
 from api.patient.patient_record import *
 from api.base import *
 from api.access.accessHandle import *
+from api.record.record import *
