@@ -11,3 +11,15 @@ def get_all_patient_records(patientId):
         return jsonify({"error": "Patient not found"}), 404
     return jsonify([record.to_dict() for record in patient.records])
 
+@api.route('/patient/<uuid:patientId>/record', methods=['PUT'], strict_slashes=False)
+def add_patient_record(patientId):
+    patient = database.get_by_id(Patient, str(patientId))
+    if not patient:
+        return jsonify({"error": "Patient not found"}), 404
+    content_type = request.headers.get('Content-Type')
+    if content_type == 'application/json':
+        data = request.get_json()
+    else:
+        data = request.form.to_dict()
+    record = Record(**data, patientId=patientId)
+    return jsonify(database.get_by_id(Record, str(Record.id)).to_dict())

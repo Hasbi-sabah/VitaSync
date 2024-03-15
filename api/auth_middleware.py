@@ -28,6 +28,10 @@ def token_required(allowed_roles=None):
                         "error": "User not found!"
                     }, 401
 
+                if user.token != token:
+                    return {
+                        "error": "Wrong token"
+                    }, 401
                 if user.role not in allowed_roles + ['admin']:
                     return {
                         "error": "Insufficient privileges!"
