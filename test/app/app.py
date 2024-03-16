@@ -1,14 +1,11 @@
 from flask import Flask
 from flask_cors import CORS
-from api import api
-from json import JSONEncoder
-from models.drug import Drug
 from os import getenv
 
 
 app = Flask(__name__)
-host = getenv('API_HOST') or "localhost"
-port = getenv('API_PORT') or 5000
+host = getenv('APP_HOST') or "localhost"
+port = getenv('APP_PORT') or 3500
 SECRET_KEY = getenv('SECRET_KEY')
 print(SECRET_KEY)
 app.config['SECRET_KEY'] = SECRET_KEY
