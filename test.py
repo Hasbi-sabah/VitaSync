@@ -78,19 +78,17 @@ drugs = [Drug(**entry) for entry in drug_entries]
 # vaccine1 = Vaccine(administeredById=doc.id, administeredForId=patient.id, drugId=drug1.id)
 # vaccine2 = Vaccine(administeredById=doc.id, administeredForId=patient.id, drugId=drug1.id)
 
-# prsc = Prescription(prescribedById=doc.id, prescribedForId=patient.id)
-# med1 = DrugPrescribed(drugId=drug1.id, prescriptionId = prsc.id)
-# med2 = DrugPrescribed(drugId=drug2.id, prescriptionId = prsc.id)
-# med3 = DrugPrescribed(drugId=drug3.id, prescriptionId = prsc.id)
-# med4 = DrugPrescribed(drugId=drug3.id)
-# med4.prescriptionId = prsc.id
+prsc1 = Prescription(prescribedById=doc2.id, rescribedForId=patient1.id)
+med1 = DrugPrescribed(drugId=drugs[0].id, prescriptionId = prsc1.id, instructions='twice a day for 15 days')
+med2 = DrugPrescribed(drugId=drugs[3].id, prescriptionId = prsc1.id, instructions='before meals, adjust as needed')
+med3 = DrugPrescribed(drugId=drugs[5].id, prescriptionId = prsc1.id, instructions='as per allergist advice')
 
-# prsc = Prescription(prescribedById=doc.id, prescribedForId=patient.id)
-# med1 = DrugPrescribed(drugId=drug1.id, prescriptionId = prsc.id)
-# med2 = DrugPrescribed(drugId=drug2.id, prescriptionId = prsc.id)
-# med3 = DrugPrescribed(drugId=drug3.id, prescriptionId = prsc.id)
-# med4 = DrugPrescribed(drugId=drug3.id)
-# med4.prescriptionId = prsc.id
+
+prsc2 = Prescription(prescribedById=doc2.id, prescribedForId=patient2.id)
+med1 = DrugPrescribed(drugId=drugs[1].id, prescriptionId = prsc2.id, instructions='daily in the morning')
+med2 = DrugPrescribed(drugId=drugs[2].id, prescriptionId = prsc2.id, instructions='as needed, maximum 3 times a day')
+med3 = DrugPrescribed(drugId=drugs[4].id, prescriptionId = prsc2.id, instructions='once a day for a week')
+
 
 # record1 = Record(patientId=patient.id, vaccineId=vaccine1.id,
 #                  vitalsId=vitals1.id, procedureId=proc.id,
