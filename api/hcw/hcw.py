@@ -5,6 +5,7 @@ from models import database
 from models.hcw import HCW
 from models.user import User
 
+
 @api.route('/hcw_extended', methods=['GET'] ,strict_slashes=False)
 @token_required([])
 def get_all_extended_hcws(current_user):
@@ -17,11 +18,13 @@ def get_all_extended_hcws(current_user):
         res.append(hcw_dict)
     return jsonify(res)
 
+
 @api.route('/hcw', methods=['GET'] ,strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
 def get_all_hcws(current_user):
     res = [hcw.to_dict() for hcw in database.get_all(HCW)]
     return jsonify(res)
+
 
 @api.route('/hcw_extended/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist'])
@@ -34,6 +37,7 @@ def get_hcw_extended(hcwId, current_user):
     user_dict.pop('id', None)
     hcw_dict.update(user_dict)
     return jsonify(hcw_dict)
+
 
 @api.route('/hcw/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist'])
@@ -60,6 +64,7 @@ def add_hcw(current_user):
     hcw = HCW(**data)
     return jsonify(database.get_by_id(HCW, str(hcw.id)).to_dict())
 
+
 @api.route('/hcw/<uuid:hcwId>', methods=['PUT'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist'])
 def update_hcw(hcwId, current_user):
@@ -76,6 +81,7 @@ def update_hcw(hcwId, current_user):
             setattr(hcw, key, value)
     hcw.save()
     return jsonify(database.get_by_id(HCW, str(hcwId)).to_dict())
+
 
 @api.route('/hcw/<uuid:hcwId>', methods=['DELETE'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist'])
