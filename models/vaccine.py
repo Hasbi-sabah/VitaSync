@@ -5,6 +5,8 @@ from models.base import BM, Base
 
 class Vaccine(BM, Base):
     __tablename__ = "vaccines"
+    
+    columns = ['notes', 'drugId']
 
     administeredForId = Column(String(40), ForeignKey("patients.id"))
     administeredFor = relationship("Patient", back_populates="vaccines")

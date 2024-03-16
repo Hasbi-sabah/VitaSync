@@ -5,6 +5,8 @@ from models.base import BM, Base
 
 class Vital(BM, Base):
     __tablename__ = "vitals"
+    
+    columns = ['status', 'temp', 'bp', 'bpm', 'weight', 'height', 'glucose', 'notes']
 
     takenById = Column(String(40), ForeignKey("hcws.id"))
     takenBy = relationship("HCW")

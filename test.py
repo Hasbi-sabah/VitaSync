@@ -22,7 +22,6 @@ nurse2 = HCW(firstName='Bob', lastName='Williams', email='bob.williams@example.c
 pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.com', role='pharmacist')
 pharmacist2 = HCW(firstName='Tom', lastName='Jones', email='tom.jones@example.com', role='pharmacist')
 admin = HCW(firstName='admin', username='admin', password='admin', role='admin')
-print(admin.userId)
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
 # patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')
@@ -78,16 +77,16 @@ drugs = [Drug(**entry) for entry in drug_entries]
 # vaccine1 = Vaccine(administeredById=doc.id, administeredForId=patient.id, drugId=drug1.id)
 # vaccine2 = Vaccine(administeredById=doc.id, administeredForId=patient.id, drugId=drug1.id)
 
-prsc1 = Prescription(prescribedById=doc2.id, rescribedForId=patient1.id)
-med1 = DrugPrescribed(drugId=drugs[0].id, prescriptionId = prsc1.id, instructions='twice a day for 15 days')
-med2 = DrugPrescribed(drugId=drugs[3].id, prescriptionId = prsc1.id, instructions='before meals, adjust as needed')
-med3 = DrugPrescribed(drugId=drugs[5].id, prescriptionId = prsc1.id, instructions='as per allergist advice')
+# prsc1 = Prescription(prescribedById=doc2.id, rescribedForId=patient1.id)
+# med1 = DrugPrescribed(drugId=drugs[0].id, prescriptionId = prsc1.id, instructions='twice a day for 15 days')
+# med2 = DrugPrescribed(drugId=drugs[3].id, prescriptionId = prsc1.id, instructions='before meals, adjust as needed')
+# med3 = DrugPrescribed(drugId=drugs[5].id, prescriptionId = prsc1.id, instructions='as per allergist advice')
 
 
-prsc2 = Prescription(prescribedById=doc2.id, prescribedForId=patient2.id)
-med1 = DrugPrescribed(drugId=drugs[1].id, prescriptionId = prsc2.id, instructions='daily in the morning')
-med2 = DrugPrescribed(drugId=drugs[2].id, prescriptionId = prsc2.id, instructions='as needed, maximum 3 times a day')
-med3 = DrugPrescribed(drugId=drugs[4].id, prescriptionId = prsc2.id, instructions='once a day for a week')
+# prsc2 = Prescription(prescribedById=doc2.id, prescribedForId=patient2.id)
+# med1 = DrugPrescribed(drugId=drugs[1].id, prescriptionId = prsc2.id, instructions='daily in the morning')
+# med2 = DrugPrescribed(drugId=drugs[2].id, prescriptionId = prsc2.id, instructions='as needed, maximum 3 times a day')
+# med3 = DrugPrescribed(drugId=drugs[4].id, prescriptionId = prsc2.id, instructions='once a day for a week')
 
 
 # record1 = Record(patientId=patient.id, vaccineId=vaccine1.id,

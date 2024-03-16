@@ -3,11 +3,11 @@ from api import api
 from api.auth_middleware import token_required
 from models import database
 from models.patient import Patient
-from models.prescription import Prescription
+from models.vital import Vital
 
-@api.route('/patient/<uuid:patientId>/prescription', methods=['GET'], strict_slashes=False)
+@api.route('/patient/<uuid:patientId>/vital', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
-def get_all_patient_prescriptions(patientId, current_user):
+def get_all_patient_vitals(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
@@ -16,11 +16,11 @@ def get_all_patient_prescriptions(patientId, current_user):
             return {
                     "error": "Insufficient privileges!"
                 }, 403
-    return jsonify([prescription.to_dict() for prescription in patient.prescriptions])
+    return jsonify([vital.to_dict() for vital in database.search(Vital, patientId=str(patientId))])
 
-@api.route('/patient/<uuid:patientId>/prescription', methods=['POST'], strict_slashes=False)
-@token_required(['doctor'])
-def add_patient_prescription(patientId, current_user):
+@api.route('/patient/<uuid:patientId>/vital', methods=['POST'], strict_slashes=False)
+@token_required(['doctor', 'nurse', 'pharmacist'])
+def add_patient_vital(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
@@ -29,5 +29,5 @@ def add_patient_prescription(patientId, current_user):
         data = request.get_json()
     else:
         data = request.form.to_dict()
-    prescription = Prescription(**data, prescribedForId=patientId, prescribedById=current_user.profileId)
-    return jsonify(database.get_by_id(Prescription, str(prescription.id)).to_dict())
+    vital = Vital(**data, takenForId=patientId, takenById=current_user.profileId)
+    return jsonify(database.get_by_id(Vital, str(vital.id)).to_dict())

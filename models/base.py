@@ -38,7 +38,8 @@ class BM:
 
     def to_dict(self):
         """returns a dictionary containing all keys/values of the instance"""
-        new_dict = self.__dict__.copy()
-        if "_sa_instance_state" in new_dict:
-            del new_dict["_sa_instance_state"]
+        new_dict = {}
+        for key, value in self.__dict__.items():
+            if isinstance(value, (int, float, str, bool, list, dict, tuple)):
+                new_dict[key] = value
         return new_dict
