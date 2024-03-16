@@ -28,22 +28,14 @@ def token_required(allowed_roles=None):
                         "error": "User not found!"
                     }, 401
 
+                if user.token != token:
+                    return {
+                        "error": "Wrong token"
+                    }, 401
                 if user.role not in allowed_roles + ['admin']:
                     return {
                         "error": "Insufficient privileges!"
                     }, 403
-                if user.role == 'patient':
-                    patientId = kwargs.get('patientId', None)
-                    if patientId and user.profileId != str(patientId):
-                        return {
-                                "error": "Insufficient privileges!"
-                            }, 403
-                else:
-                    hcwId = kwargs.get('hcwId', None)
-                    if hcwId and user.profileId != str(hcwId):
-                        return {
-                                "error": "Insufficient privileges!"
-                            }, 403
 
                 kwargs['current_user'] = user
 

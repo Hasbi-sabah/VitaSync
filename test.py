@@ -28,6 +28,13 @@ print(admin.userId)
 # patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')
 # patient6 = Patient(firstName='Fiona', lastName='Apple', sex='Female')
 
+record1 = Record(diagnosis="Bronchitis", notes="Medication given", patientId=patient1.id, assessedById=doc1.id)
+record2 = Record(diagnosis="Hypertension", notes="Patient advised to monitor blood pressure regularly", patientId=patient1.id, assessedById=doc2.id)
+record3 = Record(notes="Insulin prescribed, dietary recommendations provided", patientId=patient1.id, assessedById=doc1.id)
+record4 = Record(diagnosis="Fractured leg", notes="Leg cast applied, follow-up appointment scheduled", patientId=patient2.id, assessedById=doc1.id)
+record5 = Record(diagnosis="Migraine", notes="Prescribed pain medication, advised to rest in a quiet environment", patientId=patient2.id, assessedById=doc2.id)
+record6 = Record(diagnosis="Common cold")
+
 drug_entries = [
     {'commercialName': 'Aspirin', 'activeIngredient': 'Acetylsalicylic Acid', 'distributor': 'Pharma Inc.',
      'description': 'Pain reliever and anti-inflammatory drug', 'dose': '75mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
