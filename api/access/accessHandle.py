@@ -3,7 +3,7 @@ from api import api
 from api.auth_middleware import token_required
 from models import database
 
-@api.route('/login', methods=['POST'], methods=['POST'], strict_slashes=False)
+@api.route('/login', methods=['POST'], strict_slashes=False)
 def login():
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
