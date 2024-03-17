@@ -39,28 +39,13 @@ def print_prescription(id):
     prescription = database.get_by_id(Prescription, objId=str(id))
     if not prescription:
         return jsonify({"error": "Prescription not found"}), 404
-    # # Check if the current user has permission to access this prescription
-    # if current_user.role == 'patient' and current_user.profileId != prescription.prescribedForId:
-    #     return {"error": "You don't have permission to access this prescription"}, 403
-    # return render_template('file.html', prescription=prescription, patient=prescription.prescribedFor, doc=prescription.prescribedBy, drugs=prescription.drugs)
-    # getPrescribedBy = database.get_by_id(HCW, prescription.prescribedById)
-    # drugs = []
-    # for drug_prescribed in prescription.drugs:
-    #     drug = database.get_by_id(Drug, drug_prescribed.drugId)
-    #     drugs.append({
-    #         "name": drug.commercialName,
-    #         "form": drug.form,
-    #         "dose": drug.dose,
-    #         "price": drug.price
-    #     })
-    # data = {
-    #     "id": prescription.id,
-    #     "patient": current_user.username,
-    #     "doc": f"Dr. {getPrescribedBy.firstName} {getPrescribedBy.lastName}",
-    #     "drugs": drugs
-    # }
-    # dear yassine render the template with prescription data
-    rendered_template = render_template('file.html', prescription=prescription, patient=prescription.prescribedFor, doc=prescription.prescribedBy, drugs=prescription.drugs)
+    # Check if the current user has permission to access this prescription
+    if current_user.role == 'patient' and current_user.profileId != prescription.prescribedForId:
+        return {"error": "You don't have permission to access this prescription"}, 403
+    rendered_template = render_template('file.html', prescription=prescription,
+                                        patient=prescription.prescribedFor,
+                                        doc=prescription.prescribedBy,
+                                        drugs=prescription.drugs)
     # composing html to pdf based on previous func's logic by sabah
     css = CSS(string=''' @page {size: 315mm 445.5mm;} ''')
     pdf = HTML(string=rendered_template).write_pdf(stylesheets=[css])
