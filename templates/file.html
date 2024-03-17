@@ -1,34 +1,76 @@
+<!-- we need to make base tempalte first then extend it for record and prescription and medical certificate -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Printable Document</title>
+    <title>Prescription</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 50px;
         }
-        .watermark {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: rgba(0, 0, 0, 0.1);
-            font-size: 100px;
-            font-weight: bold;
-            transform-origin: 0 0;
-            -webkit-transform: rotate(-45deg);
-            -moz-transform: rotate(-45deg);
-            -ms-transform: rotate(-45deg);
-            -o-transform: rotate(-45deg);
-            transform: rotate(-45deg);
+        h1 {
+            text-align: center;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .sub-table {
+            width: 100%;
+            border-collapse: collapse;
         }
     </style>
 </head>
 <body>
-    <!-- <div class="watermark">CONFIDENTIAL</div> -->
     <h1>Prescription</h1>
-    <p>{{ prsc.id }}</p>
+    <table>
+        <br>
+        {% for attr, value in data.items() %}
+            {% if attr != "drugs" %}   
+                <tr>
+                    <th>{{ attr }}</th>
+                    <td>{{ value }}</td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        {% if data.drugs %}
+            <tr>
+                <th colspan="2">Drugs</th>
+                {% for drug in data.drugs %}
+                <td colspan="2">
+                    <table class="sub-table">
+                        <tr>
+                            <th>Name</th>
+                            <td>{{ drug.name }}</td>
+                        </tr>
+                        <tr>
+                            <th>Form</th>
+                            <td>{{ drug.form }}</td>
+                        </tr>
+                        <tr>
+                            <th>Dose</th>
+                            <td>{{ drug.dose }}</td>
+                        </tr>
+                        <tr>
+                            <th>Price</th>
+                            <td>{{ drug.price }}</td>
+                        </tr>
+                    </table>
+                </td>
+                {% endfor %}
+            </tr>
+        {% endif %}
+    </table>
 </body>
 </html>

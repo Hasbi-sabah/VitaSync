@@ -26,10 +26,7 @@ def add_prescription_drug(prescriptionId, current_user):
     if not prescription:
         return jsonify({"error": "Prescription not found"}), 404
     content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
-        data = request.get_json()
-    else:
-        data = request.form.to_dict()
+    data = request.get_json() if content_type == 'application/json' else request.form.to_dict()
     for attr in DrugPrescribed.columns:
         if not data.get(attr, None):
             return jsonify({"error": f"Missing {attr}"}), 400

@@ -6,7 +6,7 @@ from models.record import Record
 
 
 @api.route('/record/<uuid:recordId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient', 'admin'])
 def get_record(recordId, current_user):
     record = database.get_by_id(Record, str(recordId))
     if not record:
