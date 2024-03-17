@@ -1,6 +1,6 @@
 from io import BytesIO
 from flask import jsonify, render_template, request, send_file, Response
-from weasyprint import HTML
+from weasyprint import CSS, HTML
 import qrcode
 from api import api
 from models import database
@@ -33,15 +33,15 @@ def get_qr(id):
 
 
 @api.route('/print_prescription/<uuid:id>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
-def print_prescription(id, current_user):
+# @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def print_prescription(id):
     """Generate a PDF file for the given prescription ID and return it."""
     prescription = database.get_by_id(Prescription, objId=str(id))
     if not prescription:
         return jsonify({"error": "Prescription not found"}), 404
-    # Check if the current user has permission to access this prescription
-    if current_user.role == 'patient' and current_user.profileId != prescription.prescribedForId:
-        return {"error": "You don't have permission to access this prescription"}, 403
+    # # Check if the current user has permission to access this prescription
+    # if current_user.role == 'patient' and current_user.profileId != prescription.prescribedForId:
+    #     return {"error": "You don't have permission to access this prescription"}, 403
     # return render_template('file.html', prescription=prescription, patient=prescription.prescribedFor, doc=prescription.prescribedBy, drugs=prescription.drugs)
     # getPrescribedBy = database.get_by_id(HCW, prescription.prescribedById)
     # drugs = []
@@ -59,10 +59,11 @@ def print_prescription(id, current_user):
     #     "doc": f"Dr. {getPrescribedBy.firstName} {getPrescribedBy.lastName}",
     #     "drugs": drugs
     # }
-    # # dear yassine render the template with prescription data
+    # dear yassine render the template with prescription data
     rendered_template = render_template('file.html', prescription=prescription, patient=prescription.prescribedFor, doc=prescription.prescribedBy, drugs=prescription.drugs)
     # composing html to pdf based on previous func's logic by sabah
-    pdf = HTML(string=rendered_template).write_pdf()
+    css = CSS(string=''' @page {size: 315mm 445.5mm;} ''')
+    pdf = HTML(string=rendered_template).write_pdf(stylesheets=[css])
     #Return PDF file with appropriate headers
     return Response(pdf, mimetype='application/pdf', headers={
         'Content-Disposition': 'attachment; filename=prescription.pdf'

@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask
 from flask_cors import CORS
 from api import api
@@ -18,6 +19,7 @@ cors_config = {
     "origins": ["http://localhost:5000", "http://localhost:4000"]
 }
 CORS(app, **cors_config)
+app.jinja_env.globals.update(datetime=datetime)
 
 
 if __name__ == '__main__':

@@ -45,8 +45,12 @@
                 <td>{{ patient.lastName }}</td>
             </tr>
             <tr>
+                <th>prescribed at</th>
+                <td>{{ datetime.fromtimestamp(prescription.created_at).strftime('%Y-%m-%d') }}</td>
+            </tr>
+            <tr>
                 <th>prescribed by</th>
-                <td>{{ doc.lastName }} {{ doc.firstName }}</td>
+                <td>Dr. {{ doc.lastName }} {{ doc.firstName }}</td>
             </tr>
         <tr>
             <th colspan="2">Drugs</th>
