@@ -4,3 +4,4 @@ api/hcw/__pycache__
 models/__pycache__
 test/app/__pycache__
 test/app/routes/__pycache__
+**/__pycache__
