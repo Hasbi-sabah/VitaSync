@@ -36,41 +36,47 @@
     <h1>Prescription</h1>
     <table>
         <br>
-        {% for attr, value in data.items() %}
-            {% if attr != "drugs" %}   
-                <tr>
-                    <th>{{ attr }}</th>
-                    <td>{{ value }}</td>
-                </tr>
-            {% endif %}
-        {% endfor %}
-        {% if data.drugs %}
             <tr>
-                <th colspan="2">Drugs</th>
-                {% for drug in data.drugs %}
-                <td colspan="2">
-                    <table class="sub-table">
-                        <tr>
-                            <th>Name</th>
-                            <td>{{ drug.name }}</td>
-                        </tr>
-                        <tr>
-                            <th>Form</th>
-                            <td>{{ drug.form }}</td>
-                        </tr>
-                        <tr>
-                            <th>Dose</th>
-                            <td>{{ drug.dose }}</td>
-                        </tr>
-                        <tr>
-                            <th>Price</th>
-                            <td>{{ drug.price }}</td>
-                        </tr>
-                    </table>
-                </td>
-                {% endfor %}
+                <th>first name</th>
+                <td>{{ patient.firstName }}</td>
             </tr>
-        {% endif %}
+            <tr>
+                <th>last name</th>
+                <td>{{ patient.lastName }}</td>
+            </tr>
+            <tr>
+                <th>prescribed by</th>
+                <td>{{ doc.lastName }} {{ doc.firstName }}</td>
+            </tr>
+        <tr>
+            <th colspan="2">Drugs</th>
+            {% for drug in drugs %}
+            <td colspan="2">
+                <table class="sub-table">
+                    <tr>
+                        <th>Name</th>
+                        <td>{{ drug.drug.commercialName }}</td>
+                    </tr>
+                    <tr>
+                        <th>Form</th>
+                        <td>{{ drug.drug.form }}</td>
+                    </tr>
+                    <tr>
+                        <th>Dose</th>
+                        <td>{{ drug.drug.dose }}</td>
+                    </tr>
+                    <tr>
+                        <th>Price</th>
+                        <td>{{ drug.drug.price }}</td>
+                    </tr>
+                    <tr>
+                        <th>Instructions</th>
+                        <td>{{ drug.instructions }}</td>
+                    </tr>
+                </table>
+            </td>
+            {% endfor %}
+        </tr>
     </table>
 </body>
 </html>
