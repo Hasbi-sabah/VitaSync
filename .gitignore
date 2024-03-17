@@ -1,5 +1,6 @@
-.env
 api/__pycache__
 api/drug/__pycache__
 api/hcw/__pycache__
 models/__pycache__
+test/app/__pycache__
+test/app/routes/__pycache__

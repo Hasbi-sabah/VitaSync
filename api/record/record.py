@@ -18,6 +18,7 @@ def get_record(recordId, current_user):
                 }, 403
     return jsonify(record.to_dict())
 
+
 @api.route('/record/<uuid:recordId>', methods=['PUT'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist'])
 def update_record(recordId, current_user):
@@ -39,6 +40,7 @@ def update_record(recordId, current_user):
             setattr(record, key, value)
     record.save()
     return jsonify(database.get_by_id(Record, str(recordId)).to_dict())
+
 
 @api.route('/record/<uuid:recordId>', methods=['DELETE'], strict_slashes=False)
 @token_required([])

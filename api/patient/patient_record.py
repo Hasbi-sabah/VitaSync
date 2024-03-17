@@ -5,6 +5,7 @@ from models import database
 from models.patient import Patient
 from models.record import Record
 
+
 @api.route('/patient/<uuid:patientId>/record', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
 def get_all_patient_records(patientId, current_user):

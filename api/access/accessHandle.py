@@ -12,13 +12,13 @@ def login():
         data = request.form.to_dict()
     username = data.get('username', None)
     if not username:
-        return jsonify({"error": "Missing username"}), 400
+        return jsonify({"error": "Invalid Credentials"}), 400
     password = data.get('password', None)
     if not password:
-       return jsonify({"error": "Missing password"}), 400
+       return jsonify({"error": "invalid credentials"}), 400
     user = database.get_by_username(username=username)
     if not user:
-        return jsonify({"error": "Username not found"}), 404
+        return jsonify({"error": "User does not found"}), 404
     if not user.check_hash(password):
         return jsonify({"error": "Wrong password"}), 401
     user.create_jwt()
