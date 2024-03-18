@@ -10,6 +10,17 @@
             font-family: Arial, sans-serif;
             margin: 50px;
         }
+        .watermark {
+            content: '';
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background-image: url('https://raw.githubusercontent.com/Hasbi-sabah/alx-zero_day/master/.image.png');
+            opacity: 0.3;
+            pointer-events: none;
+          }
         h1 {
             text-align: center;
         }
@@ -17,6 +28,9 @@
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
+        }
+        ul, ol {
+            list-style-type: none;
         }
         th, td {
             border: 1px solid #ddd;
@@ -30,57 +44,43 @@
             width: 100%;
             border-collapse: collapse;
         }
+        .qr-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .qr-image {
+            position: absolute;
+            right: 0;
+            width: 100px;
+            height: auto;
+        }
     </style>
 </head>
 <body>
+    {% if prescription.status %}
+    <div class="watermark"></div>
+    {% endif %}
     <h1>Prescription</h1>
-    <table>
+    <br>
+    <ul>
+        <li><strong>First Name:</strong> {{ patient.firstName }}</li>
+        <li><strong>Last Name:</strong> {{ patient.lastName }}</li>
+        <li><strong>Prescribed At:</strong> {{ datetime.fromtimestamp(prescription.created_at).strftime('%Y-%m-%d') }}</li>
+        <li><strong>Prescribed By:</strong> Dr. {{ doc.lastName }} {{ doc.firstName }}</li>
+    </ul>
+    <br>   
+    <h3>Drugs</h3> 
+    <ul>
+    {% for drug in drugs %}
+        <li>{{ loop.index }}. {{ drug.drug.commercialName }} ({{ drug.drug.activeIngredient }}) {{ drug.drug.dose }} {{ drug.drug.form }}</li>
+        <li>Instructions: {{ drug.instructions }}</li>
         <br>
-            <tr>
-                <th>first name</th>
-                <td>{{ patient.firstName }}</td>
-            </tr>
-            <tr>
-                <th>last name</th>
-                <td>{{ patient.lastName }}</td>
-            </tr>
-            <tr>
-                <th>prescribed at</th>
-                <td>{{ datetime.fromtimestamp(prescription.created_at).strftime('%Y-%m-%d') }}</td>
-            </tr>
-            <tr>
-                <th>prescribed by</th>
-                <td>Dr. {{ doc.lastName }} {{ doc.firstName }}</td>
-            </tr>
-        <tr>
-            <th colspan="2">Drugs</th>
-            {% for drug in drugs %}
-            <td colspan="2">
-                <table class="sub-table">
-                    <tr>
-                        <th>Name</th>
-                        <td>{{ drug.drug.commercialName }}</td>
-                    </tr>
-                    <tr>
-                        <th>Form</th>
-                        <td>{{ drug.drug.form }}</td>
-                    </tr>
-                    <tr>
-                        <th>Dose</th>
-                        <td>{{ drug.drug.dose }}</td>
-                    </tr>
-                    <tr>
-                        <th>Price</th>
-                        <td>{{ drug.drug.price }}</td>
-                    </tr>
-                    <tr>
-                        <th>Instructions</th>
-                        <td>{{ drug.instructions }}</td>
-                    </tr>
-                </table>
-            </td>
-            {% endfor %}
-        </tr>
-    </table>
+    {% endfor %}
+    </ul>  
+    <div class="qr-container">
+        <img class="qr-image" src="data:image/png;base64,{{ qr }}" alt="QR Code">
+    </div>
 </body>
 </html>
