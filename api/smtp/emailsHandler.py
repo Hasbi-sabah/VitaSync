@@ -16,7 +16,7 @@ def notify(current_user):
     to_email = data.get('to_email', None)
     to_name = data.get('to_name', 'John Doe')
     subject = data.get('subject', 'Hi!')
-    html_content = data.get('html_content', '<html><head></head><body><p>Hello,</p>This is my first transactional email sent from Brevo.</p></body></html>')
+    html_content = data.get('message', '<html><head></head><body><p>Hello,</p>This is my first transactional email sent from Brevo.</p></body></html>')
     if not to_email:
         return jsonify({"error": "Invalid recipient email"}), 400
     sender_name = "vitasync support"
@@ -43,7 +43,7 @@ def notify(current_user):
         "htmlContent": html_content
     }
     response = requests.post(api_url, headers=headers, json=data)
-    if response.status_code == 200:
+    if response.status_code == 200 or response.status_code == 201:
         return jsonify({'email': "sent successfully"}), 200
     else:
-        return jsonify({"error": "Failed to send email", "status_code": response.status_code}), 500
+        return jsonify({"error": "Something Went Wront", "status_code": response.status_code}), response.status_code
