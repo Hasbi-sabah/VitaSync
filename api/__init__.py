@@ -4,6 +4,7 @@ api = Blueprint('api', __name__, url_prefix='/api')
 
 from api.base import *
 from api.access.accessHandle import *
+from api.smtp.emailsHandler import *
 
 from api.drug.drug import *
 
@@ -18,7 +19,6 @@ from api.patient.patient_vital import *
 
 from api.prescription.prescription_drug import *
 from api.prescription.prescription import *
-
 from api.prescription_drug.drug import *
 
 from api.procedure.procedure import *

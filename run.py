@@ -11,9 +11,11 @@ app = Flask(__name__, static_url_path='/assets', static_folder='assets')
 host = getenv('API_HOST') or "localhost"
 port = getenv('API_PORT') or 5000
 SECRET_KEY = getenv('SECRET_KEY')
-APP_EMAIL = getenv('APP_EMAIL')
+SMTP_EMAIL = getenv('SMTP_EMAIL')
+SMTP_API_KEY = getenv('SMTP_API_KEY')
 app.config['SECRET_KEY'] = SECRET_KEY
-app.config['SMTP_EMAIL'] = APP_EMAIL
+app.config['SMTP_EMAIL'] = SMTP_EMAIL
+app.config['SMTP_API_KEY'] = SMTP_API_KEY
 app.register_blueprint(api)
 app.url_map.strict_slashes = False
 cors_config = {
