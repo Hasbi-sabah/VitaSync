@@ -1,7 +1,17 @@
 api/__pycache__
+api/access/__pycache__
 api/drug/__pycache__
 api/hcw/__pycache__
+api/patient/__pycache__
+api/prescription/__pycache__
+api/prescription_drug/__pycache__
+api/procedure/__pycache__
+api/record/__pycache__
+api/smtp/__pycache__
+api/vaccine/__pycache__
+api/vital/__pycache__
 models/__pycache__
 test/app/__pycache__
 test/app/routes/__pycache__
 **/__pycache__
+.env
