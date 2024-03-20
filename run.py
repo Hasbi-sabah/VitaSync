@@ -7,7 +7,7 @@ from models.drug import Drug
 from os import getenv
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/assets', static_folder='assets')
 host = getenv('API_HOST') or "localhost"
 port = getenv('API_PORT') or 5000
 SECRET_KEY = getenv('SECRET_KEY')
