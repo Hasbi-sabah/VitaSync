@@ -39,15 +39,15 @@ def get_qr(id):
 
 
 @api.route('/print_prescription/<uuid:id>', methods=['GET'], strict_slashes=False)
-# @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
-def print_prescription(id):
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+def print_prescription(id, current_user):
     """Generate a PDF file for the given prescription ID and return it."""
     prescription = database.get_by_id(Prescription, objId=str(id))
     if not prescription:
         return jsonify({"error": "Prescription not found"}), 404
-    # Check if the current user has permission to access this prescription
-    # if current_user.role == 'patient' and current_user.profileId != prescription.prescribedForId:
-    #     return {"error": "You don't have permission to access this prescription"}, 403
+    #Check if the current user has permission to access this prescription
+    if current_user.role == 'patient' and current_user.profileId != prescription.prescribedForId:
+        return {"error": "You don't have permission to access this prescription"}, 403
     rendered_template = render_template('file.html', prescription=prescription,
                                         patient=prescription.prescribedFor,
                                         doc=prescription.prescribedBy,
