@@ -25,6 +25,8 @@ from api.procedure.procedure import *
 
 from api.record.record import *
 
+from api.test.test import *
+
 from api.vaccine.vaccine import *
 
 from api.vital.vital import *

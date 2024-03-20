@@ -20,7 +20,7 @@ def get_all_drugs(current_user):
     return jsonify(res)
 
 
-@api.route('/drug_lookup', methods=['GET'] ,strict_slashes=False)
+@api.route('/drug_lookup', methods=['POST'] ,strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
 def drug_lookup(current_user):
     content_type = request.headers.get('Content-Type')

@@ -10,6 +10,7 @@ from models.vaccine import Vaccine
 from models.procedure import Procedure
 from models.record import Record
 from models.user import User
+from models.test import Test
 from sqlalchemy import create_engine
 from os import getenv
 from dotenv import load_dotenv
@@ -25,7 +26,7 @@ class DB:
     __engine = None
     __session = None
     classes = [HCW, Drug, DrugPrescribed, Prescription, Patient, Vital, MedInfo,
-               Vaccine, Procedure, Record, User]
+               Vaccine, Procedure, Record, User, Test]
 
     def __init__(self):
         """Instantiate a DBStorage object"""
@@ -74,6 +75,9 @@ class DB:
         
     def drug_lookup(self, name):
         return self.__session.query(Drug).filter_by(archived=False).filter(Drug.commercialName.like(f'%{name}%'))
+    
+    def test_lookup(self, name):
+        return self.__session.query(Test).filter_by(archived=False).filter(Test.name.like(f'%{name}%'))
     
     def new(self, obj):
         """add the object to the current database session"""
