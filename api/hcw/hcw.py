@@ -78,7 +78,7 @@ def add_hcw(current_user):
     if not data.get('password', None):
         data['password'] = secrets.token_urlsafe(10)
     hcw = HCW(**data)
-    notify(hcw.userId, 1, name=f'{hcw.lastName} {hcw.firstName}', username=database.get_by_id(User, str(hcw.userId)).username, password=data['password'])
+    # notify(hcw.userId, 1, name=f'{hcw.lastName} {hcw.firstName}', username=database.get_by_id(User, str(hcw.userId)).username, password=data['password'])
     return jsonify(database.get_by_id(HCW, str(hcw.id)).to_dict())
 
 

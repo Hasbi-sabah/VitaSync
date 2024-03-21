@@ -11,6 +11,7 @@ from api.drug.drug import *
 from api.hcw.hcw import *
 
 from api.patient.patient import *
+from api.patient.patient_appointment import *
 from api.patient.patient_prescription import *
 from api.patient.patient_procedure import *
 from api.patient.patient_record import *

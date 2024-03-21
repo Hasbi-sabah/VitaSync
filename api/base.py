@@ -1,4 +1,5 @@
 import base64
+from datetime import datetime
 from io import BytesIO
 from flask import app, current_app, jsonify, render_template, request, send_file, Response
 import requests
@@ -13,11 +14,29 @@ from models.drug import Drug
 from models.drug_prescribed import DrugPrescribed
 from api.auth_middleware import token_required
 
+def input_to_timestamp(input):
+    input_format = "%d-%m-%Y %I:%M %p"
+    try:
+        datetime_obj = datetime.strptime(input, input_format)
+        timestamp = int(datetime_obj.timestamp())
+        return timestamp
+    except ValueError:
+        return None
+    
+def timestamp_to_str(timestamp):
+    end_format = "%d-%m-%Y at %I:%M %p"
+    dt_obj = datetime.fromtimestamp(timestamp)
+    formatted_str = dt_obj.strftime(end_format)
+    return formatted_str
+
 def notify(userId, flag, **data): # 1 for registration for now
     user = database.get_by_id(User, objId=userId)
     if flag == 1:
         subject = 'Registration complete'
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}</body></html>'
+    elif flag == 2:
+        subject = 'Appointment confirmed'
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'
     else:
         return
     if not user.email:

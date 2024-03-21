@@ -22,6 +22,7 @@ class Patient(BM, Base):
     )
     vaccines = relationship("Vaccine", uselist=True, back_populates="administeredFor")
     records = relationship("Record", uselist=True, back_populates="patient")
+    appointments = relationship("Appointment", uselist=True, back_populates="patient")
     userId = Column(String(40))
 
 

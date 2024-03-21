@@ -76,7 +76,7 @@ def add_patient(current_user):
         return jsonify({"error": "Email already exists in database"}), 409
     data['role'] = 'patient'
     patient = Patient(**data)
-    notify(patient.userId, 1, name=f'{patient.lastName} {patient.firstName}', username=database.get_by_id(User, str(patient.userId)).username, password=data['password'])
+    # notify(patient.userId, 1, name=f'{patient.lastName} {patient.firstName}', username=database.get_by_id(User, str(patient.userId)).username, password=data['password'])
     return jsonify(database.get_by_id(Patient, str(patient.id)).to_dict())
 
 
