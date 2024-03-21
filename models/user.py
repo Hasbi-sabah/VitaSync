@@ -26,18 +26,10 @@ class User(BM, Base):
             email = kwargs.get('email', None)
             if email:
                 kwargs['username'] = email.split('@')[0]
-        if not kwargs.get('password', None):
-            kwargs['password'] = secrets.token_urlsafe(10)
         super().__init__(**kwargs)
 
     def __setattr__(self, __name: str, __value: Any) -> None:
-        if __name == 'role':
-            print('role:', __value)
-        if __name == 'username':
-            print('username:', __value)
         if __name == 'password':
-            print('password:', __value)
-            print('--------')
             __value = bcrypt.hashpw(__value.encode('utf-8'), bcrypt.gensalt())
         return super().__setattr__(__name, __value)
     

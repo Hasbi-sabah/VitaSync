@@ -1,6 +1,8 @@
+import secrets
 from flask import jsonify, request
 from api import api
 from api.auth_middleware import token_required
+from api.base import notify
 from models import database
 from models.hcw import HCW
 from models.user import User
@@ -71,7 +73,12 @@ def add_hcw(current_user):
             return jsonify({"error": f"Missing {attr}"}), 400
     if database.search(HCW, licence=data.get('licence', None)):
         return jsonify({"error": "License already exists in database"}), 409
+    if database.search(User, email=data.get('email', None)):
+        return jsonify({"error": "Email already exists in database"}), 409
+    if not data.get('password', None):
+        data['password'] = secrets.token_urlsafe(10)
     hcw = HCW(**data)
+    notify(hcw.userId, 1, name=f'{hcw.lastName} {hcw.firstName}', username=database.get_by_id(User, str(hcw.userId)).username, password=data['password'])
     return jsonify(database.get_by_id(HCW, str(hcw.id)).to_dict())
 
 
@@ -109,6 +116,8 @@ def delete_hcw(hcwId, current_user):
             return {
                     "error": "Insufficient privileges!"
                 }, 403
+    user = database.get_by_id(User, hcw.userId)
     hcw.archive()
+    user.archive()
     return jsonify({})
 

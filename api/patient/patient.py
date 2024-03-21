@@ -1,5 +1,6 @@
 from flask import jsonify, request
 from api import api
+from api.base import notify
 from models import database
 from models.patient import Patient
 from models.user import User
@@ -69,7 +70,13 @@ def add_patient(current_user):
     for attr in Patient.columns[:-2]:
         if not data.get(attr, None):
             return jsonify({"error": f"Missing {attr}"}), 400
+    if data.get('username', None) and database.search(User, username=data.get('username')):
+        return jsonify({"error": "Username already exists in database"}), 409
+    if database.search(User, email=data.get('email', None)):
+        return jsonify({"error": "Email already exists in database"}), 409
+    data['role'] = 'patient'
     patient = Patient(**data)
+    notify(patient.userId, 1, name=f'{patient.lastName} {patient.firstName}', username=database.get_by_id(User, str(patient.userId)).username, password=data['password'])
     return jsonify(database.get_by_id(Patient, str(patient.id)).to_dict())
 
 
@@ -97,5 +104,8 @@ def delete_patient(patientId, current_user):
     patient = database.get_by_id(Patient, str(patientId))
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
+        user = database.get_by_id(User, hcw.userId)
+    user = database.get_by_id(User, patient.userId)
     patient.archive()
+    user.archive()
     return jsonify({})

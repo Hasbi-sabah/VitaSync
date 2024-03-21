@@ -7,7 +7,7 @@ from models.user import User
 class Patient(BM, Base):
     __tablename__ = "patients"
 
-    columns = ['firstName', 'lastName', 'CIN', 'sex', 'birthDate', 'phoneNumber', 'address']
+    columns = ['firstName', 'lastName', 'CIN', 'sex', 'phoneNumber', 'address', 'email']
 
     firstName = Column(String(60))
     lastName = Column(String(60))
@@ -31,6 +31,8 @@ class Patient(BM, Base):
         for key, value in kwargs.items():
             if key in User.columns:
                 userDict[key] = value
+        for key in userDict:
+            kwargs.pop(key)
         super().__init__(**kwargs)
         userDict['profileId'] = self.id
         user = User(**userDict)

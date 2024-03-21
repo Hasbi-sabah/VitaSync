@@ -6,7 +6,7 @@ from models.user import User
 class HCW(BM, Base):
     __tablename__ = "hcws"
 
-    columns = ['firstName', 'lastName', 'CIN', 'licence', 'workAddress', 'profileId']
+    columns = ['firstName', 'lastName', 'CIN', 'licence', 'workAddress', 'role', 'email']
     
     firstName = Column(String(60))
     lastName = Column(String(60))
@@ -21,6 +21,8 @@ class HCW(BM, Base):
         for key, value in kwargs.items():
             if key in User.columns:
                 userDict[key] = value
+        for key in userDict:
+            kwargs.pop(key)
         super().__init__(**kwargs)
         userDict['profileId'] = self.id
         user = User(**userDict)

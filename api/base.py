@@ -1,6 +1,7 @@
 import base64
 from io import BytesIO
-from flask import jsonify, render_template, request, send_file, Response
+from flask import app, current_app, jsonify, render_template, request, send_file, Response
+import requests
 from weasyprint import CSS, HTML
 import qrcode
 from api import api
@@ -11,6 +12,44 @@ from models.user import User
 from models.drug import Drug
 from models.drug_prescribed import DrugPrescribed
 from api.auth_middleware import token_required
+
+def notify(userId, flag, **data): # 1 for registration for now
+    user = database.get_by_id(User, objId=userId)
+    if flag == 1:
+        subject = 'Registration complete'
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}</body></html>'
+    else:
+        return
+    if not user.email:
+        return jsonify({"error": "Invalid recipient email"}), 400
+    sender_name = "vitasync support"
+    sender_email = current_app.config['SMTP_EMAIL']
+    api_key = current_app.config["SMTP_API_KEY"]
+    api_url = "https://api.brevo.com/v3/smtp/email"
+    headers = {
+        "accept": "application/json",
+        "api-key": api_key,
+        "content-type": "application/json"
+    }
+    data = {
+        "sender": {
+            "name": sender_name,
+            "email": sender_email
+        },
+        "to": [
+            {
+                "email": user.email,
+                "name": database.get_by_id(User, objId=user.profileId)
+            }
+        ],
+        "subject": subject,
+        "htmlContent": html_content
+    }
+    response = requests.post(api_url, headers=headers, json=data)
+    if response.status_code == 200 or response.status_code == 201:
+        print('sent successfully')
+    else:
+        print('Something Went Wrong')
 
 def make_qr(id):
     qr = qrcode.QRCode(
