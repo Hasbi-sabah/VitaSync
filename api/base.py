@@ -90,7 +90,7 @@ def make_qr(id):
     return img_bytes
 
 def check_appointments():
-    timingint = datetime.now() + timedelta(hours=12)
+    timingint = datetime.now() + timedelta(days=1)
     timeStampAfter = timingint.timestamp()
     timeStampNow = int(datetime.now().timestamp())
     upcoming_appointments = database.appt_lookup(timeStampNow, timeStampAfter)

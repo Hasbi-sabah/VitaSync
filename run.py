@@ -8,6 +8,7 @@ from os import getenv
 import schedule
 import time
 from api.base import check_appointments
+import threading
 
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets')
@@ -36,10 +37,14 @@ def job_scheduler():
         time.sleep(1)
 
 
+def run_job(app):
+    with app.app_context():
+        check_appointments()
+
+
 if __name__ == '__main__':
     """Run the app in debug mode."""
     # times we run the jobs
-    schedule.every().day.at("11:00").do(check_appointments)
-    schedule.every().day.at("16:00").do(check_appointments)
+    schedule.every().day.at("16:00").do(run_job, app)
     job_scheduler()
     app.run(debug=True, host=host, port=port)
