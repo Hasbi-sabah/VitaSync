@@ -93,21 +93,18 @@ def check_appointments():
     timingint = datetime.now() + timedelta(days=1)
     timeStampAfter = timingint.timestamp()
     timeStampNow = int(datetime.now().timestamp())
-    appointments = database.search(Appointment.time <= timeStampAfter)
-    print('sent s')
-    
-    for appointment in appointments:
-        """ appointmentDaybefore = appointment.time - 86400
-        if appointmentDaybefore < timeStampNow:
-            patient = database.get_by_id(User, objId=appointment.patientId)
-            patientName = f'{patient.lastName} {patient.firstName}'
-            notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time)) """
-        
-        patient = database.get_by_id(User, objId=appointment.patientId)
-        if patient:
-            patientName = f'{patient.lastName} {patient.firstName}'
-            notify(appointment.patient.Id, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
-            print('sent f')
+    appointments = database.search(Appointment)
+    upcoming_appointments = [appointment for appointment in appointments if appointment.time <= timeStampAfter]
+
+    with current_app.app_context():
+        smtp_email = current_app.config['SMTP_EMAIL']
+        smtp_api_key = current_app.config['SMTP_API_KEY']
+        for appointment in upcoming_appointments:
+            patient = appointment.patient
+            if patient:
+                patientName = f'{patient.lastName} {patient.firstName}'
+                userId = database.get_by_id(User, objId=patient.userId).id
+                notify(userId, 3, name=patientName, time=timestamp_to_str(appointment.time))
 
 
 @api.route('/get_qr/<uuid:id>', methods=['GET'], strict_slashes=False)

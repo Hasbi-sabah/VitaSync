@@ -31,15 +31,15 @@ app.jinja_env.globals.update(datetime=datetime)
 def job_scheduler():
     # loop to make sure jobs run continuously
     while True:
-        schedule.run_pending()
+        with app.app_context():
+            schedule.run_pending()
         time.sleep(1)
 
 
 if __name__ == '__main__':
     """Run the app in debug mode."""
     # times we run the jobs
-    schedule.every().day.at("11:57").do(check_appointments)
+    schedule.every().day.at("11:00").do(check_appointments)
     schedule.every().day.at("16:00").do(check_appointments)
-    """ schedule.every().second.do(check_appointments) """
     job_scheduler()
     app.run(debug=True, host=host, port=port)
