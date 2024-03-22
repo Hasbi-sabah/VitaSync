@@ -40,7 +40,7 @@ def notify(userId, flag, **data): # 1 for registration for now
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'
     elif flag == 3:
         subject = 'Appointment reminder'
-        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your appointment has been scheduled for tomorrow. Please make sure to attend at {data["time"]}.</body></html>'
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have an appointment scheduled for tomorrow with Dr. {data["dr_name"]}. Please make sure to attend at {data["time"]}.</body></html>'
     else:
         return
     if not user.email:
@@ -90,20 +90,18 @@ def make_qr(id):
     return img_bytes
 
 def check_appointments():
-    timingint = datetime.now() + timedelta(days=1)
+    timingint = datetime.now() + timedelta(hours=12)
     timeStampAfter = timingint.timestamp()
     timeStampNow = int(datetime.now().timestamp())
     upcoming_appointments = database.appt_lookup(timeStampNow, timeStampAfter)
 
     with current_app.app_context():
-        smtp_email = current_app.config['SMTP_EMAIL']
-        smtp_api_key = current_app.config['SMTP_API_KEY']
         for appointment in upcoming_appointments:
             patient = appointment.patient
             if patient:
                 patientName = f'{patient.lastName} {patient.firstName}'
-                userId = database.get_by_id(User, objId=patient.userId).id
-                notify(userId, 3, name=patientName, time=timestamp_to_str(appointment.time))
+                drName = f'{appointment.hcw.lastName} {appointment.hcw.firstName}'
+                notify(patient.userId, 3, name=patientName, dr_name=drName, time=timestamp_to_str(appointment.time))
 
 
 @api.route('/get_qr/<uuid:id>', methods=['GET'], strict_slashes=False)
