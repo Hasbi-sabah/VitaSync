@@ -93,8 +93,7 @@ def check_appointments():
     timingint = datetime.now() + timedelta(days=1)
     timeStampAfter = timingint.timestamp()
     timeStampNow = int(datetime.now().timestamp())
-    appointments = database.search(Appointment)
-    upcoming_appointments = [appointment for appointment in appointments if appointment.time <= timeStampAfter]
+    upcoming_appointments = database.appt_lookup(timeStampNow, timeStampAfter)
 
     with current_app.app_context():
         smtp_email = current_app.config['SMTP_EMAIL']

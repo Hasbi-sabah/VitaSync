@@ -11,7 +11,7 @@ from models.procedure import Procedure
 from models.record import Record
 from models.appointment import Appointment
 from models.user import User
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, or_
 from os import getenv
 from dotenv import load_dotenv
 from sqlalchemy.orm import scoped_session, sessionmaker
@@ -75,6 +75,14 @@ class DB:
         
     def drug_lookup(self, name):
         return self.__session.query(Drug).filter_by(archived=False).filter(Drug.commercialName.like(f'%{name}%'))
+    
+    def appt_lookup(self, start_time, end_time, patientId=None):
+        start_time = 0 if not start_time else start_time
+        end_time = 2147483647 if not end_time else end_time
+        if patientId:
+            return self.__session.query(Appointment).filter_by(patientId=str(patientId), archived=False).filter(Appointment.time.between(start_time, end_time)).all()
+        else:
+            return self.__session.query(Appointment).filter_by(archived=False).filter(Appointment.time.between(start_time, end_time)).all()
     
     def new(self, obj):
         """add the object to the current database session"""
