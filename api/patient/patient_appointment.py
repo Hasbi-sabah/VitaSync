@@ -40,5 +40,5 @@ def add_patient_appointment(patientId, current_user):
         return jsonify({"error": "Invalid input format. Ex: 19-08-2024 08:05 AM"}), 400
     appointment = Appointment(time=timestamp, patientId=patientId, hcwId=current_user.profileId)
     hcw = database.get_by_id(HCW, current_user.profileId)
-    notify(patient.userId, 2, name=f'{patient.lastName} {patient.firstName}', dr_name=f'{hcw.lastName} {hcw.firstName}', time=timestamp_to_str(timestamp))
+    """ notify(patient.userId, 2, name=f'{patient.lastName} {patient.firstName}', dr_name=f'{hcw.lastName} {hcw.firstName}', time=timestamp_to_str(timestamp)) """
     return jsonify(database.get_by_id(Appointment, str(appointment.id)).to_dict())

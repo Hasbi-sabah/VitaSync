@@ -5,6 +5,9 @@ from api import api
 from json import JSONEncoder
 from models.drug import Drug
 from os import getenv
+import schedule
+import time
+from api.base import check_appointments
 
 
 app = Flask(__name__, static_url_path='/assets', static_folder='assets')
@@ -25,6 +28,19 @@ CORS(app, **cors_config)
 app.jinja_env.globals.update(datetime=datetime)
 
 
+def job_scheduler():
+    # loop to make sure jobs run continuously
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+
 if __name__ == '__main__':
     """Run the app in debug mode."""
     app.run(debug=True, host=host, port=port)
+
+    # times we run the jobs
+    schedule.every().day.at("11:00").do(check_appointments)
+    schedule.every().day.at("16:00").do(check_appointments)
+    # shcedule the job scheduler
+    job_scheduler()

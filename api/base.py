@@ -37,6 +37,9 @@ def notify(userId, flag, **data): # 1 for registration for now
     elif flag == 2:
         subject = 'Appointment confirmed'
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'
+    elif flag == 3:
+        subject = 'Appointment reminder'
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your appointment has been scheduled for tomorrow. Please make sure to attend at {data["time"]}.</body></html>'
     else:
         return
     if not user.email:
@@ -84,6 +87,17 @@ def make_qr(id):
     img.save(img_bytes)
     img_bytes.seek(0)
     return img_bytes
+
+def check_appointments():
+    appointments = database.get_all('Appointment')
+    timeStampNow = int(datetime.now().timestamp())
+    for appointment in appointments:
+        appointmentDaybefore = appointment.time - 86400
+        if appointmentDaybefore < timeStampNow:
+            patient = database.get_by_id(User, objId=appointment.patientId)
+            patientName = f'{patient.lastName} {patient.firstName}'
+            notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
+
 
 @api.route('/get_qr/<uuid:id>', methods=['GET'], strict_slashes=False)
 def get_qr(id):
