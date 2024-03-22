@@ -90,22 +90,23 @@ def make_qr(id):
     return img_bytes
 
 def check_appointments():
-    timeStampAfter = int(datetime.now() + timedelta(days=1)).timestamp()
+    timingint = datetime.now() + timedelta(days=1)
+    timeStampAfter = timingint.timestamp()
     timeStampNow = int(datetime.now().timestamp())
-    appointments = database.search(Appointment, time__lte=timeStampAfter)
+    appointments = database.search(Appointment.time <= timeStampAfter)
     print('sent s')
-
+    
     for appointment in appointments:
         """ appointmentDaybefore = appointment.time - 86400
         if appointmentDaybefore < timeStampNow:
             patient = database.get_by_id(User, objId=appointment.patientId)
             patientName = f'{patient.lastName} {patient.firstName}'
-            notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
-         """
+            notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time)) """
+        
         patient = database.get_by_id(User, objId=appointment.patientId)
         if patient:
             patientName = f'{patient.lastName} {patient.firstName}'
-            notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
+            notify(appointment.patient.Id, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
             print('sent f')
 
 

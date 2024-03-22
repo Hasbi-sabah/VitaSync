@@ -38,8 +38,8 @@ def job_scheduler():
 if __name__ == '__main__':
     """Run the app in debug mode."""
     # times we run the jobs
-    schedule.every().day.at("11:34").do(check_appointments)
+    schedule.every().day.at("11:57").do(check_appointments)
     schedule.every().day.at("16:00").do(check_appointments)
-    # shcedule the job scheduler
+    """ schedule.every().second.do(check_appointments) """
     job_scheduler()
     app.run(debug=True, host=host, port=port)
