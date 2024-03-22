@@ -1,5 +1,5 @@
 import base64
-from datetime import datetime
+from datetime import datetime, timedelta
 from io import BytesIO
 from flask import app, current_app, jsonify, render_template, request, send_file, Response
 import requests
@@ -11,6 +11,7 @@ from models.prescription import Prescription
 from models.hcw import HCW
 from models.user import User
 from models.drug import Drug
+from models.appointment import Appointment
 from models.drug_prescribed import DrugPrescribed
 from api.auth_middleware import token_required
 
@@ -89,14 +90,23 @@ def make_qr(id):
     return img_bytes
 
 def check_appointments():
-    appointments = database.get_all('Appointment')
+    timeStampAfter = int(datetime.now() + timedelta(days=1)).timestamp()
     timeStampNow = int(datetime.now().timestamp())
+    appointments = database.search(Appointment, time__lte=timeStampAfter)
+    print('sent s')
+
     for appointment in appointments:
-        appointmentDaybefore = appointment.time - 86400
+        """ appointmentDaybefore = appointment.time - 86400
         if appointmentDaybefore < timeStampNow:
             patient = database.get_by_id(User, objId=appointment.patientId)
             patientName = f'{patient.lastName} {patient.firstName}'
             notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
+         """
+        patient = database.get_by_id(User, objId=appointment.patientId)
+        if patient:
+            patientName = f'{patient.lastName} {patient.firstName}'
+            notify(appointment.patient.userId, 3, patientName=patientName, time=timestamp_to_str(appointment.time))
+            print('sent f')
 
 
 @api.route('/get_qr/<uuid:id>', methods=['GET'], strict_slashes=False)
