@@ -42,7 +42,7 @@ class BM:
         new_dict = {}
         for key, value in self.__dict__.items():
             if isinstance(value, (int, float, str, bool, list, dict, tuple)):
-                if key in ['created_at', 'updated_at', 'time']:
+                if key in ['created_at', 'modified_at', 'time']:
                     value = timestamp_to_str(value)
                 new_dict[key] = value
         return new_dict
