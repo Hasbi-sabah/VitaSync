@@ -1,0 +1,10 @@
+Flask==2.3.2
+Flask_Cors==3.0.8
+PyJWT==2.8.0
+python-dotenv==1.0.1
+python_bcrypt==0.3.2
+qrcode==7.4.2
+Requests==2.31.0
+SQLAlchemy==2.0.23
+SQLAlchemy_Utils==0.41.1
+weasyprint==61.2

@@ -9,7 +9,7 @@ class Drug(BM, Base):
     columns = ["commercialName", "activeIngredient", "distributor",
                "description", "dose", "form", "status"]
 
-    commercialName = Column(String(250))
+    commercialName = Column(String(250), index=True)
     activeIngredient = Column(String(250))
     distributor = Column(String(250))
     dose = Column(String(250))

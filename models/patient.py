@@ -32,6 +32,7 @@ class Patient(BM, Base):
             if key in User.columns:
                 userDict[key] = value
         super().__init__(**kwargs)
+        userDict['role'] = 'patient'
         userDict['profileId'] = self.id
         user = User(**userDict)
         setattr(self, 'userId', user.id)

@@ -13,6 +13,7 @@ from api.patient.patient import *
 from api.patient.patient_prescription import *
 from api.patient.patient_procedure import *
 from api.patient.patient_record import *
+from api.patient.patient_test_request import *
 from api.patient.patient_vaccine import *
 from api.patient.patient_vital import *
 
@@ -26,6 +27,8 @@ from api.procedure.procedure import *
 from api.record.record import *
 
 from api.test.test import *
+
+from api.test_request.test_request import *
 
 from api.vaccine.vaccine import *
 

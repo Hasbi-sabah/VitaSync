@@ -10,5 +10,5 @@ class MedInfo(BM, Base):
     patient = relationship("Patient", back_populates="medicalInfo")
 
     allergies = Column(String(2048))
-    consitions = Column(String(2048))
+    conditions = Column(String(2048))
     notes = Column(String(2048))

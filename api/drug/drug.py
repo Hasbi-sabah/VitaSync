@@ -6,7 +6,7 @@ from models.drug import Drug
 
 
 @api.route('/drug', methods=['GET'] ,strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient', 'technician'])
 def get_all_drugs(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
@@ -21,7 +21,7 @@ def get_all_drugs(current_user):
 
 
 @api.route('/drug_lookup', methods=['POST'] ,strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient', 'technician'])
 def drug_lookup(current_user):
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
@@ -33,7 +33,7 @@ def drug_lookup(current_user):
 
 
 @api.route('/drug/<uuid:drugId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@token_required(['doctor', 'nurse', 'pharmacist', 'patient', 'technician'])
 def get_drug(drugId, current_user):
     drug = database.get_by_id(Drug, str(drugId))
     if not drug:
@@ -72,7 +72,7 @@ def update_drug(drugId, current_user):
 
 
 @api.route('/drug/<uuid:drugId>', methods=['DELETE'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@token_required([])
 def delete_drug(drugId, current_user):
     drug = database.get_by_id(Drug, str(drugId))
     if not drug:

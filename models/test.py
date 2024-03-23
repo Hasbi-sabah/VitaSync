@@ -8,7 +8,7 @@ class Test(BM, Base):
     
     columns = ['name', 'type', 'sampleType', 'instructions', 'price', 'description']
     
-    name = Column(String(250))
+    name = Column(String(250), index=True)
     type = Column(String(50))
     sampleType = Column(String(250))
     instructions = Column(String(250))
