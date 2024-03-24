@@ -1,1 +1,1 @@
-# alx-pets
+# VitaSync Alx Graduation Project
