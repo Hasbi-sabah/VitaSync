@@ -6,7 +6,7 @@ from models.test import Test
 from models.test_request import TestRequest
 
 
-@api.route('/test_request/<uuid:test_requestId>', methods=['GET'], strict_slashes=False)
+@api.route('/test_request/<uuid:testRequestId>', methods=['GET'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
 def get_test_request(testRequestId, current_user):
     test_request = database.get_by_id(TestRequest, str(testRequestId))

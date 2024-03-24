@@ -12,8 +12,8 @@ def get_all_prescription_drugs(prescriptionId, current_user):
     prescription = database.get_by_id(Prescription, str(prescriptionId))
     if not prescription:
         return jsonify({"error": "Prescription not found"}), 404
-    if current_user.role == 'prescription':
-        if current_user.profileId != str(prescriptionId):
+    if current_user.role == 'patient':
+        if current_user.profileId != prescription.prescribedForId:
             return {
                     "error": "Insufficient privileges!"
                 }, 403
