@@ -23,7 +23,8 @@ app.config['SMTP_API_KEY'] = SMTP_API_KEY
 app.register_blueprint(api)
 app.url_map.strict_slashes = False
 cors_config = {
-    "origins": ["http://localhost:5000", "http://localhost:4000"]
+    "origins": ["http://localhost:5000", "http://localhost:3000"],
+    "supports_credentials": True
 }
 CORS(app, **cors_config)
 app.jinja_env.globals.update(datetime=datetime)
