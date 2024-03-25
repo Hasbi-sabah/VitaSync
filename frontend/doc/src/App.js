@@ -14,12 +14,12 @@ function App() {
       <Route index element={<Public />} />
       <Route path="/" element={<Layout />}>
         {/* pulic routes*/}
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="patients" element={<PatientMan />} />
-        <Route path="records" element={<Records />} />
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="patients" element={<PatientMan />} />
+          <Route path="records" element={<Records />} />
         </Route>
 
       </Route>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import CreateNewPatient from "../../features/CreateNewPatient";
+import CreateNewPatient from "../patient/CreateNewPatient";
 import Searchbox from "./Searchbox";
 
 const CreateSearchPatient = () => {

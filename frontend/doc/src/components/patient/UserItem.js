@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ViewPatient from "../../features/ViewPatient";
+import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 

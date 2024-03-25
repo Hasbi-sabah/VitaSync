@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import PatientDetails from '../components/patient/PatientDetails';
+import PatientDetails from './PatientDetails';
 import NewPatientRecord from './NewPatientRecord';
 
 // API call for patient record
