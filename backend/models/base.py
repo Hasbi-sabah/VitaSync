@@ -8,7 +8,7 @@ Base = declarative_base()
 
 
 class BM:
-    id = Column(String(40), primary_key=True)
+    id = Column(String(40), primary_key=True, index=True)
     created_at = Column(Integer)
     modified_at = Column(Integer)
     archived = Column(Boolean, default=False)
