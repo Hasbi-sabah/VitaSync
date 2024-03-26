@@ -24,6 +24,7 @@ export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
         rows={rows}
         {...field}
         {...props}
+        disabled={true}
       />
       {meta.touched && meta.error ? (
         <div className="error">{meta.error}</div>
@@ -37,7 +38,10 @@ const MyDateInput = ({ label, ...props }) => {
   const [field] = useField(props);
   return (
     <div className="text-left mt-3">
-      <label className={`${label_style} text-white`} htmlFor={props.id || props.name}>
+      <label
+        className={`${label_style} text-white`}
+        htmlFor={props.id || props.name}
+      >
         {label}
       </label>
       <input
@@ -45,63 +49,42 @@ const MyDateInput = ({ label, ...props }) => {
         type="date"
         {...field}
         {...props}
+        disabled={true}
       />
     </div>
   );
 };
 
 const NewPatientRecord = ({ closeOverlay }) => {
-  const [drugOptions, setDrugOptions] = useState([]);
-  const [vaccineOptions, setVaccineOptions] = useState([]);
-
-  // API calls
-  const fetchDrugs = async () => {};
-  const fetchVaccine = async () => {};
-
   useEffect(() => {
-    // Fetch drugs from API
-    fetchDrugs().then((data) => setDrugOptions(sampleDrugs));
-    fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
+    // Fetch patient's record from API
   }, []);
 
-  const sampleDrugs = [
-    { id: 1, name: "Drug A" },
-    { id: 2, name: "Drug B" },
-    { id: 3, name: "Drug C" },
-    // Add more sample drugs as needed
-  ];
-  const sampleVaccines = [
-    { id: 1, name: "Vaccine A" },
-    { id: 2, name: "Vaccine B" },
-    { id: 3, name: "Vaccine C" },
+  const diagnosisSample = "diagnosis";
+  const notesSample = "notes";
+  const proceduresSample = "procedures sample";
+  const followUpSample = new Date("2024-12-03");
+  const PrescriptionSample = [
+    { drug: "drug1", dosage: "prescription 1" },
+    { drug: "drug3", dosage: "prescription 3" },
+    { drug: "drug2", dosage: "prescription 2" },
   ];
 
-  const addDrugButton = ({ handleAddDrug}, type ) => (
-    <div
-      className="absolute top-3 right-7 bg-lightBlue2 cursor-pointer hover:bg-lightBlue h-10 p-3 flex items-center mr-2"
-      onClick={() => handleAddDrug(type)}
-    >
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="32"
-        height="32"
-        fill="#ffffff"
-        viewBox="0 0 256 256"
-      >
-        <path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"></path>
-      </svg>
-      <p className="text-white text-lg pl-2">Add drug</p>
-    </div>
-  );
+  const vaccineSample = [
+    { drug: "vaccine 1", dosage: "Vaccine note" },
+    { drug: "vaccine 2", dosage: "Vaccine note" },
+    { drug: "vaccine 3", dosage: "Vaccine note" },
+  ];
+
   return (
     <Formik
       initialValues={{
-        prescriptions: [],
-        diagnosis: "",
-        notes: "",
-        procedures: "",
-        vaccine: [],
-        followUp: "",
+        prescriptions: PrescriptionSample,
+        diagnosis: diagnosisSample,
+        notes: notesSample,
+        procedures: proceduresSample,
+        vaccine: vaccineSample,
+        followUp: followUpSample.toISOString().split('T')[0],
       }}
       validationSchema={Yup.object({
         diagnosis: Yup.string().required("Required"),
@@ -109,21 +92,8 @@ const NewPatientRecord = ({ closeOverlay }) => {
         procedures: Yup.string(),
         followUp: Yup.date(),
       })}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-          resetForm();
-        }, 400);
-      }}
     >
       {(formik) => {
-        const handleAddDrug = (type) => {
-          formik.setFieldValue(type, [
-            ...formik.values[type],
-            { drug: "", dosage: "" }, // Initialize with empty values
-          ]);
-        };
         return (
           <Form className="flex mt-4 flex-col gap-3">
             {/* Prescription */}
@@ -131,49 +101,47 @@ const NewPatientRecord = ({ closeOverlay }) => {
               <h3 className="font-semibold text-lg text-left pt-6">
                 Prescriptions
               </h3>
-
-              {/* Add drug button */}
-              {addDrugButton({ handleAddDrug }, "prescriptions")}
-
-              <FieldArray name="prescriptions">
-                {(arrayHelpers) => (
+              <FieldArray>
+                {() => (
                   <div>
-                    {formik.values.prescriptions.map((prescribe, index) => (
-                      <div key={index} className="flex justify-between p-3">
-                        <div>
-                          {index + 1}.
-                          <select
-                            className={`${input_style} inline ml-4 pl-2`}
-                            name={`prescriptions.${index}.drug`}
-                            onChange={formik.handleChange}
-                            value={prescribe.drug}
-                          >
-                            <option value="">Select drug</option>
-                            {drugOptions.map((drug) => (
-                              <option key={drug.id} value={drug.id}>
-                                {drug.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
+                    {PrescriptionSample.map((prescribe) => (
+                      <div className="flex justify-between p-3">
+                        <div></div>
                         <input
                           type="text"
-                          name={`prescriptions.${index}.dosage`}
-                          onChange={formik.handleChange}
+                          name="prescription"
+                          value={prescribe.drug}
+                          className={`${input_style} p-3 h-12 w-[24rem]`}
+                          disabled={true}
+                        />
+                        <input
+                          type="text"
+                          name="prescriptions_dosage"
                           value={prescribe.dosage}
                           className={`${input_style} p-3 h-12 w-[24rem]`}
-                          placeholder="Dosage instructions"
+                          disabled={true}
                         />
                         <svg
-                          className="cursor-pointer"
-                          onClick={() => arrayHelpers.remove(index)}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          fill="#00ff00"
+                          viewBox="0 0 256 256"
+                          onClick={""}
+                          className="hover:cursor-pointer"
+                        >
+                          <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
+                        </svg>
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="32"
                           height="32"
                           fill="#ff0000"
                           viewBox="0 0 256 256"
+                          onClick={""}
+                          className="hover:cursor-pointer"
                         >
-                          <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
+                          <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.56,87.56,0,0,1-20.41,56.28L71.72,60.4A88,88,0,0,1,216,128ZM40,128A87.56,87.56,0,0,1,60.41,71.72L184.28,195.6A88,88,0,0,1,40,128Z"></path>
                         </svg>
                       </div>
                     ))}
@@ -194,49 +162,47 @@ const NewPatientRecord = ({ closeOverlay }) => {
             <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white relative">
               <h3 className="font-semibold text-lg text-left pt-6">Vaccine</h3>
 
-              {/* Add drug button */}
-              {addDrugButton({ handleAddDrug }, "vaccine")}
-
-              <FieldArray name="vaccine">
-                {(arrayHelpers) => (
+              <FieldArray>
+                {() => (
                   <div>
-                    {formik.values.vaccine.map((prescribe, index) => (
-                      <div key={index} className="flex justify-between p-3">
-                        <div>
-                          {index + 1}.
-                          <select
-                            className={`${input_style} inline ml-4 pl-2`}
-                            name={`vaccine.${index}.drug`}
-                            onChange={formik.handleChange}
-                            value={prescribe.drug}
-                          >
-                            <option value="">Select vaccine</option>
-                            {vaccineOptions.map((drug) => (
-                              <option key={drug.id} value={drug.id}>
-                                {drug.name}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                        <textarea
+                    {vaccineSample.map((vaccine) => (
+                      <div className="flex justify-between p-3">
+                        <div></div>
+                        <input
                           type="text"
-                          name={`vaccine.${index}.dosage`}
-                          onChange={formik.handleChange}
-                          value={prescribe.dosage}
-                          className={`resize-none input p-3 bg-gray block rounded-md w-[20rem] mt-1 focus:outline-none focus:ring-2 focus:ring-lightBlue`}
-                          rows={4}
-                          placeholder="Vaccine instructions"
+                          name="prescription"
+                          value={vaccine.drug}
+                          className={`${input_style} p-3 h-12 w-[24rem]`}
+                          disabled={true}
+                        />
+                        <input
+                          type="text"
+                          name="prescriptions_dosage"
+                          value={vaccine.dosage}
+                          className={`${input_style} p-3 h-12 w-[24rem]`}
+                          disabled={true}
                         />
                         <svg
-                          className="cursor-pointer"
-                          onClick={() => arrayHelpers.remove(index)}
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="32"
+                          height="32"
+                          fill="#00ff00"
+                          viewBox="0 0 256 256"
+                          onClick={""}
+                          className="hover:cursor-pointer"
+                        >
+                          <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
+                        </svg>
+                        <svg
                           xmlns="http://www.w3.org/2000/svg"
                           width="32"
                           height="32"
                           fill="#ff0000"
                           viewBox="0 0 256 256"
+                          onClick={""}
+                          className="hover:cursor-pointer"
                         >
-                          <path d="M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z"></path>
+                          <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.56,87.56,0,0,1-20.41,56.28L71.72,60.4A88,88,0,0,1,216,128ZM40,128A87.56,87.56,0,0,1,60.41,71.72L184.28,195.6A88,88,0,0,1,40,128Z"></path>
                         </svg>
                       </div>
                     ))}

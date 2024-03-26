@@ -4,7 +4,7 @@ import * as Yup from "yup";
 
 const label_style = "pl-2 text-l font-normal";
 
-const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
+const UpdateMedInfo = ({ edit, setFunction, medInfo, patientId }) => {
   //<input>
   const TextInput = ({ label, ...props }) => {
     const [field] = useField(props);

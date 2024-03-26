@@ -3,7 +3,7 @@ import UpdateMedInfo from "../MedInfo/UpdateMedInfo";
 import Vital from "./Vital";
 import RecordVitals from "./RecordVitals";
 
-const PatientDetails = ({ userId, closeOverlay }) => {
+const PatientDetails = ({ patientId, closeOverlay }) => {
   // API call to /patient/id ASK SABAH TO INCLUDE EMAIL
   const currentDate = new Date();
   const reqPatientDetails = {
@@ -101,7 +101,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               edit={editAllergies}
               setFunction={setEditAllergies}
               medInfo={fillDetails.allergies}
-              userId={userId}
+              patientId={patientId}
             />
             {editButton("allergies")}
           </div>
@@ -110,7 +110,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               edit={editConditions}
               setFunction={setEditConditions}
               medInfo={fillDetails.conditions}
-              userId={userId}
+              patientId={patientId}
             />
             {editButton("conditions")}
           </div>
@@ -119,7 +119,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               edit={editNote}
               setFunction={setEditNote}
               medInfo={fillDetails.note}
-              userId={userId}
+              patientId={patientId}
             />
             {editButton("note")}
           </div>
@@ -159,7 +159,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               currentDate={"9/18/16"}
             ></Vital>
           </div>
-          {addVitals && <RecordVitals closeOverlay={closeVitalsOverlay} patientId={userId}/>}
+          {addVitals && <RecordVitals closeOverlay={closeVitalsOverlay} patientId={patientId}/>}
           <div
             className="absolute top-3 right-7 bg-lightBlue2 cursor-pointer hover:bg-lightBlue h-10 p-3 flex items-center mr-2"
             onClick={() => handleAddVital()}

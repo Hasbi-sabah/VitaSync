@@ -3,7 +3,7 @@ import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
-const UserItem = ({ userId, sn, name, sex, age, contact, date, time}) => {
+const UserItem = ({ patientId, sn, name, sex, age, contact, date, time}) => {
   const location = useLocation();
   const isDashboard = location.pathname === '/dashboard';
   const bgColor = sn % 2 === 1 ? "bg-gray" : "";
@@ -28,7 +28,7 @@ const UserItem = ({ userId, sn, name, sex, age, contact, date, time}) => {
       {isDashboard && isMobile && <td>{time}</td>}
       <td>
         {/* Overlay */}
-        {showPatientDetails && <ViewPatient closeOverlay={closeOverlay} userId={userId} />}
+        {showPatientDetails && <ViewPatient closeOverlay={closeOverlay} patientId={patientId} />}
         <svg
           onClick={handleOnClick}
           className="hover:cursor-pointer"

@@ -3,7 +3,7 @@ import PatientDetails from "./PatientDetails";
 import NewPatientRecord from "./NewPatientRecord";
 
 // API call for patient record
-const ViewPatient = ({ userId, closeOverlay }) => {
+const ViewPatient = ({ patientId, closeOverlay }) => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleHistory = () => {
@@ -29,7 +29,7 @@ const ViewPatient = ({ userId, closeOverlay }) => {
         </h1>
         <div className="mb-4">
           {/* Add more patient details here */}
-          <PatientDetails userId={userId} closeOverlay={closeOverlay} />
+          <PatientDetails patientId={patientId} closeOverlay={closeOverlay} />
         </div>
         <div
           className="rounded-lg h-10 w-full mt-10 flex justify-between items-center cursor-pointer  bg-white"
@@ -67,7 +67,7 @@ const ViewPatient = ({ userId, closeOverlay }) => {
         ) : (
           ""
         )}
-        <NewPatientRecord closeOverlay={closeOverlay} />
+        <NewPatientRecord closeOverlay={closeOverlay} patientId={patientId} />
       </div>
     </div>
   );
