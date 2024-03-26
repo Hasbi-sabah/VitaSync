@@ -25,11 +25,14 @@ const MenuItem = ({ label }) => {
   return (
     <Link to={`/${label}`}>
     <>
-        <div className={`flex items-center h-32 sm:gap-10 sm:h-20 cursor-pointer ${isActive ? 'bg-darkBlue' : 'bg-blue hover:bg-lightBlue'}  ${label === 'logout' ? 'sm:fixed sm:bottom-0 sm:w-64' : '' }`}>
-            <span className='px-5 sm:pl-12'>{icons[label]}</span>
-            {!isMobile && <span className={`text-white max-w-20 text-left ${isActive ? 'text-lg' : 'text-base'}`}>{labels[label]}</span>}
+        <div className={`${label === 'logout' ? 'sm:fixed sm:bottom-0 sm:w-56 lg:w-64' : '' }`}>
+          {!isMobile && label === 'logout' && <hr className={`h-1 bg-white block`}/>}
+            <div className={`flex items-center h-20 sm:gap-2 lg:gap-10 lg:h-20 sm:h-32 cursor-pointer ${isActive ? 'bg-darkBlue' : 'bg-blue hover:bg-lightBlue'} `}>
+              <span className='px-5 sm:px-3 lg:px-4'>{icons[label]}</span>
+              {!isMobile && <span className={`text-white max-w-20 text-left ${isActive ? 'text-lg sm:text-2xl lg:text-lg' : 'text-base sm:text-xl lg:text-base'}`}>{labels[label]}</span>}
+            </div>
+          <hr className={`h-1 bg-white block`}/>
         </div>
-        <span className={`h-1 bg-white block ${label === 'logout' ? 'sm:fixed bottom-0' : '' }`}/>
     </>
     </Link>
   )

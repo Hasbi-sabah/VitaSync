@@ -13,11 +13,11 @@ function App() {
       <Route path="login" element={<Login />} />
       <Route index element={<Public />} />
       <Route path="/" element={<Layout />}>
+      <Route path="dashboard" element={<Dashboard />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="dashboard" element={<Dashboard />} />
           <Route path="patients" element={<PatientMan />} />
           <Route path="records" element={<Records />} />
         </Route>

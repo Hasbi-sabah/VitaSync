@@ -63,8 +63,8 @@ const PatientDetails = ({ userId, closeOverlay }) => {
   </svg>
   );
   return (
-    <div className="w-screen sm:w-[60rem]">
-      <div className="flex flex-col sm:flex-row gap-11">
+    <div className="w-screen sm:w-[100%] lg:w-[60rem]">
+      <div className="flex flex-col lg:flex-row gap-11">
         <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 sm:w-[26rem] p-3 sm:p-5">
           <div className="">
             <h2 className="text-3xl font-semibold text-center">
@@ -114,9 +114,9 @@ const PatientDetails = ({ userId, closeOverlay }) => {
             {editButton("note")}
           </div>
         </div>
-        <div className="bg-white rounded-3xl relative sm:w-[43rem] sm:h-[20rem] p-5">
+        <div className="bg-white rounded-3xl mx-auto relative lg:w-[43rem] lg:h-[20rem] p-5">
           <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
-          <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 mt-5 text-left">
+          <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
             {/* API call to get the vitals */}
             <Vital
               Vitalreading={"90 °F"}

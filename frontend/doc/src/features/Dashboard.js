@@ -17,7 +17,7 @@ const Dashboard = () => {
 
   const label = "Today's Appointments"
   return (
-    <div className='bg-gray pb-12'>
+    <div className='bg-gray pb-12 flex flex-col items-center justify-center'>
       <CreateSearchPatient />
       <DisplayPatients data={data} label={label}/>
     </div>

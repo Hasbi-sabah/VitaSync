@@ -2,17 +2,17 @@ import React from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
 
-const label_style = "sm:pl-2 text-lg sm:text-l font-medium sm:font-normal";
+const label_style = "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
 const input_style =
-  "block rounded-xl h-12 sm:h-7 w-[100%] sm:w-60 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
+  "block rounded-xl text-black h-12 lg:h-7 w-[100%] lg:w-60 mt-1 lg:mt-0 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
 const button_style =
-  "h-14 w-28 px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
+  "h-10 w-24 px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
 //<input>
 export const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
-    <div className="px-2 sm:px-8">
+    <div className="px-2 lg:px-8">
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
@@ -24,7 +24,7 @@ export const MyTextInput = ({ label, ...props }) => {
         {...props}
       />
       {meta.touched && meta.error ? (
-        <div className="error pl-5 text-red">{meta.error}</div>
+        <div className="error pl-5 text-sm text-red">{meta.error}</div>
       ) : null}
     </div>
   );
@@ -34,13 +34,13 @@ export const MyTextInput = ({ label, ...props }) => {
 export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
   const [field, meta] = useField(props);
   return (
-    <div className="px:2 sm:px-8">
+    <div className="px:2 lg:px-8">
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
       <textarea
-      // "block rounded-xl h-12 sm:h-7 w-[100%] sm:w-60 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
-        className={`resize-none p-5 border block rounded-md w-[100%] sm:w-96 mt-1 focus:outline-none focus:ring-2 focus:ring-lightBlue ${
+      // "block rounded-xl h-12 lg:h-7 w-[100%] lg:w-60 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
+        className={`resize-none p-5 border block rounded-md w-[100%] lg:w- mt-1 text-black focus:outline-none focus:ring-2 focus:ring-lightBlue ${
           meta.touched && meta.error ? "border border-red animate-shake" : ""
         }`}
         rows={rows}
@@ -58,7 +58,7 @@ export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
 export const MyCheckBox = ({ children, ...props }) => {
   const [field, meta] = useField({ ...props, type: "checkbox" });
   return (
-    <div className="pl-2 sm:pl-6">
+    <div className="pl-2 lg:pl-6">
       <label className={`checkbox-input ${label_style}`}>
         <input
           className={`p-5 ${input_style} ${
@@ -81,7 +81,7 @@ export const MyCheckBox = ({ children, ...props }) => {
 export const MySelect = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
-    <div className="px-2 sm:pl-8">
+    <div className="px-2 lg:pl-8">
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
@@ -97,7 +97,7 @@ export const MySelect = ({ label, ...props }) => {
 const MyDateInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
-    <div className="px-2 sm:pl-8">
+    <div className="px-2 lg:pl-8">
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
@@ -110,7 +110,7 @@ const MyDateInput = ({ label, ...props }) => {
         {...props}
       />
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <div className="text-sm error pl-5 text-red">{meta.error}</div>
       ) : null}
     </div>
   );
@@ -157,8 +157,8 @@ const SignUpForm = ({ closeOverlay }) => {
         }, 400);
       }}
     >
-      <Form className="flex mt-4 flex-col gap-3 sm:gap-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-5">
+      <Form className="flex mt-4 lg:mt-2 flex-col gap-3 lg:gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
           <MyTextInput
             label={"First Name"}
             name="firstname"
@@ -211,7 +211,7 @@ const SignUpForm = ({ closeOverlay }) => {
           placeholder="No. 0, Test Str, Example Estate"
         />
 
-        <div className="flex justify-evenly sm:justify-end gap-5">
+        <div className="flex justify-evenly lg:justify-end gap-5">
           <button
             className={`bg-white text-black ${button_style}`}
             onClick={closeOverlay}
@@ -232,10 +232,12 @@ const SignUpForm = ({ closeOverlay }) => {
 
 const CreateNewPatient = ({ closeOverlay }) => {
   return (
-    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto sm:overflow-hidden ">
-      <div className="sm:mt-24 mt-36 bg-white rounded-xl shadow-lg sm:p-6 w-96 sm:w-auto">
-        <h1 className="text-xl font-semibold pt-3 text-center mb-1">Create Patient Account</h1>
-        <div className="mb-12 sm:mb-4">{SignUpForm({ closeOverlay })}</div>
+    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto lg:overflow-hidden">
+      <div className="flex justify-center items-center lg:mt-16 sm:mt-[10%] mt-[20%] bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
+        <div>
+          <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-3 lg:mt-1 text-center mb-1">Create Patient Account</h1>
+          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-auto sm:min-h-[60vh] overflow-auto ">{SignUpForm({ closeOverlay })}</div>
+        </div>
       </div>
     </div>
   );
