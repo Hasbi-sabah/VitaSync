@@ -15,14 +15,14 @@ from models.appointment import Appointment
 from models.drug_prescribed import DrugPrescribed
 from api.auth_middleware import token_required
 
-def input_to_timestamp(input):
+def input_to_timestamp(input, input_format):
     """
     Convert a string input representing a date and time to a Unix timestamp.
 
-    This function takes a string input in the format "dd-mm-yyyy hh:mm AM/PM"
+    This function takes a string input and a format
     and converts it into a Unix timestamp.
     """
-    input_format = "%d-%m-%Y %I:%M %p"  # Format of the input string
+    # input_format = "%d-%m-%Y %I:%M %p"  # Format of the input string
     try:
         # Attempt to parse the input string into a datetime object
         datetime_obj = datetime.strptime(input, input_format)
@@ -33,13 +33,13 @@ def input_to_timestamp(input):
         # If the input string is not in the correct format, return None
         return None
     
-def timestamp_to_str(timestamp):
+def timestamp_to_str(timestamp, end_format):
     """
     Convert a Unix timestamp to a formatted date and time string.
 
     This function takes a Unix timestamp and converts it into a formatted string representing a date and time.
     """
-    end_format = "%d-%m-%Y at %I:%M %p"  # Desired format for the date and time string
+    # end_format = "%d-%m-%Y at %I:%M %p"  # Desired format for the date and time string
     dt_obj = datetime.fromtimestamp(timestamp)  # Convert the timestamp to a datetime object
     formatted_str = dt_obj.strftime(end_format)  # Format the datetime object into a string
     return formatted_str  # Return the formatted date and time string

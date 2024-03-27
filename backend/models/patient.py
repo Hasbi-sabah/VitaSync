@@ -13,7 +13,7 @@ class Patient(BM, Base):
     lastName = Column(String(60))
     CIN = Column(String(20))  # identity card number
     sex = Column(String(20))
-    birthDate = Column(String(60))
+    birthDate = Column(Integer)
     phoneNumber = Column(Integer)
     address = Column(String(2048))
     medicalInfo = relationship("MedInfo", uselist=False, back_populates="patient")
@@ -36,6 +36,7 @@ class Patient(BM, Base):
             kwargs.pop(key)
         super().__init__(**kwargs)
         userDict['profileId'] = self.id
+        userDict['role'] = 'patient'
         user = User(**userDict)
         setattr(self, 'userId', user.id)
         self.save()

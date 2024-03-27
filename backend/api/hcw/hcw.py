@@ -3,6 +3,7 @@ from flask import jsonify, request
 from api import api
 from api.auth_middleware import token_required
 from api.base import notify
+from models.patient import Patient
 from models import database
 from models.hcw import HCW
 from models.user import User
@@ -37,6 +38,7 @@ def get_all_extended_hcws(current_user):
         # Remove sensitive information from the user dictionary
         user_dict.pop('id', None)  # Remove 'id' field
         user_dict.pop('password', None)  # Remove 'password' field
+        user_dict.pop('token', None)  # Remove 'token' field
 
         # Update the healthcare worker dictionary with user information
         hcw_dict.update(user_dict)
@@ -63,7 +65,7 @@ def get_all_hcws(current_user):
     """
 
     # Retrieve all healthcare workers from the database and convert them to dictionaries
-    res = [hcw.to_dict() for hcw in database.get_all(HCW) if database.get_by_id(User, hcw.userId).role != 'admin']
+    res = [hcw.to_dict() for hcw in database.get_all(HCW) if current_user.role == 'admin' or database.get_by_id(User, hcw.userId).role != 'admin']
 
     # Return a JSON response with the list of healthcare workers
     return jsonify(res)
@@ -197,6 +199,10 @@ def add_hcw(current_user):
         if not val:
             return jsonify({"error": f"Missing {attr}"}), 400
 
+    # Check if the CIN already exists in the database
+    if database.search(HCW, CIN=data.get('CIN', None)) or database.search(Patient, CIN=data.get('CIN', None)):
+        return jsonify({"error": "CIN already exists in database"}), 409
+
     # Check if the licence number already exists in the database
     if database.search(HCW, licence=data.get('licence', None)):
         return jsonify({"error": "License already exists in database"}), 409
@@ -204,7 +210,7 @@ def add_hcw(current_user):
     # Check if the email address already exists in the database
     if database.search(User, email=data.get('email', None)):
         return jsonify({"error": "Email already exists in database"}), 409
-
+    
     # Generate a random password if not provided
     if not data.get('password', None):
         data['password'] = secrets.token_urlsafe(10)
@@ -216,11 +222,16 @@ def add_hcw(current_user):
             return jsonify({"error": "Could not generate username, please include it in the next request"}), 400
         data['username'] = username
 
+    new_data = data.copy()
+    for key in data:
+        if not hasattr(HCW, key) and not hasattr(User, key):
+            new_data.pop(key, None)
+
     # Create and add the new healthcare worker to the database
-    hcw = HCW(**data)
+    hcw = HCW(**new_data)
     
     # Notify the user about their credentials by email
-    # notify(hcw.userId, 1, name=f'{hcw.lastName} {hcw.firstName}', username=database.get_by_id(User, str(hcw.userId)).username, password=data['password'])
+    notify(hcw.userId, 1, name=f'{hcw.lastName} {hcw.firstName}', username=database.get_by_id(User, str(hcw.userId)).username, password=new_data['password'])
     
     # Return a JSON response with the newly added healthcare worker's information
     return jsonify(database.get_by_id(HCW, str(hcw.id)).to_dict())
@@ -254,7 +265,7 @@ def update_hcw(hcwId, current_user):
     :return: JSON response with the updated healthcare worker's information or an error message.
     :raises 404: If the specified healthcare worker ID is not found in the database.
     :raises 403: If the user does not have sufficient privileges to access the information.
-    :raises 400: If attribute is invalid or already exists.
+    :raises 400: If attribute already exists.
     """
 
     # Check content type and get data
@@ -269,6 +280,9 @@ def update_hcw(hcwId, current_user):
     if not hcw:
         return jsonify({"error": "Health Care Worker not found"}), 404
 
+    # Get the user object associated with the patient
+    user = database.get_by_id(User, hcw.userId)
+    
     # Check permissions
     if current_user.role != 'admin' and current_user.profileId != str(hcwId):
         return jsonify({"error": "Insufficient privileges!"}), 403
@@ -276,24 +290,27 @@ def update_hcw(hcwId, current_user):
     # Iterate over the key-value pairs in the data dictionary
     for key, value in data.items():
         # Check if the current user is not an admin and the key is in the restricted list
-        if current_user.role != 'admin' and key in ['id', 'created_at', 'updated_at', 'archived', 'profileId', 'role', 'userId', 'password', 'token']:
+        if current_user.role != 'admin' and key in ['id', 'created_at', 'modified_at', 'archived', 'profileId', 'role', 'userId', 'password', 'token']:
             continue  # Skip processing for restricted attributes
         
-        # Check for specific attributes (username, email, licence) and if they already exist in the database
-        for attr in ['username', 'email', 'licence']:
-            if key == attr and database.search(User, key=value):
+        # Check for specific attributes and if they already exist in the database
+        for attr in ['username', 'email']:
+            if key == attr and database.search(User, **{key: value}):
                 # Return a 409 Conflict error if the attribute already exists in the database
                 return jsonify({"error": f"{attr} already exists in database"}), 409
+     
+        # Check for specific attributes and if they already exist in the database
+        for attr in ['CIN', 'licence']:
+            if key == attr and (database.search(HCW, **{key: value}) or database.search(Patient, **{key: value})):
+                # Return a 409 Conflict error if the attribute already exists in the database
+                return jsonify({"error": f"{attr} already exists in database"}), 409   
         
         # Check if the attribute exists in the HCW model, and update if so
         if hasattr(hcw, key):
             setattr(hcw, key, value)
         # If the attribute doesn't exist in the HCW model, check if it exists in the current user model, and update if so
-        elif hasattr(current_user, key):
-            setattr(current_user, key, value)
-        else:
-            # If the attribute is neither in HCW nor in current_user, return a 400 Bad Request error
-            return jsonify({"error": f"Invalid attribute: {key}"}), 400
+        elif hasattr(user, key):
+            setattr(user, key, value)
 
     # Save the changes to the database
     hcw.save()

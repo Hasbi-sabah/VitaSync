@@ -43,6 +43,8 @@ class BM:
         for key, value in self.__dict__.items():
             if isinstance(value, (int, float, str, bool, list, dict, tuple)):
                 if key in ['created_at', 'modified_at', 'time']:
-                    value = timestamp_to_str(value)
+                    value = timestamp_to_str(value, "%Y-%m-%d at %I:%M %p")
+                if key == 'birthDate':
+                    value = timestamp_to_str(value, "%Y-%m-%d")
                 new_dict[key] = value
         return new_dict
