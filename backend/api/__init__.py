@@ -6,9 +6,13 @@ from api.base import *
 from api.access.accessHandle import *
 from api.smtp.emailsHandler import *
 
+from api.appointment.appointment import *
+
 from api.drug.drug import *
 
 from api.hcw.hcw import *
+from api.hcw.hcw_appointment import *
+
 
 from api.patient.patient import *
 from api.patient.patient_appointment import *

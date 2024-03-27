@@ -1,4 +1,5 @@
 from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
 from models.base import BM, Base
 from models.user import User
 
@@ -13,6 +14,7 @@ class HCW(BM, Base):
     speciality = Column(String(150))
     workNumber = Column(String(20))
     workAddress = Column(String(2048))
+    appointments = relationship("Appointment", uselist=True, back_populates="hcw")
     userId = Column(String(40))
 
     def __init__(self, **kwargs):

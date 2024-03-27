@@ -112,6 +112,7 @@ def get_hcw_extended(hcwId, current_user):
     # Remove sensitive information from the user data (optional)
     user_dict.pop('id', None)
     user_dict.pop('password', None)
+    user_dict.pop('token', None)
 
     # Merge the user data into the healthcare worker data
     hcw_dict.update(user_dict)

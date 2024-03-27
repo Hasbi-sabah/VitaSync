@@ -57,14 +57,20 @@ def notify(userId, flag, **data):
     
     # Determine the subject and HTML content based on the flag
     if flag == 1:
-        subject = 'Registration complete'
+        subject = 'Registration Complete'
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}</body></html>'
     elif flag == 2:
-        subject = 'Appointment confirmed'
+        subject = 'Appointment Confirmed'
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'
     elif flag == 3:
-        subject = 'Appointment reminder'
+        subject = 'Appointment Reminder'
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have an appointment scheduled for tomorrow with Dr. {data["dr_name"]}. Please make sure to attend at {data["time"]}.</body></html>'
+    elif flag == 4:
+        subject = 'Appointment Rescheduled'
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been rescheduled to {data["time"]}.</body></html>'
+    elif flag == 5:
+        subject = 'Appointment Canceled'
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} on {data["time"]} has been canceled.</body></html>'
     else:
         return
     

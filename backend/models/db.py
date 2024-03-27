@@ -76,11 +76,11 @@ class DB:
     def drug_lookup(self, name):
         return self.__session.query(Drug).filter_by(archived=False).filter(Drug.commercialName.like(f'%{name}%'))
     
-    def appt_lookup(self, start_time, end_time, patientId=None):
+    def appt_lookup(self, start_time, end_time, **id):
         start_time = 0 if not start_time else start_time
         end_time = 2147483647 if not end_time else end_time
-        if patientId:
-            return self.__session.query(Appointment).filter_by(patientId=str(patientId), archived=False).filter(Appointment.time.between(start_time, end_time)).all()
+        if id:
+            return self.__session.query(Appointment).filter_by(**id, archived=False).filter(Appointment.time.between(start_time, end_time)).all()
         else:
             return self.__session.query(Appointment).filter_by(archived=False).filter(Appointment.time.between(start_time, end_time)).all()
     

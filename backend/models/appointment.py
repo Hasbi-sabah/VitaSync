@@ -7,7 +7,7 @@ class Appointment(BM, Base):
     __tablename__ = "appointments"
 
     hcwId = Column(String(40), ForeignKey("hcws.id"))
-    hcw = relationship("HCW")
+    hcw = relationship("HCW", back_populates="appointments")
 
     patientId = Column(String(40), ForeignKey("patients.id"))
     patient = relationship("Patient", back_populates="appointments")
