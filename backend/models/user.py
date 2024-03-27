@@ -22,19 +22,16 @@ class User(BM, Base):
 
     def __init__(self, **kwargs):
         """initializes city of users"""
-        if not kwargs.get('username', None):
-            email = kwargs.get('email', None)
-            if email:
-                kwargs['username'] = email.split('@')[0]
         super().__init__(**kwargs)
 
     def __setattr__(self, __name: str, __value: Any) -> None:
-        if __name == 'password':
+        if __name == 'password' or __name == 'token':
             __value = bcrypt.hashpw(__value.encode('utf-8'), bcrypt.gensalt())
         return super().__setattr__(__name, __value)
     
-    def check_hash(self, password):
-        return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))
+    def check_hash(self, unhashed, flag=0):
+        hashed = self.token if flag else self.password
+        return bcrypt.checkpw(unhashed.encode('utf-8'), hashed.encode('utf-8'))
     
     def create_jwt(self):
         now = datetime.now()
@@ -47,3 +44,4 @@ class User(BM, Base):
         token = jwt.encode(payload, current_app.config["SECRET_KEY"], algorithm="HS256")
         setattr(self, 'token', token)
         self.save()
+        return token

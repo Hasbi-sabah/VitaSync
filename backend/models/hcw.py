@@ -5,13 +5,13 @@ from models.user import User
 
 class HCW(BM, Base):
     __tablename__ = "hcws"
-
-    columns = ['firstName', 'lastName', 'CIN', 'licence', 'workAddress', 'role', 'email']
     
     firstName = Column(String(60))
     lastName = Column(String(60))
     CIN = Column(String(20))  # identity card number
     licence = Column(String(20))  # medical licence number
+    speciality = Column(String(150))
+    workNumber = Column(String(20))
     workAddress = Column(String(2048))
     userId = Column(String(40))
 
