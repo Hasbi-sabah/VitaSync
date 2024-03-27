@@ -76,25 +76,53 @@ def procedure_perform(procedureId, current_user):
 @api.route('/procedure/<uuid:procedureId>', methods=['PUT'], strict_slashes=False)
 @token_required(['doctor'])
 def update_procedure(procedureId, current_user):
+    """
+    Updates a procedure.
+
+    Parameters:
+    - procedureId (uuid): The unique identifier of the procedure to update.
+    - current_user: The authenticated user attempting to update the procedure.
+
+    Returns:
+    - JSON response containing the updated procedure details.
+
+    Raises:
+    - 404: If the procedure with the given procedureId is not found in the database.
+    - 403: If the user does not have sufficient privileges to update the procedure or if updating is not allowed after 24 hours.
+    """
+    # Check the content type of the request to determine how to parse the data
     content_type = request.headers.get('Content-Type')
     if content_type == 'application/json':
         data = request.get_json()
     else:
         data = request.form.to_dict()
+
+    # Retrieve the procedure from the database using the provided procedureId
     procedure = database.get_by_id(Procedure, str(procedureId))
     if not procedure:
+        # Return an error response if the procedure is not found
         return jsonify({"error": "Procedure not found"}), 404
+
+    # Check if the user has sufficient privileges to update the procedure
     if current_user.role != 'admin':
         if current_user.profileId != procedure.prescribedById:
+            # Return an error response if the user does not have permission to update the procedure
             return {"error": "Insufficient privileges!"}, 403
         if procedure.created_at + (24 * 3600) < time.time():
+            # Return an error response if updating is not allowed after 24 hours
             return {"error": "Can't edit records after 24h"}, 403
+
+    # Update the procedure attributes based on the provided data
     for key, value in data.items():
         if current_user.role != 'admin' and key in ['id', 'created_at', 'modified_at', 'archived', 'prescribedById', 'performedById', 'patientId']:
             continue
         if hasattr(procedure, key):
             setattr(procedure, key, value)
+
+    # Save the updated procedure in the database
     procedure.save()
+
+    # Return the updated procedure details in a JSON response
     return jsonify(database.get_by_id(Procedure, str(procedureId)).to_dict())
 
 @api.route('/procedure/<uuid:procedureId>', methods=['DELETE'], strict_slashes=False)
