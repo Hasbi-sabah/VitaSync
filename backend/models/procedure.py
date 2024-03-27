@@ -6,8 +6,6 @@ from models.base import BM, Base
 class Procedure(BM, Base):
     __tablename__ = "procedures"
 
-    columns = ['notes']
-
     prescribedById = Column(String(40), ForeignKey("hcws.id"))
     prescribedBy = relationship("HCW", foreign_keys=[prescribedById])
 
@@ -18,4 +16,5 @@ class Procedure(BM, Base):
     patient = relationship("Patient")
 
     status = Column(Boolean, default=False)
+    name = Column(String(150))
     notes = Column(String(2048))
