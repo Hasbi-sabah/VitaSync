@@ -252,7 +252,7 @@ In the VitaSync system, when an element is deleted, it is not permanently remove
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for details.
 
 ## Contact
 
