@@ -13,7 +13,7 @@ This project is the backend part of the VitaSync application, designed to manage
 1. Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-repo-url.git
+git clone https://github.com/Hasbi-sabah/VitaSync.git
 ```
 
 2. Navigate to the backend directory:
