@@ -145,6 +145,7 @@ The VitaSync API supports the functionality to print prescriptions directly. Thi
 - **Automated Prescription Generation**: Doctors can create prescriptions directly within the system, including details such as medication name, dosage, frequency, and duration.
 - **Customizable Prescription Templates**: The system allows for the customization of prescription templates, enabling healthcare professionals to match the prescription format with their clinic's branding or specific requirements.
 - **Direct PDF Generation**: Once a prescription is created, it can be generated as a PDF directly from the API. This eliminates the need for manual data entry or formatting, saving time and reducing errors.
+- **Watermark for Filled Prescriptions**: If a prescription is marked as filled, a watermark is added to the printed prescription to indicate its status. This feature helps prevent the reuse of prescriptions that have already been dispensed.
 
 ### Usage
 
