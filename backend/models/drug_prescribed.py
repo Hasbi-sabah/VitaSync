@@ -6,8 +6,6 @@ from models.base import BM, Base
 class DrugPrescribed(BM, Base):
     __tablename__ = "drugsPrescribed"
 
-    columns = ['drugId', 'instructions']
-
     drugId = Column(String(60), ForeignKey("drugs.id"))
     drug = relationship("Drug", uselist=False)
 
