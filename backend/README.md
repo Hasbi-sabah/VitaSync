@@ -58,51 +58,108 @@ python app.py
 
 This will start the server, and you should be able to access the API endpoints at `http://localhost:5000` (or the port you have configured).
 
-## API Endpoints
 
-The backend provides a comprehensive set of API endpoints for managing patient healthcare data. Here are some examples of the main endpoints:
+## API Routes
+
+This section provides an overview of all available API endpoints in the VitaSync backend.
+
+### Healthcare Workers (HCW)
+
+- `GET /hcw_extended`: Retrieve extended information about all healthcare workers.
+- `GET /hcw`: Retrieve detailed information about all healthcare workers.
+- `GET /hcw_extended/<uuid:hcwId>`: Retrieve extended information about a specific healthcare worker.
+- `GET /hcw/<uuid:hcwId>`: Retrieve detailed information about a specific healthcare worker.
+- `POST /hcw`: Add a new healthcare worker to the system.
+- `PUT /hcw/<uuid:hcwId>`: Update the information of a specific healthcare worker.
+- `DELETE /hcw/<uuid:hcwId>`: Delete (archive) a healthcare worker from the system.
 
 ### Patients
 
-- `GET /api/patients`: Retrieve a list of all patients.
-- `POST /api/patients`: Create a new patient record.
-- `GET /api/patients/{id}`: Retrieve a specific patient record by ID.
-- `PUT /api/patients/{id}`: Update a specific patient record by ID.
-- `DELETE /api/patients/{id}`: Delete a specific patient record by ID.
+- `GET /patient_extended`: Retrieve extended details of all patients.
+- `GET /patient`: Retrieve details of all patients.
+- `GET /patient/<uuid:patientId>`: Retrieve details of a specific patient.
+- `GET /patient_extended/<uuid:patientId>`: Retrieve extended details of a specific patient.
+- `POST /patient`: Add a new patient to the system.
+- `PUT /patient/<uuid:patientId>`: Update patient details in the system.
+- `DELETE /patient/<uuid:patientId>`: Delete a patient and associated user from the system.
+
+### Authentication
+
+- `POST /login`: Authenticate a user and return a JWT token.
+- `POST /logout`: Logs User out.
+
+### Patient's Medical Information
+
+- `GET /patient/<uuid:patientId>/info`: Retrieve all medical information associated with a specific patient.
+- `POST /patient/<uuid:patientId>/info`: Add new medical information for a specific patient.
+- `GET /med_info/<uuid:infoId>`: Retrieve details of a specific medical information record.
+- `PUT /med_info/<uuid:infoId>`: Update a specific medical information record's information.
+- `DELETE /med_info/<uuid:infoId>`: Delete a specific medical information record.
+
+### Drugs
+
+- `GET /drug`: Retrieve a list of all drugs or filter drugs based on provided criteria.
+- `GET /drug_lookup`: Lookup drugs based on name.
+- `GET /drug/<uuid:drugId>`: Retrieve details of a specific drug identified by drugId.
+- `POST /drug`: Add a new drug to the database.
+- `PUT /drug/<uuid:drugId>`: Update details of a specific drug.
+- `DELETE /drug/<uuid:drugId>`: Delete a drug from the database.
 
 ### Prescriptions
 
-- `GET /api/prescriptions`: Retrieve a list of all prescriptions.
-- `POST /api/prescriptions`: Create a new prescription record.
-- `GET /api/prescriptions/{id}`: Retrieve a specific prescription record by ID.
-- `POST /api/prescriptions/{id}/fill`: Flags a prescription record as filled.
-- `PUT /api/prescriptions/{id}`: Update a specific prescription record by ID.
-- `DELETE /api/prescriptions/{id}`: Delete a specific prescription record by ID.
-
-### Vaccines
-
-- `GET /api/vaccines`: Retrieve a list of all vaccines.
-- `POST /api/vaccines`: Create a new vaccine record.
-- `GET /api/vaccines/{id}`: Retrieve a specific vaccine record by ID.
-- `PUT /api/vaccines/{id}`: Update a specific vaccine record by ID.
-- `DELETE /api/vaccines/{id}`: Delete a specific vaccine record by ID.
-
-### Procedures
-
-- `GET /api/procedures`: Retrieve a list of all procedures.
-- `POST /api/procedures`: Create a new procedure record.
-- `GET /api/procedures/{id}`: Retrieve a specific procedure record by ID.
-- `POST /api/procedures/{id}/perform`: Flags a specific procedure record as performs.
-- `PUT /api/procedures/{id}`: Update a specific procedure record by ID.
-- `DELETE /api/procedures/{id}`: Delete a specific procedure record by ID.
+- `GET /prescription/<uuid:prescriptionId>/drug`: Retrieve all drugs associated with a specific prescription.
+- `POST /prescription/<uuid:prescriptionId>/drug`: Add a new drug to a specific prescription.
+- `GET /prescription/<uuid:prescriptionId>`: Retrieve details of a specific prescription.
+- `POST /prescription/<uuid:prescriptionId>/fill`: Mark a specific prescription as filled.
+- `PUT /prescription/<uuid:prescriptionId>`: Update a specific prescription's information.
+- `DELETE /prescription/<uuid:prescriptionId>`: Delete a specific prescription.
+- `GET /prescription_drug/<uuid:drugId>`: Retrieve details of a specific prescription drug.
+- `PUT /prescription_drug/<uuid:drugId>`: Update a specific prescription drug's information.
+- `DELETE /prescription_drug/<uuid:drugId>`: Delete a specific prescription drug.
+- `GET /patient/<uuid:patientId>/prescription`: Retrieve all prescriptions associated with a specific patient.
+- `POST /patient/<uuid:patientId>/prescription`: Add a new prescription for a specific patient.
 
 ### Records
 
-- `GET /api/records`: Retrieve a list of all medical records.
-- `POST /api/records`: Create a new medical record.
-- `GET /api/records/{id}`: Retrieve a specific medical record by ID.
-- `PUT /api/records/{id}`: Update a specific medical record by ID.
-- `DELETE /api/records/{id}`: Delete a specific medical record by ID.
+- `GET /patient/<uuid:patientId>/record`: Retrieve all records associated with a specific patient.
+- `POST /patient/<uuid:patientId>/record`: Add a new record for a specific patient.
+- `GET /record/<uuid:recordId>`: Retrieve details of a specific record.
+- `PUT /record/<uuid:recordId>`: Update a specific record's information.
+- `DELETE /record/<uuid:recordId>`: Delete a specific record.
+
+### Vitals
+
+- `GET /patient/<uuid:patientId>/vital`: Retrieve all vital signs associated with a specific patient.
+- `POST /patient/<uuid:patientId>/vital`: Add a new vital sign for a specific patient.
+- `GET /vital/<uuid:vitalId>`: Retrieve details of a specific vital sign.
+- `PUT /vital/<uuid:vitalId>`: Update a specific vital sign's information.
+- `DELETE /vital/<uuid:vitalId>`: Delete a specific vital sign.
+
+### Procedures
+
+- `GET /patient/<uuid:patientId>/procedure`: Retrieve all procedures associated with a specific patient.
+- `POST /patient/<uuid:patientId>/procedure`: Add a new procedure for a specific patient.
+- `GET /procedure/<uuid:procedureId>`: Retrieve details of a specific procedure.
+- `POST /procedure/<uuid:procedureId>/perform`: Mark a specific procedure as performed.
+- `PUT /procedure/<uuid:procedureId>`: Update a specific procedure's information.
+- `DELETE /procedure/<uuid:procedureId>`: Delete a specific procedure.
+
+### Vaccines
+
+- `GET /patient/<uuid:patientId>/vaccine`: Retrieve all vaccines associated with a specific patient.
+- `POST /patient/<uuid:patientId>/vaccine`: Add a new vaccine for a specific patient.
+- `GET /vaccine/<uuid:vaccineId>`: Retrieve details of a specific vaccine.
+- `PUT /vaccine/<uuid:vaccineId>`: Update a specific vaccine's information.
+- `DELETE /vaccine/<uuid:vaccineId>`: Delete a specific vaccine.
+
+### Appointments
+
+- `GET /hcw/<uuid:hcwId>/appointment`: Retrieve all appointments associated with a specific healthcare worker.
+- `GET /patient/<uuid:patientId>/appointment`: Retrieve all appointments associated with a specific patient.
+- `POST /patient/<uuid:patientId>/appointment`: Add a new appointment for a specific patient.
+- `GET /appointment/<uuid:appointmentId>`: Retrieve details of a specific appointment.
+- `PUT /appointment/<uuid:appointmentId>`: Update a specific appointment's information.
+- `DELETE /appointment/<uuid:appointmentId>`: Delete a specific appointment.
 
 ## Email Notifications
 
@@ -188,6 +245,10 @@ The backend also implements role-based access control (RBAC) to manage permissio
 Each role has specific permissions that determine which API endpoints they can access. For example, a Doctor can access all endpoints related to prescriptions and procedures but cannot access endpoints for managing other users or system settings.
 
 Paths are protected by token-based authentication, and role-based permissions are enforced on each request to ensure that users can only access the resources and perform actions that their role permits.
+
+### Archiving vs. Deleting
+
+In the VitaSync system, when an element is deleted, it is not permanently removed from the database. Instead, it is archived. Archiving is a process where records are marked as inactive or hidden from regular operations but are still retained in the database for historical purposes and potential future use. This approach ensures that no data is lost and that the integrity of the system is maintained.
 
 ## License
 
