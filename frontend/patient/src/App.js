@@ -4,6 +4,7 @@ import Layout from './components/Layout';
 import Public from './components/Public';
 import Login from './features/auth/Login';
 import RequireAuth from './features/RequireAuth';
+import ContactHCW from './features/ContactHCW';
 import PatientMan from './features/PatientMan';
 import Records from './features/Records';
 
@@ -14,6 +15,7 @@ function App() {
       <Route index element={<Public />} />
       <Route path="/" element={<Layout />}>
       <Route path="dashboard" element={<Dashboard />} />
+      <Route path="contactHCW" element={<ContactHCW />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
