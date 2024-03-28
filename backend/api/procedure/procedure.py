@@ -6,8 +6,8 @@ from models import database
 from models.procedure import Procedure
 
 
-@api.route('/procedure/<uuid:procedureId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/procedure/<uuid:procedureId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_procedure(procedureId, current_user):
     """
     Retrieves details of a specific procedure.
@@ -30,15 +30,18 @@ def get_procedure(procedureId, current_user):
         return jsonify({"error": "Procedure not found"}), 404
 
     # Check if the current user has sufficient privileges to access the procedure
-    if current_user.role == 'patient' and current_user.profileId != procedure.patientId:
+    if current_user.role == "patient" and current_user.profileId != procedure.patientId:
         # Return an error response for insufficient privileges
         return {"error": "Insufficient privileges!"}, 403
 
     # Return JSON response with the details of the requested procedure
     return jsonify(procedure.to_dict())
 
-@api.route('/procedure/<uuid:procedureId>/perform', methods=['POST'], strict_slashes=False)
-@token_required(['doctor', 'nurse'])
+
+@api.route(
+    "/procedure/<uuid:procedureId>/perform", methods=["POST"], strict_slashes=False
+)
+@token_required(["doctor", "nurse"])
 def procedure_perform(procedureId, current_user):
     """
     Marks a procedure as performed.
@@ -66,15 +69,16 @@ def procedure_perform(procedureId, current_user):
         return jsonify({"error": "Procedure already performed"}), 409
 
     # Update the procedure status to performed and set the performedById attribute
-    setattr(procedure, 'status', True)
-    setattr(procedure, 'performedById', current_user.profileId)
+    setattr(procedure, "status", True)
+    setattr(procedure, "performedById", current_user.profileId)
     procedure.save()
 
     # Return JSON response with the details of the updated procedure
     return jsonify(database.get_by_id(Procedure, str(procedure.id)).to_dict())
 
-@api.route('/procedure/<uuid:procedureId>', methods=['PUT'], strict_slashes=False)
-@token_required(['doctor'])
+
+@api.route("/procedure/<uuid:procedureId>", methods=["PUT"], strict_slashes=False)
+@token_required(["doctor"])
 def update_procedure(procedureId, current_user):
     """
     Updates a procedure.
@@ -91,8 +95,8 @@ def update_procedure(procedureId, current_user):
     - 403: If the user does not have sufficient privileges to update the procedure or if updating is not allowed after 24 hours.
     """
     # Check the content type of the request to determine how to parse the data
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
@@ -104,7 +108,7 @@ def update_procedure(procedureId, current_user):
         return jsonify({"error": "Procedure not found"}), 404
 
     # Check if the user has sufficient privileges to update the procedure
-    if current_user.role != 'admin':
+    if current_user.role != "admin":
         if current_user.profileId != procedure.prescribedById:
             # Return an error response if the user does not have permission to update the procedure
             return {"error": "Insufficient privileges!"}, 403
@@ -114,7 +118,15 @@ def update_procedure(procedureId, current_user):
 
     # Update the procedure attributes based on the provided data
     for key, value in data.items():
-        if current_user.role != 'admin' and key in ['id', 'created_at', 'modified_at', 'archived', 'prescribedById', 'performedById', 'patientId']:
+        if current_user.role != "admin" and key in [
+            "id",
+            "created_at",
+            "modified_at",
+            "archived",
+            "prescribedById",
+            "performedById",
+            "patientId",
+        ]:
             continue
         if hasattr(procedure, key):
             setattr(procedure, key, value)
@@ -125,8 +137,9 @@ def update_procedure(procedureId, current_user):
     # Return the updated procedure details in a JSON response
     return jsonify(database.get_by_id(Procedure, str(procedureId)).to_dict())
 
-@api.route('/procedure/<uuid:procedureId>', methods=['DELETE'], strict_slashes=False)
-@token_required(['doctor'])
+
+@api.route("/procedure/<uuid:procedureId>", methods=["DELETE"], strict_slashes=False)
+@token_required(["doctor"])
 def delete_procedure(procedureId, current_user):
     """
     Deletes a procedure.
@@ -149,7 +162,7 @@ def delete_procedure(procedureId, current_user):
         return jsonify({"error": "Procedure not found"}), 404
 
     # Check if the user has sufficient privileges to delete the procedure
-    if current_user.role != 'admin':
+    if current_user.role != "admin":
         if current_user.profileId != procedure.prescribedById:
             # Return an error response if the user does not have permission to delete the procedure
             return {"error": "Insufficient privileges!"}, 403

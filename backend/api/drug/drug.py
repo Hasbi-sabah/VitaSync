@@ -5,29 +5,29 @@ from models import database
 from models.drug import Drug
 
 
-@api.route('/drug', methods=['GET'] ,strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/drug", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_all_drugs(current_user):
     """
     Get all drugs or filter drugs based on provided criteria.
 
     Parameters:
     - current_user (User): The user making the request, with token-based authentication.
-    
+
     Query Parameters:
     - Query parameters are optional and can be used to filter the drugs.
     - Valid query parameters correspond to attributes of the Drug model.
-    
+
     Returns:
     - JSON object containing a list of drugs that match the query parameters, or all drugs if no parameters are provided.
     """
     # Check the content type of the request
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
-    
+
     # Process query parameters for filtering
     if data:
         new_data = data.copy()
@@ -40,13 +40,13 @@ def get_all_drugs(current_user):
     else:
         # If no query parameters are provided, fetch all drugs from the database
         res = [drug.to_dict() for drug in database.get_all(Drug)]
-        
+
     # Return the list of drugs in JSON format
     return jsonify(res)
 
 
-@api.route('/drug_lookup', methods=['GET'] ,strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/drug_lookup", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def drug_lookup(current_user):
     """
     Lookup drugs based on name.
@@ -61,21 +61,21 @@ def drug_lookup(current_user):
     - JSON object containing a list of drugs that match the lookup criteria.
     """
     # Check the content type of the request
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     # Perform drug lookup based on the provided name (if any)
-    res = [drug.to_dict() for drug in database.drug_lookup(name=data.get('name', ''))]
+    res = [drug.to_dict() for drug in database.drug_lookup(name=data.get("name", ""))]
 
     # Return the list of drugs in JSON format
     return jsonify(res)
 
 
-@api.route('/drug/<uuid:drugId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/drug/<uuid:drugId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_drug(drugId, current_user):
     """
     Get details of a specific drug identified by drugId.
@@ -100,8 +100,8 @@ def get_drug(drugId, current_user):
     return jsonify(drug.to_dict())
 
 
-@api.route('/drug', methods=['POST'], strict_slashes=False)
-@token_required(['pharmacist'])
+@api.route("/drug", methods=["POST"], strict_slashes=False)
+@token_required(["pharmacist"])
 def add_drug(current_user):
     """
     Add a new drug to the database.
@@ -124,18 +124,25 @@ def add_drug(current_user):
     - 400 Bad Request: If any required attribute is missing in the request body or if the drug already exists in the database.
     """
     # Check the content type of the request
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     # Check for required attributes in the request body
-    for key in ["commercialName", "activeIngredient", "distributor", "dose", "form", "price"]:
+    for key in [
+        "commercialName",
+        "activeIngredient",
+        "distributor",
+        "dose",
+        "form",
+        "price",
+    ]:
         val = data.get(key, None)
         if not val:
             return jsonify({"error": f"Missing {key}"}), 400
-    
+
     # Filter out any non-existing attributes for the Drug model
     drug_data = data.copy()
     for key in data:
@@ -154,8 +161,8 @@ def add_drug(current_user):
     return jsonify(database.get_by_id(Drug, str(new_drug.id)).to_dict())
 
 
-@api.route('/drug/<uuid:drugId>', methods=['PUT'], strict_slashes=False)
-@token_required(['pharmacist'])
+@api.route("/drug/<uuid:drugId>", methods=["PUT"], strict_slashes=False)
+@token_required(["pharmacist"])
 def update_drug(drugId, current_user):
     """
     Update details of a specific drug identified by drugId.
@@ -175,8 +182,8 @@ def update_drug(drugId, current_user):
     - 400 Bad Request: If the request contains invalid attributes or the user lacks permission to update certain attributes.
     """
     # Check the content type of the request
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
@@ -191,10 +198,15 @@ def update_drug(drugId, current_user):
     for key, value in data.items():
         if hasattr(Drug, key):
             # Check for permission to update certain attributes
-            if current_user.role != 'admin' and key in ['modified_at', 'id', 'created_at', 'archived']:
+            if current_user.role != "admin" and key in [
+                "modified_at",
+                "id",
+                "created_at",
+                "archived",
+            ]:
                 continue
             # Convert price to float if the attribute is 'price'
-            if key == 'price':
+            if key == "price":
                 value = float(value)
             setattr(drug, key, value)
 
@@ -205,7 +217,7 @@ def update_drug(drugId, current_user):
     return jsonify(database.get_by_id(Drug, str(drugId)).to_dict())
 
 
-@api.route('/drug/<uuid:drugId>', methods=['DELETE'], strict_slashes=False)
+@api.route("/drug/<uuid:drugId>", methods=["DELETE"], strict_slashes=False)
 @token_required([])
 def delete_drug(drugId, current_user):
     """

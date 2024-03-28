@@ -9,7 +9,7 @@ from models.hcw import HCW
 from models.user import User
 
 
-@api.route('/hcw_extended', methods=['GET'] ,strict_slashes=False)
+@api.route("/hcw_extended", methods=["GET"], strict_slashes=False)
 @token_required([])
 def get_all_extended_hcws(current_user):
     """
@@ -28,7 +28,7 @@ def get_all_extended_hcws(current_user):
 
     # Loop through all healthcare workers in the database
     for hcw in database.get_all(HCW):
-        
+
         # Convert the healthcare worker object to a dictionary
         hcw_dict = hcw.to_dict()
 
@@ -36,9 +36,9 @@ def get_all_extended_hcws(current_user):
         user_dict = database.get_by_id(User, str(hcw.userId)).to_dict()
 
         # Remove sensitive information from the user dictionary
-        user_dict.pop('id', None)  # Remove 'id' field
-        user_dict.pop('password', None)  # Remove 'password' field
-        user_dict.pop('token', None)  # Remove 'token' field
+        user_dict.pop("id", None)  # Remove 'id' field
+        user_dict.pop("password", None)  # Remove 'password' field
+        user_dict.pop("token", None)  # Remove 'token' field
 
         # Update the healthcare worker dictionary with user information
         hcw_dict.update(user_dict)
@@ -50,8 +50,8 @@ def get_all_extended_hcws(current_user):
     return jsonify(res)
 
 
-@api.route('/hcw', methods=['GET'] ,strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/hcw", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_all_hcws(current_user):
     """
     Get all healthcare workers.
@@ -65,14 +65,19 @@ def get_all_hcws(current_user):
     """
 
     # Retrieve all healthcare workers from the database and convert them to dictionaries
-    res = [hcw.to_dict() for hcw in database.get_all(HCW) if current_user.role == 'admin' or database.get_by_id(User, hcw.userId).role != 'admin']
+    res = [
+        hcw.to_dict()
+        for hcw in database.get_all(HCW)
+        if current_user.role == "admin"
+        or database.get_by_id(User, hcw.userId).role != "admin"
+    ]
 
     # Return a JSON response with the list of healthcare workers
     return jsonify(res)
 
 
-@api.route('/hcw_extended/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@api.route("/hcw_extended/<uuid:hcwId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def get_hcw_extended(hcwId, current_user):
     """
     Get extended information about a specific healthcare worker.
@@ -100,7 +105,7 @@ def get_hcw_extended(hcwId, current_user):
         return jsonify({"error": "Health Care Worker not found!"}), 404
 
     # Check if the current user has sufficient privileges to access the information
-    if current_user.role != 'admin' and current_user.profileId != str(hcwId):
+    if current_user.role != "admin" and current_user.profileId != str(hcwId):
         return {"error": "Insufficient privileges!"}, 403
 
     # Convert the healthcare worker object to a dictionary
@@ -110,9 +115,9 @@ def get_hcw_extended(hcwId, current_user):
     user_dict = database.get_by_id(User, str(hcw.userId)).to_dict()
 
     # Remove sensitive information from the user data (optional)
-    user_dict.pop('id', None)
-    user_dict.pop('password', None)
-    user_dict.pop('token', None)
+    user_dict.pop("id", None)
+    user_dict.pop("password", None)
+    user_dict.pop("token", None)
 
     # Merge the user data into the healthcare worker data
     hcw_dict.update(user_dict)
@@ -121,8 +126,8 @@ def get_hcw_extended(hcwId, current_user):
     return jsonify(hcw_dict)
 
 
-@api.route('/hcw/<uuid:hcwId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/hcw/<uuid:hcwId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_hcw(hcwId, current_user):
     """
     Get detailed information about a specific healthcare worker.
@@ -150,14 +155,14 @@ def get_hcw(hcwId, current_user):
         return jsonify({"error": "Health Care Worker not found!"}), 404
 
     # Check if the current user has sufficient privileges to access the information
-    if current_user.role != 'admin' and current_user.profileId != str(hcwId):
+    if current_user.role != "admin" and current_user.profileId != str(hcwId):
         return {"error": "Insufficient privileges!"}, 403
 
     # Return a JSON response containing the detailed healthcare worker information
     return jsonify(hcw.to_dict())
 
 
-@api.route('/hcw', methods=['POST'], strict_slashes=False)
+@api.route("/hcw", methods=["POST"], strict_slashes=False)
 @token_required([])
 def add_hcw(current_user):
     """
@@ -188,40 +193,59 @@ def add_hcw(current_user):
     :raises 403: If the user does not have sufficient privileges to access the information.
     :raises 409: If the licence number or email address already exists in the database.
     """
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     # Check for required attributes
-    for attr in ['firstName', 'lastName', 'CIN', 'licence', 'speciality', 'workAddress', 'workNumber', 'role', 'email']:
+    for attr in [
+        "firstName",
+        "lastName",
+        "CIN",
+        "licence",
+        "speciality",
+        "workAddress",
+        "workNumber",
+        "role",
+        "email",
+    ]:
         val = data.get(attr, None)
         if not val:
             return jsonify({"error": f"Missing {attr}"}), 400
 
     # Check if the CIN already exists in the database
-    if database.search(HCW, CIN=data.get('CIN', None)) or database.search(Patient, CIN=data.get('CIN', None)):
+    if database.search(HCW, CIN=data.get("CIN", None)) or database.search(
+        Patient, CIN=data.get("CIN", None)
+    ):
         return jsonify({"error": "CIN already exists in database"}), 409
 
     # Check if the licence number already exists in the database
-    if database.search(HCW, licence=data.get('licence', None)):
+    if database.search(HCW, licence=data.get("licence", None)):
         return jsonify({"error": "License already exists in database"}), 409
 
     # Check if the email address already exists in the database
-    if database.search(User, email=data.get('email', None)):
+    if database.search(User, email=data.get("email", None)):
         return jsonify({"error": "Email already exists in database"}), 409
-    
+
     # Generate a random password if not provided
-    if not data.get('password', None):
-        data['password'] = secrets.token_urlsafe(10)
+    if not data.get("password", None):
+        data["password"] = secrets.token_urlsafe(10)
 
     # Generate username from email address if not provided
-    if not data.get('username', None):
-        username = data.get('email').split('@')[0]
+    if not data.get("username", None):
+        username = data.get("email").split("@")[0]
         if database.search(User, username=username):
-            return jsonify({"error": "Could not generate username, please include it in the next request"}), 400
-        data['username'] = username
+            return (
+                jsonify(
+                    {
+                        "error": "Could not generate username, please include it in the next request"
+                    }
+                ),
+                400,
+            )
+        data["username"] = username
 
     new_data = data.copy()
     for key in data:
@@ -230,16 +254,22 @@ def add_hcw(current_user):
 
     # Create and add the new healthcare worker to the database
     hcw = HCW(**new_data)
-    
+
     # Notify the user about their credentials by email
-    notify(hcw.userId, 1, name=f'{hcw.lastName} {hcw.firstName}', username=database.get_by_id(User, str(hcw.userId)).username, password=new_data['password'])
-    
+    notify(
+        hcw.userId,
+        1,
+        name=f"{hcw.lastName} {hcw.firstName}",
+        username=database.get_by_id(User, str(hcw.userId)).username,
+        password=new_data["password"],
+    )
+
     # Return a JSON response with the newly added healthcare worker's information
     return jsonify(database.get_by_id(HCW, str(hcw.id)).to_dict())
 
 
-@api.route('/hcw/<uuid:hcwId>', methods=['PUT'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@api.route("/hcw/<uuid:hcwId>", methods=["PUT"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def update_hcw(hcwId, current_user):
     """
     Update a healthcare worker's information.
@@ -270,8 +300,8 @@ def update_hcw(hcwId, current_user):
     """
 
     # Check content type and get data
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
@@ -283,29 +313,42 @@ def update_hcw(hcwId, current_user):
 
     # Get the user object associated with the patient
     user = database.get_by_id(User, hcw.userId)
-    
+
     # Check permissions
-    if current_user.role != 'admin' and current_user.profileId != str(hcwId):
+    if current_user.role != "admin" and current_user.profileId != str(hcwId):
         return jsonify({"error": "Insufficient privileges!"}), 403
 
     # Iterate over the key-value pairs in the data dictionary
     for key, value in data.items():
         # Check if the current user is not an admin and the key is in the restricted list
-        if current_user.role != 'admin' and key in ['id', 'created_at', 'modified_at', 'archived', 'profileId', 'role', 'userId', 'password', 'token']:
+        if current_user.role != "admin" and key in [
+            "id",
+            "created_at",
+            "modified_at",
+            "archived",
+            "profileId",
+            "role",
+            "userId",
+            "password",
+            "token",
+        ]:
             continue  # Skip processing for restricted attributes
-        
+
         # Check for specific attributes and if they already exist in the database
-        for attr in ['username', 'email']:
+        for attr in ["username", "email"]:
             if key == attr and database.search(User, **{key: value}):
                 # Return a 409 Conflict error if the attribute already exists in the database
                 return jsonify({"error": f"{attr} already exists in database"}), 409
-     
+
         # Check for specific attributes and if they already exist in the database
-        for attr in ['CIN', 'licence']:
-            if key == attr and (database.search(HCW, **{key: value}) or database.search(Patient, **{key: value})):
+        for attr in ["CIN", "licence"]:
+            if key == attr and (
+                database.search(HCW, **{key: value})
+                or database.search(Patient, **{key: value})
+            ):
                 # Return a 409 Conflict error if the attribute already exists in the database
-                return jsonify({"error": f"{attr} already exists in database"}), 409   
-        
+                return jsonify({"error": f"{attr} already exists in database"}), 409
+
         # Check if the attribute exists in the HCW model, and update if so
         if hasattr(hcw, key):
             setattr(hcw, key, value)
@@ -316,12 +359,12 @@ def update_hcw(hcwId, current_user):
     # Save the changes to the database
     hcw.save()
     current_user.save()
-    
+
     # Return the updated healthcare worker's information
     return jsonify(database.get_by_id(HCW, str(hcwId)).to_dict())
 
 
-@api.route('/hcw/<uuid:hcwId>', methods=['DELETE'], strict_slashes=False)
+@api.route("/hcw/<uuid:hcwId>", methods=["DELETE"], strict_slashes=False)
 @token_required([])
 def delete_hcw(hcwId, current_user):
     """

@@ -7,8 +7,8 @@ from models.drug import Drug
 from models.drug_prescribed import DrugPrescribed
 
 
-@api.route('/prescription_drug/<uuid:drugId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/prescription_drug/<uuid:drugId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_prescription_drug(drugId, current_user):
     """
     Retrieve details of a specific prescription drug.
@@ -33,15 +33,19 @@ def get_prescription_drug(drugId, current_user):
         return jsonify({"error": "Prescription drug not found"}), 404
 
     # Check user privileges if role is 'patient'
-    if current_user.role == 'patient' and current_user.profileId != drug.prescription.prescribedForId:
+    if (
+        current_user.role == "patient"
+        and current_user.profileId != drug.prescription.prescribedForId
+    ):
         # Raise a 403 error if the user has insufficient privileges
         return {"error": "Insufficient privileges!"}, 403
 
     # Return a JSON response containing the details of the prescription drug
     return jsonify(drug.to_dict())
 
-@api.route('/prescription_drug/<uuid:drugId>', methods=['PUT'], strict_slashes=False)
-@token_required(['doctor'])
+
+@api.route("/prescription_drug/<uuid:drugId>", methods=["PUT"], strict_slashes=False)
+@token_required(["doctor"])
 def update_prescription_drug(drugId, current_user):
     """
     Update details of a prescription drug.
@@ -60,10 +64,10 @@ def update_prescription_drug(drugId, current_user):
         400: If there is a duplicate drug in the current prescription after the update.
     """
     # Determine the content type of the request
-    content_type = request.headers.get('Content-Type')
+    content_type = request.headers.get("Content-Type")
 
     # Extract data based on content type
-    if content_type == 'application/json':
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
@@ -77,7 +81,7 @@ def update_prescription_drug(drugId, current_user):
         return jsonify({"error": "Prescription drug not found"}), 404
 
     # Check user privileges for updating the drug
-    if current_user.role != 'admin':
+    if current_user.role != "admin":
         # Raise a 403 error if the user has insufficient privileges
         if current_user.profileId != drug.prescription.prescribedById:
             return {"error": "Insufficient privileges!"}, 403
@@ -89,15 +93,20 @@ def update_prescription_drug(drugId, current_user):
     # Process and update the drug data
     for key, value in data.items():
         # Allow updating 'drugId' and 'instructions' only for admin users or all keys for admin users
-        if key in ['drugId', 'instructions'] or current_user.role == 'admin':
-            if key == 'drugId':
+        if key in ["drugId", "instructions"] or current_user.role == "admin":
+            if key == "drugId":
                 # Check if the specified drug ID exists
-                if not database.get_by_id(Drug, str(data.get('drugId'))):
+                if not database.get_by_id(Drug, str(data.get("drugId"))):
                     return jsonify({"error": "Drug not found"}), 404
 
                 # Check for duplicate drugs in the prescription after update
-                if database.search(DrugPrescribed, prescriptionId=drug.prescriptionId, drugId=value):
-                    return jsonify({"error": "Duplicate drug in current prescription"}), 400
+                if database.search(
+                    DrugPrescribed, prescriptionId=drug.prescriptionId, drugId=value
+                ):
+                    return (
+                        jsonify({"error": "Duplicate drug in current prescription"}),
+                        400,
+                    )
 
             # Set attribute values for the drug
             setattr(drug, key, value)
@@ -108,8 +117,9 @@ def update_prescription_drug(drugId, current_user):
     # Return a JSON response containing the updated details of the prescription drug
     return jsonify(database.get_by_id(DrugPrescribed, str(drugId)).to_dict())
 
-@api.route('/prescription_drug/<uuid:drugId>', methods=['DELETE'], strict_slashes=False)
-@token_required(['doctor'])
+
+@api.route("/prescription_drug/<uuid:drugId>", methods=["DELETE"], strict_slashes=False)
+@token_required(["doctor"])
 def delete_prescription_drug(drugId, current_user):
     """
     Delete a prescription drug.
@@ -134,7 +144,7 @@ def delete_prescription_drug(drugId, current_user):
         return jsonify({"error": "Prescription drug not found"}), 404
 
     # Check user privileges for deleting the drug
-    if current_user.role != 'admin':
+    if current_user.role != "admin":
         # Raise a 403 error if the user has insufficient privileges
         if current_user.profileId != drug.prescription.prescribedById:
             return {"error": "Insufficient privileges!"}, 403

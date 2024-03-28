@@ -6,8 +6,8 @@ from models import database
 from models.vital import Vital
 
 
-@api.route('/vital/<uuid:vitalId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/vital/<uuid:vitalId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_vital(vitalId, current_user):
     """
     Retrieves a specific vital take entry by its unique identifier.
@@ -30,15 +30,16 @@ def get_vital(vitalId, current_user):
         return jsonify({"error": "Vital take not found"}), 404
 
     # Check if the current user has sufficient privileges to access the vital take entry
-    if current_user.role == 'patient' and current_user.profileId != vital.takenForId:
+    if current_user.role == "patient" and current_user.profileId != vital.takenForId:
         # Return an error response for insufficient privileges
         return {"error": "Insufficient privileges!"}, 403
 
     # Return the vital take entry data as a JSON response
     return jsonify(vital.to_dict())
 
-@api.route('/vital/<uuid:vitalId>', methods=['PUT'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+
+@api.route("/vital/<uuid:vitalId>", methods=["PUT"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def update_vital(vitalId, current_user):
     """
     Updates a specific vital take entry identified by its unique identifier.
@@ -57,8 +58,8 @@ def update_vital(vitalId, current_user):
     - 403: If the vital take entry was created more than 24 hours ago and cannot be edited.
     """
     # Retrieve the content type of the request
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         # Parse JSON data if the content type is JSON
         data = request.get_json()
     else:
@@ -72,7 +73,7 @@ def update_vital(vitalId, current_user):
         return jsonify({"error": "Vital take not found"}), 404
 
     # Check if the current user has sufficient privileges to update the vital take entry
-    if current_user.role != 'admin':
+    if current_user.role != "admin":
         if current_user.profileId != vital.takenById:
             # Return an error response for insufficient privileges
             return {"error": "Insufficient privileges!"}, 403
@@ -82,7 +83,14 @@ def update_vital(vitalId, current_user):
 
     # Update the vital take entry attributes based on the provided data
     for key, value in data.items():
-        if current_user.role != 'admin' and key in ['id', 'created_at', 'modified_at', 'archived', 'takenById', 'takenForId']:
+        if current_user.role != "admin" and key in [
+            "id",
+            "created_at",
+            "modified_at",
+            "archived",
+            "takenById",
+            "takenForId",
+        ]:
             continue
         if hasattr(vital, key):
             setattr(vital, key, value)
@@ -93,8 +101,9 @@ def update_vital(vitalId, current_user):
     # Return the updated vital take entry data as a JSON response
     return jsonify(database.get_by_id(Vital, str(vitalId)).to_dict())
 
-@api.route('/vital/<uuid:vitalId>', methods=['DELETE'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+
+@api.route("/vital/<uuid:vitalId>", methods=["DELETE"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def delete_vital(vitalId, current_user):
     """
     Deletes a specific vital sign entry identified by its unique identifier.
@@ -118,7 +127,7 @@ def delete_vital(vitalId, current_user):
         return jsonify({"error": "Vital take not found"}), 404
 
     # Check if the current user has sufficient privileges to delete the vital sign entry
-    if current_user.role != 'admin':
+    if current_user.role != "admin":
         if current_user.profileId != vital.takenById:
             # Return an error response for insufficient privileges
             return {"error": "Insufficient privileges!"}, 403

@@ -8,8 +8,11 @@ from models.patient import Patient
 from models.appointment import Appointment
 from api.base import input_to_timestamp, notify, timestamp_to_str
 
-@api.route('/patient/<uuid:patientId>/appointment', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+
+@api.route(
+    "/patient/<uuid:patientId>/appointment", methods=["GET"], strict_slashes=False
+)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_all_patient_appointments(patientId, current_user):
     """
     Retrieves all appointments associated with a specific patient.
@@ -33,45 +36,71 @@ def get_all_patient_appointments(patientId, current_user):
         return jsonify({"error": "Patient not found"}), 404
 
     # Check if the user has sufficient privileges to retrieve the appointments
-    if current_user.role == 'patient':
+    if current_user.role == "patient":
         if current_user.profileId != str(patientId):
             # Return an error response if the user does not have permission to retrieve the appointments
             return {"error": "Insufficient privileges!"}, 403
 
     # Check the content type of the request to determine how to parse the data
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     if data:
         # Extract start_time and end_time parameters from the data, if provided
-        start_time = data.get('start_time', None)
+        start_time = data.get("start_time", None)
         if start_time:
             start_time = input_to_timestamp(start_time, "%Y-%m-%d %I:%M %p")
             if not start_time:
                 # Return an error response if the start_time input format is invalid
-                return jsonify({"error": "Invalid start_time input format. Ex: 2024-08-19 08:05 AM"}), 400
+                return (
+                    jsonify(
+                        {
+                            "error": "Invalid start_time input format. Ex: 2024-08-19 08:05 AM"
+                        }
+                    ),
+                    400,
+                )
 
-        end_time = data.get('end_time', None)
+        end_time = data.get("end_time", None)
         if end_time:
             end_time = input_to_timestamp(end_time, "%Y-%m-%d %I:%M %p")
             if not end_time:
                 # Return an error response if the end_time input format is invalid
-                return jsonify({"error": "Invalid end_time input format. Ex: 2024-08-19 08:05 AM"}), 400
+                return (
+                    jsonify(
+                        {
+                            "error": "Invalid end_time input format. Ex: 2024-08-19 08:05 AM"
+                        }
+                    ),
+                    400,
+                )
 
         # Retrieve appointments based on the specified time range and patientId
-        res = [appointment.to_dict() for appointment in database.appt_lookup(start_time, end_time, patientId=str(patientId))]
+        res = [
+            appointment.to_dict()
+            for appointment in database.appt_lookup(
+                start_time, end_time, patientId=str(patientId)
+            )
+        ]
     else:
         # If no parameters are provided, retrieve all non-archived appointments for the patient
-        res = [appointment.to_dict() for appointment in patient.appointments if not appointment.archived]
+        res = [
+            appointment.to_dict()
+            for appointment in patient.appointments
+            if not appointment.archived
+        ]
 
     # Return the list of appointment details in a JSON response
     return jsonify(res)
 
-@api.route('/patient/<uuid:patientId>/appointment', methods=['POST'], strict_slashes=False)
-@token_required(['doctor'])
+
+@api.route(
+    "/patient/<uuid:patientId>/appointment", methods=["POST"], strict_slashes=False
+)
+@token_required(["doctor"])
 def add_patient_appointment(patientId, current_user):
     """
     Adds a new appointment for a specific patient.
@@ -97,14 +126,14 @@ def add_patient_appointment(patientId, current_user):
         return jsonify({"error": "Patient not found"}), 404
 
     # Determine the content type of the request to parse the data accordingly
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     # Extract the appointment time from the request data
-    appointment_time = data.get('time', None)
+    appointment_time = data.get("time", None)
     if not appointment_time:
         # Return an error response if the time field is missing
         return jsonify({"error": f"Missing time"}), 400
@@ -120,13 +149,21 @@ def add_patient_appointment(patientId, current_user):
         return jsonify({"error": "Appointment time can't be in the past"}), 400
 
     # Create a new appointment instance with the provided details
-    appointment = Appointment(time=timestamp, patientId=patientId, hcwId=current_user.profileId)
+    appointment = Appointment(
+        time=timestamp, patientId=patientId, hcwId=current_user.profileId
+    )
 
     # Retrieve the healthcare worker (HCW) who created the appointment
     hcw = database.get_by_id(HCW, current_user.profileId)
 
     # Notify the patient about the new appointment via email or notification
-    notify(patient.userId, 2, name=f'{patient.lastName} {patient.firstName}', dr_name=f'{hcw.lastName} {hcw.firstName}', time=timestamp_to_str(timestamp, "%d-%m-%Y at %I:%M %p"))
+    notify(
+        patient.userId,
+        2,
+        name=f"{patient.lastName} {patient.firstName}",
+        dr_name=f"{hcw.lastName} {hcw.firstName}",
+        time=timestamp_to_str(timestamp, "%d-%m-%Y at %I:%M %p"),
+    )
 
     # Return the details of the newly added appointment in a JSON response
     return jsonify(database.get_by_id(Appointment, str(appointment.id)).to_dict())

@@ -12,6 +12,7 @@ def token_required(allowed_roles=None):
     :param allowed_roles: List of roles allowed to access the endpoint (default is None).
     :return: Decorator function that checks for a valid token and user role.
     """
+
     def decorator(f):
         @wraps(f)
         def decorated(*args, **kwargs):
@@ -52,7 +53,9 @@ def token_required(allowed_roles=None):
                     return {"error": "Wrong token!"}, 401
 
                 # Check if the user's role is allowed to access the endpoint
-                if allowed_roles is not None and user.role not in allowed_roles + ["admin"]:
+                if allowed_roles is not None and user.role not in allowed_roles + [
+                    "admin"
+                ]:
                     # Return error response for insufficient privileges
                     return {"error": "Insufficient privileges!"}, 403
 

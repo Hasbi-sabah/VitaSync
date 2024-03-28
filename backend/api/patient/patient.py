@@ -10,7 +10,7 @@ from models.user import User
 from api.auth_middleware import token_required
 
 
-@api.route('/patient_extended', methods=['GET'], strict_slashes=False)
+@api.route("/patient_extended", methods=["GET"], strict_slashes=False)
 @token_required([])
 def get_all_extended_patients(current_user):
     """
@@ -34,9 +34,9 @@ def get_all_extended_patients(current_user):
         user_dict = database.get_by_id(User, str(patient.userId)).to_dict()
 
         # Remove sensitive information from the user dictionary
-        user_dict.pop('id', None)  # Remove user ID
-        user_dict.pop('password', None)  # Remove password
-        user_dict.pop('token', None)  # Remove authentication token
+        user_dict.pop("id", None)  # Remove user ID
+        user_dict.pop("password", None)  # Remove password
+        user_dict.pop("token", None)  # Remove authentication token
 
         # Merge patient and user dictionaries to create an extended patient dictionary
         patient_dict.update(user_dict)
@@ -48,8 +48,8 @@ def get_all_extended_patients(current_user):
     return jsonify(res)
 
 
-@api.route('/patient', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@api.route("/patient", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def get_all_patients(current_user):
     """
     Get details of all patients.
@@ -67,8 +67,8 @@ def get_all_patients(current_user):
     return jsonify(patients_list)
 
 
-@api.route('/patient/<uuid:patientId>', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+@api.route("/patient/<uuid:patientId>", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_patient(patientId, current_user):
     """
     Get details of a specific patient identified by patientId.
@@ -91,7 +91,7 @@ def get_patient(patientId, current_user):
         return jsonify({"error": "Patient not found"}), 404
 
     # Check if the current user has the 'patient' role
-    if current_user.role == 'patient':
+    if current_user.role == "patient":
         # Check if the current user is trying to access their own profile
         if current_user.profileId != str(patientId):
             # Return a 403 Forbidden error if the user does not have sufficient privileges
@@ -101,8 +101,8 @@ def get_patient(patientId, current_user):
     return jsonify(patient.to_dict())
 
 
-@api.route('/patient_extended/<uuid:patientId>', methods=['GET'], strict_slashes=False)
-@token_required(['patient'])
+@api.route("/patient_extended/<uuid:patientId>", methods=["GET"], strict_slashes=False)
+@token_required(["patient"])
 def get_patient_extended(patientId, current_user):
     """
     Get extended details of a specific patient identified by patientId.
@@ -125,7 +125,7 @@ def get_patient_extended(patientId, current_user):
         return jsonify({"error": "Patient not found"}), 404
 
     # Check if the current user is a patient and trying to access their own profile
-    if current_user.role == 'patient' and current_user.profileId != str(patientId):
+    if current_user.role == "patient" and current_user.profileId != str(patientId):
         # Return a 403 Forbidden error if the user does not have sufficient privileges
         return jsonify({"error": "Insufficient privileges!"}), 403
 
@@ -136,9 +136,9 @@ def get_patient_extended(patientId, current_user):
     user_dict = database.get_by_id(User, str(patient.userId)).to_dict()
 
     # Remove sensitive information from the user dictionary
-    user_dict.pop('id', None)  # Remove user ID
-    user_dict.pop('password', None)  # Remove password
-    user_dict.pop('token', None)  # Remove authentication token
+    user_dict.pop("id", None)  # Remove user ID
+    user_dict.pop("password", None)  # Remove password
+    user_dict.pop("token", None)  # Remove authentication token
 
     # Merge patient and user dictionaries to create an extended patient dictionary
     patient_dict.update(user_dict)
@@ -147,8 +147,8 @@ def get_patient_extended(patientId, current_user):
     return jsonify(patient_dict)
 
 
-@api.route('/patient', methods=['POST'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@api.route("/patient", methods=["POST"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def add_patient(current_user):
     """
     Add a new patient to the system.
@@ -167,40 +167,60 @@ def add_patient(current_user):
     - 409 Conflict: If the provided username or email already exists in the database.
     """
     # Get the content type from the request headers
-    content_type = request.headers.get('Content-Type')
+    content_type = request.headers.get("Content-Type")
 
     # Parse the request data based on the content type (JSON or form data)
-    if content_type == 'application/json':
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     # Validate required attributes for creating a new patient
-    for attr in ['firstName', 'lastName', 'CIN', 'sex', 'phoneNumber', 'address', 'birthDate', 'email']:
+    for attr in [
+        "firstName",
+        "lastName",
+        "CIN",
+        "sex",
+        "phoneNumber",
+        "address",
+        "birthDate",
+        "email",
+    ]:
         if not data.get(attr, None):
             return jsonify({"error": f"Missing {attr}"}), 400
 
     # Check if username or email or CIN already exists in the database
-    if database.search(HCW, CIN=data.get('CIN', None)) or database.search(Patient, CIN=data.get('CIN', None)):
+    if database.search(HCW, CIN=data.get("CIN", None)) or database.search(
+        Patient, CIN=data.get("CIN", None)
+    ):
         return jsonify({"error": "CIN already exists in database"}), 409
-    if data.get('username', None) and database.search(User, username=data.get('username')):
+    if data.get("username", None) and database.search(
+        User, username=data.get("username")
+    ):
         return jsonify({"error": "Username already exists in database"}), 409
-    if database.search(User, email=data.get('email', None)):
+    if database.search(User, email=data.get("email", None)):
         return jsonify({"error": "Email already exists in database"}), 409
-    
+
     # Generate a random password if not provided
-    if not data.get('password', None):
-        data['password'] = secrets.token_urlsafe(10)
+    if not data.get("password", None):
+        data["password"] = secrets.token_urlsafe(10)
 
     # Generate username if not provided and check for its existence in the database
-    if not data.get('username', None):
-        username = data.get('email').split('@')[0]
+    if not data.get("username", None):
+        username = data.get("email").split("@")[0]
         if database.search(User, username=username):
-            return jsonify({"error": "Could not generate username, please include it in the next request"}), 400
-        data['username'] = username
-        
+            return (
+                jsonify(
+                    {
+                        "error": "Could not generate username, please include it in the next request"
+                    }
+                ),
+                400,
+            )
+        data["username"] = username
+
     # Convert the birthdate input to a timestamp using the input_to_timestamp function
-    timestamp = input_to_timestamp(data.get('birthDate'), "%Y-%m-%d")
+    timestamp = input_to_timestamp(data.get("birthDate"), "%Y-%m-%d")
 
     # Check if the timestamp conversion was successful
     if not timestamp:
@@ -213,27 +233,33 @@ def add_patient(current_user):
         return jsonify({"error": "BirthDate can't be in the future"}), 400
 
     # Update the birthDate field in the data dictionary with the validated timestamp
-    data['birthDate'] = timestamp
-    
+    data["birthDate"] = timestamp
+
     new_data = data.copy()
     for key in data:
         if not hasattr(Patient, key) and not hasattr(User, key):
             new_data.pop(key, None)
-            
+
     # Create a new patient object using the provided data
     patient = Patient(**new_data)
-    
+
     user = database.get_by_id(User, objId=patient.userId)
-    
+
     # Send email notification to the patient with credentials
-    notify(patient.userId, 1, name=f'{patient.lastName} {patient.firstName}', username=user.username, password=data['password'])
-    
+    notify(
+        patient.userId,
+        1,
+        name=f"{patient.lastName} {patient.firstName}",
+        username=user.username,
+        password=data["password"],
+    )
+
     # Save the newly created patient to the database and return its details
     return jsonify(database.get_by_id(Patient, str(patient.id)).to_dict())
 
 
-@api.route('/patient/<uuid:patientId>', methods=['PUT'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist'])
+@api.route("/patient/<uuid:patientId>", methods=["PUT"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
 def update_patient(patientId, current_user):
     """
     Update patient details in the system.
@@ -245,7 +271,7 @@ def update_patient(patientId, current_user):
     Returns:
     - JSON response with updated patient details on success.
     - JSON response with appropriate error message and status code on failure:
-    
+
     Raises:
     - 404 Not Found if the patient is not found.
     - 400 Bad Request if there's an invalid input format or birthDate in the future.
@@ -253,10 +279,10 @@ def update_patient(patientId, current_user):
     """
 
     # Get the content type from the request headers
-    content_type = request.headers.get('Content-Type')
+    content_type = request.headers.get("Content-Type")
 
     # Parse the request data based on the content type (JSON or form data)
-    if content_type == 'application/json':
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
@@ -274,25 +300,38 @@ def update_patient(patientId, current_user):
     # Iterate through the data items and update patient and user attributes
     for key, value in data.items():
         # Check if the current user is not an admin and the key is in the restricted list
-        if current_user.role != 'admin' and key in ['id', 'created_at', 'modified_at', 'archived', 'profileId', 'role', 'userId', 'password', 'token']:
+        if current_user.role != "admin" and key in [
+            "id",
+            "created_at",
+            "modified_at",
+            "archived",
+            "profileId",
+            "role",
+            "userId",
+            "password",
+            "token",
+        ]:
             continue
 
         # Check for specific attributes (username, email) and if they already exist in the database
-        for attr in ['username', 'email']:
+        for attr in ["username", "email"]:
             if key == attr and database.search(User, **{key: value}):
                 return jsonify({"error": f"{attr} already exists in database"}), 409
-        
-        if key == 'CIN' and (database.search(HCW, CIN=data.get('CIN', None)) or database.search(Patient, CIN=data.get('CIN', None))):
+
+        if key == "CIN" and (
+            database.search(HCW, CIN=data.get("CIN", None))
+            or database.search(Patient, CIN=data.get("CIN", None))
+        ):
             return jsonify({"error": f"{key} already exists in database"}), 409
 
         # Convert birthDate to timestamp format and validate it
-        if key == 'birthDate' and value:
+        if key == "birthDate" and value:
             timestamp = input_to_timestamp(value, "%Y-%m-%d")
             if not timestamp:
                 return jsonify({"error": "Invalid input format. Ex: 2024-04-01"}), 400
             if timestamp > time.time():
                 return jsonify({"error": "BirthDate can't be in the future"}), 400
-            data['birthDate'] = timestamp
+            data["birthDate"] = timestamp
 
         # Update patient attributes if the key exists in the Patient model
         if hasattr(patient, key):
@@ -309,7 +348,7 @@ def update_patient(patientId, current_user):
     return jsonify(database.get_by_id(Patient, str(patientId)).to_dict())
 
 
-@api.route('/patient/<uuid:patientId>', methods=['DELETE'], strict_slashes=False)
+@api.route("/patient/<uuid:patientId>", methods=["DELETE"], strict_slashes=False)
 @token_required([])
 def delete_patient(patientId, current_user):
     """
@@ -322,7 +361,7 @@ def delete_patient(patientId, current_user):
     Returns:
     - JSON response with empty data on successful deletion.
     - JSON response with error message and status code:
-    
+
     Raises:
     - 404 Not Found if the patient is not found.
     """

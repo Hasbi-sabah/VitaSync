@@ -1,6 +1,6 @@
 from flask import Blueprint
 
-api = Blueprint('api', __name__, url_prefix='/api')
+api = Blueprint("api", __name__, url_prefix="/api")
 
 from api.base import *
 from api.access.accessHandle import *
@@ -13,9 +13,11 @@ from api.drug.drug import *
 from api.hcw.hcw import *
 from api.hcw.hcw_appointment import *
 
+from api.med_info.medical_info import *
 
 from api.patient.patient import *
 from api.patient.patient_appointment import *
+from api.patient.patient_info import *
 from api.patient.patient_prescription import *
 from api.patient.patient_procedure import *
 from api.patient.patient_record import *

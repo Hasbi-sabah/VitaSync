@@ -3,7 +3,8 @@ from api import api
 from api.auth_middleware import token_required
 from models import database
 
-@api.route('/login', methods=['POST'], strict_slashes=False)
+
+@api.route("/login", methods=["POST"], strict_slashes=False)
 def login():
     """
     Authenticates a user based on provided credentials (username and password).
@@ -24,8 +25,8 @@ def login():
     - 401 Unauthorized: If the provided password does not match the user's hashed password.
     """
     # Check the content type of the request to determine how to parse the data
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         # Parse JSON data if content type is JSON
         data = request.get_json()
     else:
@@ -33,12 +34,12 @@ def login():
         data = request.form.to_dict()
 
     # Extract username and password from the data
-    username = data.get('username', None)
+    username = data.get("username", None)
     if not username:
         # Return error response if username is missing
         return jsonify({"error": "Invalid Credentials"}), 400
 
-    password = data.get('password', None)
+    password = data.get("password", None)
     if not password:
         # Return error response if password is missing
         return jsonify({"error": "Invalid Credentials"}), 400
@@ -58,10 +59,11 @@ def login():
     token = user.create_jwt()
 
     # Return the JWT token, user role and Id in a JSON response
-    return jsonify({'token': token, 'role': user.role, 'id': user.profileId})
+    return jsonify({"token": token, "role": user.role, "id": user.profileId})
 
-@api.route('/logout', methods=['POST'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+
+@api.route("/logout", methods=["POST"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def logout(current_user):
     """
     Endpoint for user logout.
@@ -73,7 +75,7 @@ def logout(current_user):
     :return: Empty JSON response indicating successful logout.
     """
     # Set the token attribute of the current user to None
-    setattr(current_user, 'token', None)
+    setattr(current_user, "token", None)
 
     # Save the updated user data to the database
     current_user.save()

@@ -5,8 +5,9 @@ from models import database
 from models.patient import Patient
 from models.procedure import Procedure
 
-@api.route('/patient/<uuid:patientId>/procedure', methods=['GET'], strict_slashes=False)
-@token_required(['doctor', 'nurse', 'pharmacist', 'patient'])
+
+@api.route("/patient/<uuid:patientId>/procedure", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
 def get_all_patient_procedures(patientId, current_user):
     """
     Retrieves all procedures associated with a specific patient.
@@ -29,7 +30,7 @@ def get_all_patient_procedures(patientId, current_user):
         return jsonify({"error": "Patient not found"}), 404
 
     # Check if the current user has sufficient privileges to access procedures for the patient
-    if current_user.role == 'patient' and current_user.profileId != str(patientId):
+    if current_user.role == "patient" and current_user.profileId != str(patientId):
         # Return an error response for insufficient privileges
         return {"error": "Insufficient privileges!"}, 403
 
@@ -39,8 +40,11 @@ def get_all_patient_procedures(patientId, current_user):
     # Convert the procedures to dictionaries and return them in a JSON response
     return jsonify([procedure.to_dict() for procedure in procedures])
 
-@api.route('/patient/<uuid:patientId>/procedure', methods=['POST'], strict_slashes=False)
-@token_required(['doctor'])
+
+@api.route(
+    "/patient/<uuid:patientId>/procedure", methods=["POST"], strict_slashes=False
+)
+@token_required(["doctor"])
 def add_patient_procedure(patientId, current_user):
     """
     Adds a new procedure for a specific patient.
@@ -62,15 +66,15 @@ def add_patient_procedure(patientId, current_user):
         return jsonify({"error": "Patient not found"}), 404
 
     # Extract data from the request based on the content type
-    content_type = request.headers.get('Content-Type')
-    if content_type == 'application/json':
+    content_type = request.headers.get("Content-Type")
+    if content_type == "application/json":
         data = request.get_json()
     else:
         data = request.form.to_dict()
 
     # Set the 'performedById' field if the 'status' key is present in the data
-    if data.get('status', None):
-        data['performedById'] = current_user.profileId
+    if data.get("status", None):
+        data["performedById"] = current_user.profileId
 
     # Create a copy of the data with only valid keys for the Procedure model
     new_data = data.copy()
@@ -79,5 +83,7 @@ def add_patient_procedure(patientId, current_user):
             new_data.pop(key, None)
 
     # Create a new Procedure instance with the extracted data and save it to the database
-    procedure = Procedure(**new_data, patientId=patientId, prescribedById=current_user.profileId)
+    procedure = Procedure(
+        **new_data, patientId=patientId, prescribedById=current_user.profileId
+    )
     return jsonify(database.get_by_id(Procedure, str(procedure.id)).to_dict())
