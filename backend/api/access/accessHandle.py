@@ -22,7 +22,7 @@ def login():
     if not user.check_hash(password):
         return jsonify({"error": "Wrong password"}), 401
     user.create_jwt()
-    return jsonify({'token': user.token})
+    return jsonify({'token': user.token, 'role': user.role})
 
 @api.route('/logout', methods=['POST'], strict_slashes=False)
 @token_required(['doctor', 'nurse', 'pharmacist', 'patient'])

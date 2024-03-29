@@ -70,12 +70,12 @@ const Login = () => {
           onSubmit={async (values, { setSubmitting, resetForm }) => {
             try {
               const userData = await login(values).unwrap();
-              console.log(userData);
-              setUser(values.username);
-              dispatch(setCredentials({ ...userData, user }));
+              // console.log(userData);
+              // setUser(values.username);
+              dispatch(setCredentials({ accessToken: userData.token, user: values.username }));
               setSubmitting(false);
-              resetForm();
               navigate("/dashboard");
+              resetForm();
             } catch (err) {
               console.log(`Error : `, err);
               if (err?.originalStatus) {

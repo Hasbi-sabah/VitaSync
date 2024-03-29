@@ -1,16 +1,12 @@
 import React from 'react';
-import SearchBoxSmall from '../components/extra/SearchboxSmall';
 import MediaQuery from 'react-responsive';
 
 const Header = () => {
   return (
-    <header className='h-14 sm:h-[10vh] w-screen fixed top-0 flex justify-between items-center px-3 sm:px-5 bg-white z-40 size-min:z-50'>
-        <div className="ml-44 sm:ml-0">
+    <header className='h-14 sm:h-[6vh] lg:h-[10vh] w-screen fixed top-0 flex justify-between items-center px-3 sm:px-5 bg-white z-50'>
+        <div className="ml-44 sm:ml-20 lg:ml-0">
             <img className='' alt='LOGO' />
         </div>
-        <MediaQuery minWidth={640}>
-          <SearchBoxSmall />
-        </MediaQuery>
         <div className='flex align-center justify-center'>
             <MediaQuery minWidth={640}>
               <span className='text-2xl font-semibold '>Dr. </span>

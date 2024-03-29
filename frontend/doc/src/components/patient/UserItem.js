@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import ViewPatient from "../../features/ViewPatient";
+import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
@@ -16,11 +16,11 @@ const UserItem = ({ userId, sn, name, sex, age, contact, date, time}) => {
     setShowPatientDetails(false);
   };
 
-  const isMobile = useMediaQuery({maxWidth:640});
+  const isMobile = useMediaQuery({maxWidth:1024});
   return (
-    <tr className={`text-textGray text-xl sm:text-base text-center h-12 ${bgColor}`}>
+    <tr className={`text-textGray text-xl lg:text-base text-center h-12 ${bgColor}`}>
       <td>{sn}</td>
-      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 sm:max-w-24 text-left text-wrap mx-auto">{name}</td>
+      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-left text-wrap mx-auto">{name}</td>
       <td>{sex}</td>
       <td>{age}</td>
       {!isMobile && <td>{contact}</td>}
