@@ -4,27 +4,42 @@ from models.base import BM, Base
 
 
 class Record(BM, Base):
+    """Record model to store medical records."""
+
     __tablename__ = "records"
 
-    columns = ['diagnosis', 'notes']
+    # Foreign key references and relationships
+    patientId = Column(
+        String(40), ForeignKey("patients.id")
+    )  # Patient ID associated with the record
+    patient = relationship(
+        "Patient", back_populates="records"
+    )  # Relationship with Patient model
 
-    patientId = Column(String(40), ForeignKey("patients.id"))
-    patient = relationship("Patient", back_populates="records")
+    vaccineId = Column(
+        String(40), ForeignKey("vaccines.id")
+    )  # Vaccine ID associated with the record
+    vaccine = relationship("Vaccine")  # Relationship with Vaccine model
 
-    vaccineId = Column(String(40), ForeignKey("vaccines.id"))
-    vaccine = relationship("Vaccine")
+    vitalsId = Column(
+        String(40), ForeignKey("vitals.id")
+    )  # Vitals ID associated with the record
+    vitals = relationship("Vital")  # Relationship with Vital model
 
-    vitalsId = Column(String(40), ForeignKey("vitals.id"))
-    vitals = relationship("Vital")
+    procedureId = Column(
+        String(40), ForeignKey("procedures.id")
+    )  # Procedure ID associated with the record
+    procedure = relationship("Procedure")  # Relationship with Procedure model
 
-    procedureId = Column(String(40), ForeignKey("procedures.id"))
-    procedure = relationship("Procedure")
+    prescriptionId = Column(
+        String(40), ForeignKey("prescriptions.id")
+    )  # Prescription ID associated with the record
+    prescription = relationship("Prescription")  # Relationship with Prescription model
 
-    prescriptionId = Column(String(40), ForeignKey("prescriptions.id"))
-    prescription = relationship("Prescription")
+    assessedById = Column(
+        String(40), ForeignKey("hcws.id")
+    )  # HCW ID who assessed the record
+    assessedBy = relationship("HCW")  # Relationship with HCW model
 
-    assessedById = Column(String(40), ForeignKey("hcws.id"))
-    assessedBy = relationship("HCW")
-
-    diagnosis = Column(String(2048))
-    notes = Column(String(2048))
+    diagnosis = Column(String(2048))  # Diagnosis information in the record
+    notes = Column(String(2048))  # Additional notes in the record
