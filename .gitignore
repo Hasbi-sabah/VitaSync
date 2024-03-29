@@ -1,7 +1,4 @@
-frontend/nurse/package-lock.json
-frontend/nurse/node_modules
-frontend/auth/node_modules
-frontend/patient/node_modules
+*package-lock.json*
+*node_modules*
 *__pycache__*
 *venv*
-*backend*
