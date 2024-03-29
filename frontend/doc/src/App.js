@@ -7,6 +7,7 @@ import Records from './features/Records';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
+import Logout from './components/Logout';
 
 function App() {
   const dispatch = useDispatch()
@@ -36,6 +37,7 @@ function App() {
       <Route path="/" element={<Layout />}>
       <Route index element={<Dashboard />} />
       <Route path="dashboard" element={<Dashboard />} />
+      <Route path="logout" element={<Logout />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
