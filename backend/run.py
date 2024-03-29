@@ -27,8 +27,10 @@ app.config['SMTP_API_KEY'] = SMTP_API_KEY
 app.register_blueprint(api)
 
 # Allow cross-origin resource sharing (CORS)
+# dev routes for frontend, to be removed in production
+# as one link will take over
 cors_config = {
-    "origins": ["http://localhost:5000", "http://localhost:3000"],
+    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003"],
     "supports_credentials": True
 }
 CORS(app, **cors_config)
