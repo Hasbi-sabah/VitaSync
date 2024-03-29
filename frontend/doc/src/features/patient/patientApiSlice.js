@@ -7,6 +7,10 @@ export const patientApiSlice = apiSlice.injectEndpoints({
                 url: "/api/patient",
                 method: "GET",
             }),
+            // transformResponse: (response) => {
+            //     console.log("Server Response:", response);
+            //     return response;
+            // }
         }),
         
         getPatientById: builder.query({

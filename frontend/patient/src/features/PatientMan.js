@@ -1,5 +1,3 @@
-import CreateSearchPatient from "../components/extra/CreateSearchPatient";
-import DisplayPatients from "../components/patient/DisplayPatients";
 
 // API call /patient
 const PatientMan = () => {
@@ -25,8 +23,6 @@ const PatientMan = () => {
   const label = "Patients"
   return (
     <div className='bg-gray pb-12'>
-      <CreateSearchPatient />
-      <DisplayPatients data={data} label={label}/>
     </div>
   )
 }

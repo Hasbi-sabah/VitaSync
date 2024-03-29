@@ -71,7 +71,7 @@ const Login = () => {
             try {
               const userData = await login(values).unwrap();
               // console.log(userData);
-              setUser(values.username);
+              // setUser(values.username);
               dispatch(setCredentials({ accessToken: userData.token, user: values.username }));
               setSubmitting(false);
               navigate("/dashboard");

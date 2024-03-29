@@ -54,8 +54,17 @@ const Login = () => {
   //   userRef.current.focus();
   // }, [userRef.current]);
 
-  const re_route = () => {
-    window.location.href =  "http://localhost:3003/dashboard";
+  const handleRedirect = (userId, role, token) => {
+    const params = `token=${token}&role=${role}&id=${userId}`;
+    if (role === "doctor" || role === "admin")
+      window.location.href = `http://localhost:3001/dashboard?${params}`;
+    else if (role === "nurse")
+      window.location.href = `http://localhost:3002/dashboard?${params}`;
+    else if (role === "patient")
+      window.location.href = `http://localhost:3003/dashboard?${params}`;
+    else if (role === "pharmacist")
+      window.location.href = `http://localhost:3004/dashboard?${params}`;
+    else navigate("/login");
     return null;
   }
   return (
@@ -75,14 +84,15 @@ const Login = () => {
             try {
               const userData = await login(values).unwrap();
               console.log(userData);
-              dispatch(setCredentials({ accessToken: userData.token, userId: userData.userId, role: userData.role }));
+              dispatch(
+                setCredentials({
+                  accessToken: userData.token,
+                  userId: userData.userId,
+                  role: userData.role,
+                })
+              );
               setSubmitting(false);
-              if (userData.role === 'doctor' || userData.role === 'admin') re_route();
-              else if (userData.role === 'nurse') navigate("http://localhost:3002/dashboard")
-              else if (userData.role === 'patient') navigate("http://localhost:3003/dashboard")
-              else if (userData.role === 'pharmacist') navigate("http://localhost:3004/dashboard")
-              else navigate("/invalid");
-              // navigate("/dashboard");
+              handleRedirect(userData.id, userData.role, userData.token);
               resetForm();
             } catch (err) {
               console.log(`Error : `, err);
@@ -109,7 +119,11 @@ const Login = () => {
               <h1 className="text-xl font-semibold">Login</h1>
               <Form className="">
                 <MyTextInput label={"Username"} name="username" type="text" />
-                <MyTextInput label={"Password"} name="password" type="password" />
+                <MyTextInput
+                  label={"Password"}
+                  name="password"
+                  type="password"
+                />
                 <button
                   className={`bg-lightBlue text-white ${button_style}`}
                   type="submit"

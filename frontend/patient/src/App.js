@@ -16,12 +16,12 @@ function App() {
       <Route path="/" element={<Layout />}>
       <Route path="dashboard" element={<Dashboard />} />
       <Route path="contactHCW" element={<ContactHCW />} />
+      <Route path="records" element={<Records />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
           <Route path="patients" element={<PatientMan />} />
-          <Route path="records" element={<Records />} />
         </Route>
 
       </Route>
