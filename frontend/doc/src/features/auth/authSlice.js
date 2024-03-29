@@ -17,6 +17,7 @@ const authSlice = createSlice({
             state.token = accessToken;
             state.role = role;
             sessionStorage.setItem('role', role);
+            sessionStorage.setItem('id', userId);
             sessionStorage.setItem('token', accessToken);
         },  
         logOut: (state, action) => {

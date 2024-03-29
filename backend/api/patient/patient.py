@@ -66,7 +66,8 @@ def get_all_patients(current_user):
     if content_type == "application/json":
         data = request.get_json()
     else:
-        data = request.form.to_dict()
+        data = {'ids': request.args.get('ids', None).split(',')}
+    print(data)
     if data and data.get('ids', None):
         patients_list = []
         ids = data.get('ids', None)
