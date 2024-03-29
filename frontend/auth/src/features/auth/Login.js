@@ -56,6 +56,7 @@ const Login = () => {
 
   const handleRedirect = (userId, role, token) => {
     const params = `token=${token}&role=${role}&id=${userId}`;
+    console.log(userId)
     if (role === "doctor" || role === "admin")
       window.location.href = `http://localhost:3001/dashboard?${params}`;
     else if (role === "nurse")
