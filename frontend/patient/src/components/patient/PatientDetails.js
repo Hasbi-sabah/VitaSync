@@ -3,9 +3,9 @@ import UpdateMedInfo from "../MedInfo/UpdateMedInfo";
 import Vital from "./Vital";
 import Caption from "../extra/Caption";
 import { useMediaQuery } from "react-responsive";
+import { useLocation } from "react-router-dom";
 
-const PatientDetails = ({ patientId, closeOverlay }) => {
-  // API call to /patient/id ASK SABAH TO INCLUDE EMAIL
+const PatientDetails = ({ patientId }) => {
   const reqPatientDetails = {
     medicalInfo: { allergies: "Peanut", conditions: "", note: "" },
     firstName: "Williams",
@@ -42,10 +42,11 @@ const PatientDetails = ({ patientId, closeOverlay }) => {
 
   const isMobile = useMediaQuery({maxWidth:640});
 
+  const location = useLocation()
   return (
     <div className="w-screen sm:w-[100%]">
       <div className="flex flex-col lg:flex-row justify-evenly sm:items-center lg:items-baseline">
-        <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 sm:w-[26rem] p-3 sm:p-5 px-8">
+        <div className="bg-white rounded-3xl relative mx-4 sm:mx-2 sm:w-[26rem] p-3 sm:p-5 px-8">
           <div className="">
             <h2 className="text-3xl font-semibold text-center">
               {firstName ? firstName : ""} {lastName ? lastName : ""}
@@ -61,7 +62,7 @@ const PatientDetails = ({ patientId, closeOverlay }) => {
               <p className="text-lightBlue text-left text-sm">{email ? email : ""}</p>
             </div>
           </div>
-          <div className="relative w-[100%] text-left pt-3">
+          <div className="relative w-full text-left pt-3">
             <UpdateMedInfo
               medInfo={fillDetails.allergies}
               patientId={patientId}
@@ -80,7 +81,7 @@ const PatientDetails = ({ patientId, closeOverlay }) => {
             />
           </div>
         </div>
-        {isMobile && <Caption />}
+        {isMobile && (location.pathname === "/dashboard") && <Caption />}
         <div className="bg-white rounded-3xl mx-auto relative lg:w-[43rem] lg:h-[20rem] p-5 mt-8 lg:mt-0">
           <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
           <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
@@ -118,7 +119,7 @@ const PatientDetails = ({ patientId, closeOverlay }) => {
           </div>
         </div>
       </div>
-      {!isMobile && <Caption />}
+      {!isMobile && (location.pathname === "/dashboard") && <Caption />}
     </div>
   );
 };

@@ -6,6 +6,7 @@ import RecordItem from '../components/extra/RecordItem';
 const Records = () => {
   //API call to obtain records
 
+  const date = new Date()
   //Ask sabah about DATE for user records
   const dummytRecords = [
     {
@@ -26,6 +27,7 @@ const Records = () => {
       ],
       assessedBy: "Dr. Smith",
       vaccines: [],
+      followUp: date.toLocaleDateString(),
     },
     {
       id: 2,
@@ -42,6 +44,7 @@ const Records = () => {
       prescriptions: [],
       assessedBy: "Dr. Johnson",
       vaccines: [],
+      followUp: date.toLocaleDateString(),
     },
     {
       id: 3,
@@ -56,6 +59,7 @@ const Records = () => {
       prescriptions: [{ drug: "Oseltamivir", dosage: "75 mg twice daily" }],
       assessedBy: "Dr. Lee",
       vaccines: [],
+      followUp: date.toLocaleDateString(),
     },
     {
       id: 4,
@@ -67,6 +71,7 @@ const Records = () => {
       prescriptions: [{ drug: "Ibuprofen", dosage: "200 mg as needed" }],
       assessedBy: "Dr. Patel",
       vaccines: [],
+      followUp: date.toLocaleDateString(),
     },
     {
       id: 5,
@@ -77,7 +82,8 @@ const Records = () => {
       procedures: ["Physical examination"],
       prescriptions: [],
       assessedBy: "Dr. Garcia",
-      vaccines: [],
+      vaccine: [],
+      followUp: date.toLocaleDateString(),
     },
   ];
   
@@ -91,22 +97,22 @@ const Records = () => {
     return dummytRecords.slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
 
-  const handleViewRecord = () => setView(true);
-  const handleCloseRecord = () => setView(false);
-  const [view, setView] = useState(false);
+
   return (
-  <div className="bg-gray mt-16 pb-12 sm:mt-12 lg:mt-32 mx-4">
-    <h2 className="text-center text-3xl py-4 font-semibold">
-      Medical History
-    </h2>
-    <table className='w-full text-lg bg-white'>
+  <div className="bg-gray mt-20 pb-12 sm:mt-24 lg:mt-32 mx-4">
+
+    <table className='w-full text-lg bg-white table-auto'>
+      <thead>
+        <tr>
+          <td colSpan={3} className='text-3xl py-4 font-semibold text-center bg-lightBlue text-white'>Medical History</td>
+        </tr>
+      </thead>
       <tbody className=''>
         {currentPageData.map((record, idx) => (
           <RecordItem 
             sn={(currentPage - 1) * pageSize + idx + 1}
             key={record.id}
-            date={record.date}
-            diagnosis={record.diagnosis}
+            data={record}
           />
         ))}
       </tbody>
