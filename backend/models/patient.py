@@ -15,7 +15,7 @@ class Patient(BM, Base):
     CIN = Column(String(20))  # Identity card number of the patient
     sex = Column(String(20))  # Sex/gender of the patient
     birthDate = Column(Integer)  # Birth date of the patient
-    phoneNumber = Column(Integer)  # Phone number of the patient
+    phoneNumber = Column(String(20))  # Phone number of the patient
     address = Column(String(2048))  # Address of the patient
     medicalInfo = relationship(
         "MedInfo", uselist=False, back_populates="patient"

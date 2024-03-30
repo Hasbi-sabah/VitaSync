@@ -2,7 +2,7 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const patientApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getPatient: builder.query({
+        getSearchPatient: builder.query({
             query: (data) => ({
                 url: "/api/search_patient",
                 method: "POST",
@@ -16,7 +16,14 @@ export const patientApiSlice = apiSlice.injectEndpoints({
             //     return response;
             // }
         }),
-        
+
+        getPatient: builder.query({
+            query: () => ({
+                url: `/api/patient`,
+                method: "GET"
+            }),
+        }),
+
         getPatientById: builder.query({
             query: (id) => ({
                 url: `/api/patient/${id}`,
@@ -50,6 +57,7 @@ export const patientApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+    useGetSearchPatientQuery,
     useGetPatientQuery,
     useGetPatientByIdQuery,
     useUpdatePatientByIdMutation,

@@ -39,6 +39,7 @@ const DisplayAppointments = ({ data, label }) => {
         <tbody>
           {currentTableData.map((user, idx) => (
             <UserItem
+              userId={ user.patientId }
               sn={(currentPage - 1) * pageSize + idx + 1}
               key={idx}
               name={`${user.firstName} ${user.lastName}`}

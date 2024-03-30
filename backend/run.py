@@ -28,7 +28,7 @@ app.register_blueprint(api)
 
 # Allow cross-origin resource sharing (CORS)
 cors_config = {
-    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001"],
+    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003"],
     "supports_credentials": True
 }
 CORS(app, **cors_config)
