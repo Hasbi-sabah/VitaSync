@@ -30,8 +30,8 @@ const DisplayAppointments = ({ data, label }) => {
             <th className="px-3 lg:px-4">Sex</th>
             <th className="px-3 lg:px-4">Age</th>
             {!isMobile && <th className=" px-4">Contact</th>}
-            {!isMobile && <th className=" px-4">Date</th>}
-            {isDashboard && isMobile && <th className=" px-4">Time</th>}
+            {!isMobile && <th className=" px-4">Time</th>}
+            {isDashboard && isMobile && <th className=" px-4"></th>}
             <th className=""></th>
           </tr>
         </thead>
@@ -45,7 +45,7 @@ const DisplayAppointments = ({ data, label }) => {
               sex={user.sex === "Male" ? "M" : "F"}
               age={user.birthDate}
               contact={user.phoneNumber}
-              date={user.time}
+              date={user.time.split(' ')[2] + ' ' + user.time.split(' ')[3]}
             />
           ))}
         </tbody>

@@ -9,10 +9,11 @@ const Dashboard = () => {
   const currentDate = new Date();
   currentDate.setHours(0, 1, 0, 0);
   const formattedDate = currentDate.toISOString().slice(0, 10);
-  const start_end = {start_time: formattedDate + ' 00:01 AM', end_time: formattedDate + ' 11:59 PM'}
+  const start_end = {start_time: formattedDate + ' 12:01 AM', end_time: formattedDate + ' 11:59 PM'}
 
   // Move the hook calls to the top level
-  const { data: patientList } = useGetHCWAppointmentByIdQuery(sessionStorage.getItem("id"), start_end);
+  const { data: patientList } = useGetHCWAppointmentByIdQuery([sessionStorage.getItem("id"), start_end]);
+  console.log([sessionStorage.getItem("id"), start_end])
   const ids = {
     ids: patientList ? patientList.map((patient) => patient.patientId) : []
    };

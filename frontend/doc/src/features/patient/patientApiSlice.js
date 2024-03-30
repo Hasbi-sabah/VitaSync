@@ -3,10 +3,13 @@ import { apiSlice } from "../../app/api/apiSlice";
 export const patientApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getPatient: builder.query({
-            query: (data=[]) => ({
-                url: "/api/patient",
-                method: "GET",
-                params: { ...data }
+            query: (data) => ({
+                url: "/api/search_patient",
+                method: "POST",
+                body: { ...data },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
             // transformResponse: (response) => {
             //     console.log("Server Response:", response);

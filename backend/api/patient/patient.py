@@ -48,9 +48,9 @@ def get_all_extended_patients(current_user):
     return jsonify(res)
 
 
-@api.route("/patient", methods=["GET"], strict_slashes=False)
+@api.route("/search_patient", methods=["POST"], strict_slashes=False)
 @token_required(["doctor", "nurse", "pharmacist"])
-def get_all_patients(current_user):
+def list_patients(current_user):
     """
     Get details of all patients.
 
@@ -85,6 +85,28 @@ def get_all_patients(current_user):
     # Return the list of patient dictionaries as a JSON response
     return jsonify([patient.to_dict() for patient in patients_list])
 
+@api.route("/patient", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
+def get_all_patients(current_user):
+    """
+    Get all healthcare workers.
+
+    This endpoint returns a list of healthcare workers.
+
+    Available for all roles.
+
+    :param current_user: Current authenticated user (obtained from token)
+    :return: JSON response with a list of healthcare workers
+    """
+
+    # Retrieve all healthcare workers from the database and convert them to dictionaries
+    res = [
+        patient.to_dict()
+        for patient in database.get_all(Patient)
+    ]
+
+    # Return a JSON response with the list of healthcare workers
+    return jsonify(res)
 
 @api.route("/patient/<uuid:patientId>", methods=["GET"], strict_slashes=False)
 @token_required(["doctor", "nurse", "pharmacist", "patient"])

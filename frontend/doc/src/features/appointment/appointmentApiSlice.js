@@ -11,10 +11,13 @@ export const appointmentApiSclice = apiSlice.injectEndpoints({
         }),
 
         getHCWAppointmentById: builder.query({
-            query: (id, data) => ({
-                url: `/api/hcw/${id}/appointment`,
-                method: "GET",
-                params: { ...data }
+            query: (data) => ({
+                url: `/api/hcw/${data[0]}/appointment`,
+                method: "POST",
+                body: JSON.stringify(data[1]),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 
