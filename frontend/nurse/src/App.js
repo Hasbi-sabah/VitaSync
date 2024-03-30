@@ -5,9 +5,34 @@ import Public from './components/Public';
 import Login from './features/auth/Login';
 import RequireAuth from './features/RequireAuth';
 import PatientMan from './features/PatientMan';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setCredentials } from './features/auth/authSlice';
 import Records from './features/Records';
 
 function App() {
+  const dispatch = useDispatch()
+  const re_routeLogin = () => {
+    window.location.href = "http://localhost:3000/login";
+    return null;
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    const userId = urlParams.get("id");
+    const role = urlParams.get("role");
+    dispatch(
+      setCredentials({
+        accessToken: token,
+        userId: userId,
+        role: role,
+      })
+    );
+    
+    console.log(`token: ${token}, id: ${userId}, role: ${role}`)
+    // if (!token) re_routeLogin()
+  }, [])
   return (
     <Routes>
       <Route path="login" element={<Login />} />
