@@ -60,11 +60,27 @@ def get_all_patients(current_user):
     Returns:
     - JSON object containing details of all patients.
     """
+    content_type = request.headers.get("Content-Type")
+
+    # Parse the request data based on content type
+    if content_type == "application/json":
+        data = request.get_json()
+    else:
+        data = {'ids': request.args.get('ids', None).split(',')}
+    print(data)
+    if data and data.get('ids', None):
+        patients_list = []
+        ids = data.get('ids', None)
+        for id in ids:
+            patient = database.get_by_id(Patient, id)
+            if patient:
+                patients_list.append(patient)
+    else:
     # Retrieve all patients from the database and convert each patient object to a dictionary
-    patients_list = [patient.to_dict() for patient in database.get_all(Patient)]
+        patients_list = database.get_all(Patient)
 
     # Return the list of patient dictionaries as a JSON response
-    return jsonify(patients_list)
+    return jsonify([patient.to_dict() for patient in patients_list])
 
 
 @api.route("/patient/<uuid:patientId>", methods=["GET"], strict_slashes=False)
