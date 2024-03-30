@@ -4,4 +4,3 @@ frontend/auth/node_modules
 frontend/patient/node_modules
 *__pycache__*
 *venv*
-*backend*
