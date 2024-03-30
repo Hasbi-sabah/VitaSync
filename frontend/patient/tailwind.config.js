@@ -13,6 +13,8 @@ module.exports = {
       'textGray': "#3E3E3E",
       'red': '#FF0000',
       // 'userColor1': "#909090"
+      'actualLightBlue': '#0920F6',
+      'green': '#00FF00',
     },
     extend: {
       keyframes: {

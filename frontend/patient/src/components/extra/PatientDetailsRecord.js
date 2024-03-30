@@ -1,8 +1,4 @@
-import React, { useState, useEffect } from "react";
-import UpdateMedInfo from "../MedInfo/UpdateMedInfo";
-import Caption from "../extra/Caption";
-import { useMediaQuery } from "react-responsive";
-import { useLocation } from "react-router-dom";
+import React from "react";
 import Vital from "../patient/Vital";
 
 const PatientDetailsRecord = ({ data }) => {

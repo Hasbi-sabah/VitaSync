@@ -16,7 +16,7 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
                 body: { ...data }
             }),
         }),
-        
+
         getPrescriptionById: builder.query({
             query: (id) => ({
                 url: `/api/prescription/${id}`,

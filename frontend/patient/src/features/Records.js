@@ -7,7 +7,6 @@ const Records = () => {
   //API call to obtain records
 
   const date = new Date()
-  //Ask sabah about DATE for user records
   const dummytRecords = [
     {
       id: 1,

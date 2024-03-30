@@ -84,14 +84,14 @@ const MenuItem = ({ label }) => {
     patients: patientManIcon,
     contactHCW: contactIcon,
     records: recordIcon,
-    prescription: prisribeIcon,
+    prescriptions: prisribeIcon,
     logout: logoutIcon,
   };
   const labels = {
     dashboard: "Dashboard",
     patients: "Patient Management",
     contactHCW: "Contact HCW",
-    prescription: "Prescriptions",
+    prescriptions: "Prescriptions",
     records: "Records",
     logout: "Logout",
   };
