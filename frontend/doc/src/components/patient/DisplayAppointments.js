@@ -45,9 +45,7 @@ const DisplayAppointments = ({ data, label }) => {
               sex={user.sex === "Male" ? "M" : "F"}
               age={user.birthDate}
               contact={user.phoneNumber}
-              date={user.date}
-              time={"13:00"}
-              userId={user.userId}
+              date={user.time}
             />
           ))}
         </tbody>

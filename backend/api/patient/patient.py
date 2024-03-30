@@ -66,8 +66,11 @@ def get_all_patients(current_user):
     if content_type == "application/json":
         data = request.get_json()
     else:
-        data = {'ids': request.args.get('ids', None).split(',')}
-    print(data)
+        ids = request.args.get('ids', None)
+        if ids:
+            data = {'ids': ids.split(',')}
+        else:
+            data = None
     if data and data.get('ids', None):
         patients_list = []
         ids = data.get('ids', None)
@@ -347,7 +350,7 @@ def update_patient(patientId, current_user):
                 return jsonify({"error": "Invalid input format. Ex: 2024-04-01"}), 400
             if timestamp > time.time():
                 return jsonify({"error": "BirthDate can't be in the future"}), 400
-            data["birthDate"] = timestamp
+            value = timestamp
 
         # Update patient attributes if the key exists in the Patient model
         if hasattr(patient, key):
