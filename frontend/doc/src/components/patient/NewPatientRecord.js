@@ -130,7 +130,10 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
         addRecord({id: userId, data: recDict})
           .then((result) => {
             const recId = result.data.id
-            
+            alert("Rec created")
+            setSubmitting(false);
+            resetForm();
+            closeOverlay();
           })
 
         if (values.followUp !== "") {

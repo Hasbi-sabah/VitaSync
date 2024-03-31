@@ -144,7 +144,6 @@ def get_hcw(hcwId, current_user):
     :return: A JSON response containing the detailed healthcare worker information.
     :rtype: flask.Response
     :raises 404: If the specified healthcare worker ID is not found in the database.
-    :raises 403: If the user does not have sufficient privileges to access the information.
     """
 
     # Retrieve the healthcare worker object from the database based on the provided ID
@@ -153,10 +152,6 @@ def get_hcw(hcwId, current_user):
     # Check if the healthcare worker exists
     if not hcw:
         return jsonify({"error": "Health Care Worker not found!"}), 404
-
-    # Check if the current user has sufficient privileges to access the information
-    if current_user.role != "admin" and current_user.profileId != str(hcwId):
-        return {"error": "Insufficient privileges!"}, 403
 
     # Return a JSON response containing the detailed healthcare worker information
     return jsonify(hcw.to_dict())

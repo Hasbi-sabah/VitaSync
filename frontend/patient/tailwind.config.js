@@ -17,6 +17,9 @@ module.exports = {
       'green': '#00FF00',
     },
     extend: {
+      spacing: {
+        '128': '32rem',
+      },
       keyframes: {
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },
