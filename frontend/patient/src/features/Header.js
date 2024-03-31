@@ -1,11 +1,16 @@
 import React from 'react';
 import MediaQuery from 'react-responsive';
+import logo from '../assets/inverted_logo.jpg';
+import { useMediaQuery } from "react-responsive";
+
 
 const Header = () => {
+  const isMobile = useMediaQuery({ maxWidth:640 })
   return (
     <header className='h-14 sm:h-[6vh] lg:h-[10vh] w-screen fixed top-0 flex justify-between items-center px-3 sm:px-5 bg-white z-50'>
-        <div className="ml-44 sm:ml-20 lg:ml-0">
-            <img className='' alt='LOGO' />
+        {isMobile ? <div></div> : ''}
+        <div>
+            <img className='h-12 sm:h-[5vh] lg:h-[9vh]' src={logo} alt='LOGO' />
         </div>
         <div className='flex align-center justify-center'>
             <MediaQuery minWidth={640}>
