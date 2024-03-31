@@ -35,6 +35,7 @@ export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
 //Date
 const MyDateInput = ({ label, ...props }) => {
   const [field] = useField(props);
+  const currentDateTime = new Date().toISOString().substring(0, 16);
   return (
     <div className="text-left mt-3">
       <label className={`${label_style} text-white`} htmlFor={props.id || props.name}>
@@ -42,7 +43,8 @@ const MyDateInput = ({ label, ...props }) => {
       </label>
       <input
         className={`input px-5 ${input_style} `}
-        type="date"
+        type="datetime-local"
+        min={currentDateTime}
         {...field}
         {...props}
       />

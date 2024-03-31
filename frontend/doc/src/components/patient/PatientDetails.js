@@ -4,6 +4,7 @@ import Vital from "./Vital";
 import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import { useGetPatientVitalByIdQuery } from '../../features/vital/vitalApiSlice'
 import { useGetPatientMedInfoByIdQuery, useAddPatientMedInfoByIdMutation } from '../../features/medInfo/medInfoApiSlice';
+import RecordVitals from "./RecordVitals";
 
 const PatientDetails = ({ userId, closeOverlay }) => {
   const { data: patientInfo } = useGetPatientByIdQuery(userId);
@@ -61,6 +62,15 @@ const PatientDetails = ({ userId, closeOverlay }) => {
     <path d="M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM51.31,160l90.35-90.35,16.68,16.69L68,176.68ZM48,179.31,76.69,208H48Zm48,25.38L79.31,188l90.35-90.35h0l16.68,16.69Z"></path>
   </svg>
   );
+  const [addVitals, setAddVitals] = useState(false)
+
+  const handleAddVital = () => {
+    setAddVitals(true);
+  };
+
+  const closeVitalsOverlay = () => {
+    setAddVitals(false);
+  }
   if (medicalInfo && reqVitals){
     const fillDetails = {
       allergies: { attr: "Known Allergies", label: "allergies", value: allergies },
@@ -68,6 +78,8 @@ const PatientDetails = ({ userId, closeOverlay }) => {
       notes: { attr: "Note", label: "notes", value: notes },
     };
     const { created_at, temp, bp, bpm, weight, height, glucose, note } = reqVitals.length > 0 ? reqVitals[0] : {};
+
+
     return (
       <div className="w-screen sm:w-[100%] lg:w-[60rem]">
         <div className="flex flex-col lg:flex-row gap-11">
@@ -76,12 +88,12 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               <h2 className="text-3xl font-semibold text-center">
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
               </h2>
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-around text-sm">
                 <span>{sex}</span>
                 <span>Age {age ? age : ""}</span>
               </div>
               <div className="mt-2 mb-2">
-                <p className="text-lightBlue text-left text-sm">
+                <p className="text-lightBlue text-center text-sm">
                   {phoneNumber ? phoneNumber : ""}
                 </p>
               </div>
@@ -148,6 +160,22 @@ const PatientDetails = ({ userId, closeOverlay }) => {
                 vitalName={"Blood Glucose"}
                 currentDate={created_at}
               ></Vital>
+              {addVitals && <RecordVitals closeOverlay={closeVitalsOverlay} patientId={userId}/>}
+              <div
+                className="absolute top-3 right-7 bg-lightBlue2 cursor-pointer hover:bg-lightBlue h-10 p-3 flex items-center mr-2"
+                onClick={() => handleAddVital()}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    fill="#ffffff"
+                    viewBox="0 0 256 256"
+                  >
+                    <path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"></path>
+                  </svg>
+                  <p className="text-white text-lg pl-2">Record Vitals</p>
+                </div>
             </div>
           </div>
         </div>

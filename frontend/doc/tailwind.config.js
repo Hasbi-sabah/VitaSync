@@ -15,6 +15,9 @@ module.exports = {
       // 'userColor1': "#909090"
     },
     extend: {
+      spacing: {
+        '128': '32rem',
+      },
       keyframes: {
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },

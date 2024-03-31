@@ -97,6 +97,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
   //Date
   const MyDateInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
+    const currentDateTime = new Date().toISOString().substring(0, 10);
     return (
       <div className="px-2 lg:pl-8">
         <label className={`${label_style}`} htmlFor={props.id || props.name}>
@@ -107,6 +108,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
             meta.touched && meta.error ? "border border-red animate-shake" : ""
           }`}
           type="date"
+          max={currentDateTime}
           {...field}
           {...props}
         />
