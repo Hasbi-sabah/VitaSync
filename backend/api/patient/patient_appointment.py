@@ -150,7 +150,7 @@ def add_patient_appointment(patientId, current_user):
 
     # Create a new appointment instance with the provided details
     appointment = Appointment(
-        time=timestamp, patientId=patientId, hcwId=current_user.profileId
+        time=timestamp, patientId=str(patientId), hcwId=current_user.profileId
     )
 
     # Retrieve the healthcare worker (HCW) who created the appointment

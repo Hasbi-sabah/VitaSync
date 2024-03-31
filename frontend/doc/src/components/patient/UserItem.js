@@ -3,9 +3,9 @@ import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
-const UserItem = ({ userId, sn, name, sex, age, contact, date, time}) => {
+const UserItem = ({ userId, sn, name, sex, age, contact, date, time }) => {
   const location = useLocation();
-  const isDashboard = location.pathname === '/dashboard';
+  const isDashboard = location.pathname === "/dashboard";
   const bgColor = sn % 2 === 1 ? "bg-gray" : "";
   const [showPatientDetails, setShowPatientDetails] = useState(false);
   const handleOnClick = () => {
@@ -16,11 +16,15 @@ const UserItem = ({ userId, sn, name, sex, age, contact, date, time}) => {
     setShowPatientDetails(false);
   };
 
-  const isMobile = useMediaQuery({maxWidth:1024});
+  const isMobile = useMediaQuery({ maxWidth: 1024 });
   return (
-    <tr className={`text-textGray text-xl lg:text-base text-center h-12 ${bgColor}`}>
+    <tr
+      className={`text-textGray text-xl lg:text-base text-center h-12 ${bgColor}`}
+    >
       <td>{sn}</td>
-      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-left text-wrap mx-auto">{name}</td>
+      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-left text-wrap mx-auto">
+        {name}
+      </td>
       <td>{sex}</td>
       <td>{age}</td>
       {!isMobile && <td>{contact}</td>}
@@ -28,7 +32,9 @@ const UserItem = ({ userId, sn, name, sex, age, contact, date, time}) => {
       {isDashboard && isMobile && <td>{time}</td>}
       <td>
         {/* Overlay */}
-        {showPatientDetails && <ViewPatient closeOverlay={closeOverlay} userId={userId} />}
+        {showPatientDetails && (
+          <ViewPatient closeOverlay={closeOverlay} userId={userId} />
+        )}
         <svg
           onClick={handleOnClick}
           className="hover:cursor-pointer"

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { FieldArray, Form, Formik, useField } from "formik";
+import { useAddPatientAppointmentByIdMutation } from "../../features/appointment/appointmentApiSlice"
+import { useAddPatientRecordByIdMutation } from "../../features/record/recordApiSlice"
 
 const label_style = "font-semibold text-lg text-left pt-6";
 const input_style =
   "block rounded-xl text-sm h-10 w-64 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
 const button_style =
   "sm:h-14 sm:w-28 px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
-
+const removeEmptyValues = (obj) => {
+  const filteredEntries = Object.entries(obj).filter(([key, value]) => value !== '' && value.length > 0);
+  return Object.fromEntries(filteredEntries);
+  };
 //<Textbox>
 export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
   const [field, meta] = useField(props);
@@ -52,7 +57,7 @@ const MyDateInput = ({ label, ...props }) => {
   );
 };
 
-const NewPatientRecord = ({ closeOverlay }) => {
+const NewPatientRecord = ({ userId, closeOverlay }) => {
   const [drugOptions, setDrugOptions] = useState([]);
   const [vaccineOptions, setVaccineOptions] = useState([]);
 
@@ -95,6 +100,8 @@ const NewPatientRecord = ({ closeOverlay }) => {
       <p className="text-white text-lg pl-2">Add drug</p>
     </div>
   );
+  const [addAppt, { apptInfo }] = useAddPatientAppointmentByIdMutation()
+  const [addRecord, { recInfo }] = useAddPatientRecordByIdMutation()
   return (
     <Formik
       initialValues={{
@@ -106,17 +113,61 @@ const NewPatientRecord = ({ closeOverlay }) => {
         followUp: "",
       }}
       validationSchema={Yup.object({
-        diagnosis: Yup.string().required("Required"),
+        diagnosis: Yup.string(),
         notes: Yup.string(),
         procedures: Yup.string(),
         followUp: Yup.date(),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-          resetForm();
-        }, 400);
+        let recDict = {};
+        if (values.notes !== "") {
+          recDict.notes = values.notes;
+        }
+        if (values.diagnosis !== "") {
+          recDict.diagnosis = values.diagnosis;
+          }
+        console.log(recDict)
+        addRecord({id: userId, data: recDict})
+          .then((result) => {
+            const recId = result.data.id
+            
+          })
+
+        if (values.followUp !== "") {
+          const followUpDate = new Date(values.followUp);
+
+          // Format the date part
+          const year = followUpDate.getFullYear();
+          const month = String(followUpDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+          const day = String(followUpDate.getDate()).padStart(2, '0');
+      
+          // Format the time part with AM/PM
+          let hour = followUpDate.getHours();
+          const minute = String(followUpDate.getMinutes()).padStart(2, '0');
+          const ampm = hour >= 12 ? 'PM' : 'AM';
+          hour = hour % 12 || 12; // Convert to 12-hour format and handle 0 hour
+      
+          // Construct the formatted string
+          values.followUp = `${year}-${month}-${day} ${hour}:${minute} ${ampm}`
+          addAppt({id: userId, data: {time: values.followUp}})
+              .then(() => {
+                alert("New appointment created");
+                setSubmitting(false);
+                resetForm();
+                closeOverlay();
+            })
+            .catch((error) => {
+              alert(`Creation failed: ${error.data.error}`);
+              setSubmitting(false);
+            })
+        }
+        // setTimeout(() => {
+
+        //   const cleanedValues = removeEmptyValues(values);
+        //   const { apptInfo } = useAddPatientAppointmentByIdMutation([userId, values.followUp])
+        //   // alert(JSON.stringify(removeEmptyValues(values), null, 2));
+
+        // }, 400);
       }}
     >
       {(formik) => {
@@ -129,8 +180,8 @@ const NewPatientRecord = ({ closeOverlay }) => {
         return (
           <Form className="flex mt-4 flex-col gap-3">
             {/* Prescription */}
-            <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white relative">
-              <h3 className="font-semibold text-lg text-left pt-6">
+            <div className="rounded-lg min-h-18 w-full mt-10 p-4 bg-white relative">
+              <h3 className="font-semibold text-lg text-left">
                 Prescriptions
               </h3>
 
@@ -141,7 +192,7 @@ const NewPatientRecord = ({ closeOverlay }) => {
                 {(arrayHelpers) => (
                   <div>
                     {formik.values.prescriptions.map((prescribe, index) => (
-                      <div key={index} className="flex justify-between p-3">
+                      <div key={index} className="flex justify-between p-3 mt-2">
                         <div>
                           {index + 1}.
                           <select
@@ -167,7 +218,7 @@ const NewPatientRecord = ({ closeOverlay }) => {
                           placeholder="Dosage instructions"
                         />
                         <svg
-                          className="cursor-pointer"
+                          className="cursor-pointer mt-3"
                           onClick={() => arrayHelpers.remove(index)}
                           xmlns="http://www.w3.org/2000/svg"
                           width="32"
@@ -185,7 +236,6 @@ const NewPatientRecord = ({ closeOverlay }) => {
             </div>
 
             <MyTextBoxInput label={"Diagnosis"} name="diagnosis" type="text" />
-            <MyTextBoxInput label={"Notes"} name="notes" type="text" />
             <MyTextBoxInput
               label={"Procedures"}
               name="procedures"
@@ -193,8 +243,8 @@ const NewPatientRecord = ({ closeOverlay }) => {
             />
 
             {/* Vaccine */}
-            <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white relative">
-              <h3 className="font-semibold text-lg text-left pt-6">Vaccine</h3>
+            <div className="rounded-lg min-h-18 w-full mt-10 p-4 bg-white relative">
+              <h3 className="font-semibold text-lg text-left ">Vaccine</h3>
 
               {/* Add drug button */}
               {addDrugButton({ handleAddDrug }, "vaccine")}
@@ -227,7 +277,7 @@ const NewPatientRecord = ({ closeOverlay }) => {
                           value={prescribe.dosage}
                           className={`resize-none input p-3 bg-gray block rounded-md w-[20rem] mt-1 focus:outline-none focus:ring-2 focus:ring-lightBlue`}
                           rows={4}
-                          placeholder="Vaccine instructions"
+                          placeholder="Notes"
                         />
                         <svg
                           className="cursor-pointer"
@@ -246,7 +296,7 @@ const NewPatientRecord = ({ closeOverlay }) => {
                 )}
               </FieldArray>
             </div>
-
+            <MyTextBoxInput label={"General Notes"} name="notes" type="text" />
             <MyDateInput label={"Follow Up"} name="followUp" />
 
             <div className="my-5 flex sm:justify-end sm:gap-5 justify-evenly">

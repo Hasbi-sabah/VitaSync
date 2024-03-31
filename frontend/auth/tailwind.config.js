@@ -4,14 +4,13 @@ module.exports = {
   theme: {
     colors: {
       'white': '#ffffff',
-      "black": "#000000",
       'gray': '#f6f4f4',
-      'blue': '#610d20',
-      'darkBlue': "#731f32",
-      'lightBlue2': "#c7265b",
-      'lightBlue': "#b53a86",
+      'blue': '#0B1DBF',
+      'darkBlue': "#121B70",
+      'lightBlue': "#0920F6",
       'textGray': "#3E3E3E",
       'red': '#FF0000',
+      'lightBlue2': "#5161f3",
       // 'userColor1': "#909090"
     },
     extend: {
@@ -28,5 +27,4 @@ module.exports = {
     },
   },
   plugins: [],
-}
-
+};

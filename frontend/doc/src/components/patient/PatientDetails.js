@@ -77,7 +77,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
       conditions: { attr: "Conditions", label: "conditions", value: conditions },
       notes: { attr: "Note", label: "notes", value: notes },
     };
-    const { created_at, temp, bp, bpm, weight, height, glucose, note } = reqVitals.length > 0 ? reqVitals[0] : {};
+    const { created_at, temp, bp, bpm, weight, height, glucose, note } = reqVitals.length > 0 ? reqVitals[reqVitals.length - 1] : {};
 
 
     return (
@@ -85,7 +85,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
         <div className="flex flex-col lg:flex-row gap-11">
           <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 sm:w-[26rem] p-3 sm:p-5">
             <div className="">
-              <h2 className="text-3xl font-semibold text-center">
+              <h2 className="text-3xl pb-5 font-semibold text-center">
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
               </h2>
               <div className="flex justify-around text-sm">

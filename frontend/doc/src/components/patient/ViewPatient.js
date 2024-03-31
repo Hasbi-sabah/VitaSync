@@ -67,7 +67,7 @@ const ViewPatient = ({ userId, closeOverlay }) => {
         ) : (
           ""
         )}
-        <NewPatientRecord closeOverlay={closeOverlay} />
+        <NewPatientRecord closeOverlay={closeOverlay} userId={userId} />
       </div>
     </div>
   );

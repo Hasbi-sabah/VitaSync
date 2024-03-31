@@ -12,7 +12,7 @@ const UpdateMedInfo = ({ medInfo }) => {
           {label}
         </label>
         <input
-          className="h-12 p-5 block rounded-xl w-[23rem] mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
+          className="h-12 p-5 block rounded-xl w-full mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
           {...field}
           {...props}
           disabled={true}
@@ -28,7 +28,7 @@ const UpdateMedInfo = ({ medInfo }) => {
       }}
     >
       <Form>
-        <TextInput label={medInfo.label} name={medInfo.label} type="text" />
+        <TextInput label={medInfo.attr} name={medInfo.label} type="text" />
       </Form>
     </Formik>
   );

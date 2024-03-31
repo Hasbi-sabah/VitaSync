@@ -22,10 +22,13 @@ export const appointmentApiSclice = apiSlice.injectEndpoints({
         }),
 
         addPatientAppointmentById: builder.mutation({
-            query: (id, data) => ({
+            query: ({id, data}) => ({
                 url: `/api/patient/${id}/appointment`,
                 method: "POST",
-                body: { ...data }
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 

@@ -8,7 +8,6 @@ const DisplayAppointments = ({ data, label }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const isMobile = useMediaQuery({ maxWidth: 1024 });
-
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastpageIndex = firstPageIndex + pageSize;
