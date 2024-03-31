@@ -57,14 +57,19 @@ const Login = () => {
   const handleRedirect = (userId, role, token) => {
     const params = `token=${token}&role=${role}&id=${userId}`;
     console.log(userId)
+    const appDocUI = process.env.APP_DOC_URL;
+    const appNurseUI = process.env.APP_NURSE_URL;
+    const appPatientUI = process.env.APP_PATIENT_URL;
+    const appPharmacistUI = process.env.APP_PHARMACIST_URL;
+
     if (role === "doctor" || role === "admin")
-      window.location.href = `http://localhost:3001/dashboard?${params}`;
+      window.location.href = `${appDocUI}/dashboard?${params}`;
     else if (role === "nurse")
-      window.location.href = `http://localhost:3002/dashboard?${params}`;
+      window.location.href = `${appNurseUI}/dashboard?${params}`;
     else if (role === "patient")
-      window.location.href = `http://localhost:3003/dashboard?${params}`;
+      window.location.href = `${appPatientUI}/dashboard?${params}`;
     else if (role === "pharmacist")
-      window.location.href = `http://localhost:3004/dashboard?${params}`;
+      window.location.href = `${appPharmacistUI}/dashboard?${params}`;
     else navigate("/login");
     return null;
   }
