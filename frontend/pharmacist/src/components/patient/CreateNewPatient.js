@@ -1,8 +1,10 @@
 import React from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
+import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
 
-const label_style = "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
+const label_style =
+  "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
 const input_style =
   "block rounded-xl text-black h-12 lg:h-7 w-[100%] lg:w-60 mt-1 lg:mt-0 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
 const button_style =
@@ -39,7 +41,7 @@ export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
         {label}
       </label>
       <textarea
-      // "block rounded-xl h-12 lg:h-7 w-[100%] lg:w-60 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
+        // "block rounded-xl h-12 lg:h-7 w-[100%] lg:w-60 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
         className={`resize-none p-5 border block rounded-md w-[100%] lg:w- mt-1 text-black focus:outline-none focus:ring-2 focus:ring-lightBlue ${
           meta.touched && meta.error ? "border border-red animate-shake" : ""
         }`}
@@ -117,6 +119,7 @@ const MyDateInput = ({ label, ...props }) => {
 };
 
 const SignUpForm = ({ closeOverlay }) => {
+  const [addPatient, { isLoading, isError, error }] = useAddPatientMutation();
   return (
     <Formik
       initialValues={{
@@ -137,12 +140,10 @@ const SignUpForm = ({ closeOverlay }) => {
           .max(20, "Must be 20 characters or less")
           .required("Required"),
         phone: Yup.string()
-          .max(20, "Must be 20 characters or less")
-          .required("Required"),
-        email: Yup.string().email("invalid email address").required("Required"),
-        cin: Yup.string()
           .matches(/^\d+$/, "Must be a number")
           .required("Required"),
+        email: Yup.string().email("invalid email address").required("Required"),
+        cin: Yup.string().required("Required"),
         sex: Yup.string()
           .oneOf(["male", "female", "others", "not_say"], "Invalid Sex")
           .required("Required"),
@@ -150,11 +151,23 @@ const SignUpForm = ({ closeOverlay }) => {
         address: Yup.string(),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-          resetForm();
-        }, 400);
+        addPatient(values)
+          .unwrap()
+          .then(() => {
+            alert("New patient created");
+            setSubmitting(false);
+            resetForm();
+            closeOverlay();
+          })
+          .catch((error) => {
+            console.error("Creation failed", error);
+            setSubmitting(false);
+          });
+        // setTimeout(() => {
+        //   alert(JSON.stringify(values, null, 2));
+        //   setSubmitting(false);
+        //   resetForm();
+        // }, 400);
       }}
     >
       <Form className="flex mt-4 lg:mt-2 flex-col gap-3 lg:gap-4">
@@ -235,8 +248,12 @@ const CreateNewPatient = ({ closeOverlay }) => {
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto lg:overflow-hidden">
       <div className="flex justify-center items-center lg:mt-16 sm:mt-[10%] mt-[20%] bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
         <div>
-          <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-3 lg:mt-1 text-center mb-1">Create Patient Account</h1>
-          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-auto sm:min-h-[60vh] overflow-auto ">{SignUpForm({ closeOverlay })}</div>
+          <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-3 lg:mt-1 text-center mb-1">
+            Create Patient Account
+          </h1>
+          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-auto sm:min-h-[60vh] overflow-auto ">
+            {SignUpForm({ closeOverlay })}
+          </div>
         </div>
       </div>
     </div>
