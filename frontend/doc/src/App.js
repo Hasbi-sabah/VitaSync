@@ -11,8 +11,9 @@ import Logout from './components/Logout';
 
 function App() {
   const dispatch = useDispatch()
+  const app_auth = process.env.APP_AUTH_URL;
   const re_routeLogin = () => {
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = app_auth + "/login";
     return null;
   };
 
