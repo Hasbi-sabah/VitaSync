@@ -22,15 +22,25 @@ function App() {
     const token = urlParams.get("token");
     const userId = urlParams.get("id");
     const role = urlParams.get("role");
+    if (token){
     dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
       })
-    );
+    );}
+    else{
+      dispatch(
+        setCredentials({
+          accessToken: localStorage.getItem('token'),
+          userId: localStorage.getItem('id'),
+          role: localStorage.getItem('role'),
+        })
+      )
+    }
     
-    console.log(`token: ${token}, id: ${userId}, role: ${role}`)
+    // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
     // if (!token) re_routeLogin()
   }, [])
   return (
