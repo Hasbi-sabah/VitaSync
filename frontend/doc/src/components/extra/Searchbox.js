@@ -3,12 +3,10 @@ import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import ViewPatient from "../patient/ViewPatient";
 
 
-const Searchbox = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+const LookUp =  ({ searchQuery }) => {
+    const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
-    const [enterPressed, setEnterPressed] = useState(false); 
-
-    const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(enterPressed ? searchQuery : undefined);
+    console.log(patientInfo)
 
     useEffect(() => {
         if (!isLoading && !isError && patientInfo) {
@@ -16,7 +14,16 @@ const Searchbox = () => {
         } else {
             setShowPatientDetails(false);
         }
-    }, [isLoading, isError, patientInfo]); // Add patientInfo to the dependency array
+    }, [isLoading, isError, patientInfo, searchQuery])
+
+    return showPatientDetails ? (
+        <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />
+      ) : null;
+}
+
+const Searchbox = () => {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [enterPressed, setEnterPressed] = useState(false); 
 
     const handleInputChange = (event) => {
         setSearchQuery(event.target.value);
@@ -51,9 +58,9 @@ const Searchbox = () => {
             <span className='inline absolute h-10 w-10 top-4 left-5'>
                 { svgIcon }
             </span>
-            {showPatientDetails && <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />}
+            {searchQuery && <LookUp searchQuery={searchQuery} />}
         </div>
-      )
-}
+      );
+};
 
 export default Searchbox
