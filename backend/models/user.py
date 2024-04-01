@@ -45,6 +45,7 @@ class User(BM, Base):
         - __name: attribute name
         - __value: attribute value
         """
+        print(__value)
         if __name == "password" or __name == "token":
             __value = bcrypt.hashpw(__value.encode("utf-8"), bcrypt.gensalt())
         return super().__setattr__(__name, __value)

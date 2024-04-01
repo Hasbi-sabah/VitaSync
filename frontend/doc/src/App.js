@@ -21,15 +21,20 @@ function App() {
     const token = urlParams.get("token");
     const userId = urlParams.get("id");
     const role = urlParams.get("role");
+    const username = urlParams.get("username");
+    if(username.includes('.')){
+      username.replace('.', ' ');
+    }
     dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
+        username: username,
       })
     );
     
-    console.log(`token: ${token}, id: ${userId}, role: ${role}`)
+    // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
     // if (!token) re_routeLogin()
   }, [])
   return (
