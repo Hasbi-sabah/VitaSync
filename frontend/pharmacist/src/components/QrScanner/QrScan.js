@@ -1,19 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import QrScanner from "qr-scanner";
 import QrFrame from "../../assets/qr-frame.svg";
-import Searchbox, { LookUp } from "../extra/Searchbox";
 
 const QrScan = ({ setCallSearch, setActiveQrScanner }) => {
   const scanner = useRef();
   const videoEl = useRef(null);
   const qrBoxEl = useRef(null);
   const [qrOn, setQrOn] = useState(true);
-  const [scannedResult, setScannedResult] = useState("");
+  // const [scannedResult, setScannedResult] = useState("");
 
   const onScanSuccess = async (result) => {
     if (result) {
       console.log("Scanned Qr Code: ", result);
-      setScannedResult(result?.data);
+      // setScannedResult(result?.data);
       setCallSearch(result?.data);
       handleCloseButtonClick();
     }
@@ -78,7 +77,7 @@ const QrScan = ({ setCallSearch, setActiveQrScanner }) => {
           Close
         </button>
       )}
-      {scannedResult && console.log(scannedResult)}
+      {/* {scannedResult && console.log(scannedResult)} */}
       {/* {scannedResult && <Searchbox scannedId={scannedResult} />} */}
 
     </div>

@@ -22,7 +22,7 @@ function App() {
     const userId = urlParams.get("id");
     const role = urlParams.get("role");
     const username = urlParams.get("username");
-    if(username.includes('.')){
+    if(username?.includes('.')){
       username.replace('.', ' ');
     }
     dispatch(
