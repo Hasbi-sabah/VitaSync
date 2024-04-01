@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import RequireAuth from './features/RequireAuth';
 import PatientMan from './features/PatientMan';
-import Records from './features/Records';
+import ContactHCW from './features/ContactHCW';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
@@ -46,14 +46,13 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
       <Route index element={<Dashboard />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="logout" element={<Logout />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="patients" element={<PatientMan />} />
-          <Route path="records" element={<Records />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="contactHCW" element={<ContactHCW />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>

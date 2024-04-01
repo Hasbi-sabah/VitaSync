@@ -10,10 +10,13 @@ export const procedureApiSclice = apiSlice.injectEndpoints({
         }),
 
         addPatientProcedureById: builder.mutation({
-            query: (id, data) => ({
+            query: ({id, data}) => ({
                 url: `/api/patient/${id}/procedure`,
                 method: "POST",
-                body: { ...data }
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 

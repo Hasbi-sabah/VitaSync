@@ -11,6 +11,8 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
 import Prescriptions from './features/Prescriptions';
+import Logout from './components/Logout';
+
 
 function App() {
   const dispatch = useDispatch()
@@ -50,10 +52,7 @@ function App() {
       <Route path="login" element={<Login />} />
       <Route index element={<Public />} />
       <Route path="/" element={<Layout />}>
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="contactHCW" element={<ContactHCW />} />
-      <Route path="records" element={<Records />} />
-      <Route path="prescriptions" element={<Prescriptions />} />
+
         {/* pulic routes*/}
         
         {/* private routes*/}
@@ -63,6 +62,7 @@ function App() {
           <Route path="records" element={<Records />} />
           <Route path="prescriptions" element={<Prescriptions />} />
           <Route path="patients" element={<PatientMan />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>
