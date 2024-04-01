@@ -3,7 +3,7 @@ import PatientDetails from "./PatientDetails";
 import NewPatientRecord from "./NewPatientRecord";
 
 // API call for patient record
-const ViewPatient = ({ patientId, closeOverlay }) => {
+const ViewPatient = ({ userId, closeOverlay }) => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleHistory = () => {
@@ -12,7 +12,7 @@ const ViewPatient = ({ patientId, closeOverlay }) => {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative">
+      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 min-h-96 z-20 overflow-auto pt-12 sm:max-w-screen relative lg:min-w-[40rem]">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={closeOverlay}
@@ -29,7 +29,7 @@ const ViewPatient = ({ patientId, closeOverlay }) => {
         </h1>
         <div className="mb-4">
           {/* Add more patient details here */}
-          <PatientDetails patientId={patientId} closeOverlay={closeOverlay} />
+          <PatientDetails userId={userId} closeOverlay={closeOverlay} />
         </div>
         <div
           className="rounded-lg h-10 w-full mt-10 flex justify-between items-center cursor-pointer  bg-white"
@@ -67,7 +67,6 @@ const ViewPatient = ({ patientId, closeOverlay }) => {
         ) : (
           ""
         )}
-        <NewPatientRecord closeOverlay={closeOverlay} patientId={patientId} />
       </div>
     </div>
   );

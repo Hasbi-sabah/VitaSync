@@ -1,14 +1,13 @@
 import Dashboard from './features/Dashboard';
 import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
-import Public from './components/Public';
-import Login from './features/auth/Login';
 import RequireAuth from './features/RequireAuth';
 import PatientMan from './features/PatientMan';
+import ContactHCW from './features/ContactHCW';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
-import Records from './features/Records';
+import Logout from './components/Logout';
 
 function App() {
   const dispatch = useDispatch()
@@ -45,16 +44,15 @@ function App() {
   }, [])
   return (
     <Routes>
-      <Route path="login" element={<Login />} />
-      <Route index element={<Public />} />
       <Route path="/" element={<Layout />}>
-      <Route path="dashboard" element={<Dashboard />} />
+      <Route index element={<Dashboard />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="patients" element={<PatientMan />} />
-          <Route path="records" element={<Records />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="contactHCW" element={<ContactHCW />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>
