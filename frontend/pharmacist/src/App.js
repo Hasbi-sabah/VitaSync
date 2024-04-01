@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
 import Logout from './components/Logout';
+import ContactHCW from './features/ContactHCW';
 
 function App() {
   const dispatch = useDispatch()
@@ -41,14 +42,13 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
       <Route index element={<Dashboard />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="logout" element={<Logout />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="patients" element={<PatientMan />} />
-          <Route path="records" element={<Records />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="contactHCW" element={<ContactHCW />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>
