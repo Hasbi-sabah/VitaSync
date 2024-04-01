@@ -251,7 +251,7 @@ const CreateNewPatient = ({ closeOverlay }) => {
           <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-3 lg:mt-1 text-center mb-1">
             Create Patient Account
           </h1>
-          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-auto sm:min-h-[60vh] overflow-auto ">
+          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-[] sm:min-h-[60vh] overflow-auto ">
             {SignUpForm({ closeOverlay })}
           </div>
         </div>
