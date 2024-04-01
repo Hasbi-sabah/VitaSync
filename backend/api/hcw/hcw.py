@@ -65,12 +65,13 @@ def get_all_hcws(current_user):
     """
 
     # Retrieve all healthcare workers from the database and convert them to dictionaries
-    res = [
-        hcw.to_dict()
-        for hcw in database.get_all(HCW)
-        if current_user.role == "admin"
-        or database.get_by_id(User, hcw.userId).role != "admin"
-    ]
+    res = []
+    for hcw in database.get_all(HCW):
+        role = database.get_by_id(User, hcw.userId).role
+        if current_user.role == "admin" or role != "admin":
+            hcw = hcw.to_dict()
+            hcw['role'] = role
+            res.append(hcw)
 
     # Return a JSON response with the list of healthcare workers
     return jsonify(res)
@@ -200,7 +201,6 @@ def add_hcw(current_user):
         "lastName",
         "CIN",
         "licence",
-        "speciality",
         "workAddress",
         "workNumber",
         "role",

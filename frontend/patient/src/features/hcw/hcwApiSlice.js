@@ -2,6 +2,17 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const hcwApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        getSearchHcw: builder.query({
+            query: (data) => ({
+                url: "/api/search_hcw",
+                method: "POST",
+                body: { ...data },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }),
+        }),
+
         getHcw: builder.query({
             query: () => ({
                 url: "/api/hcw",
@@ -43,6 +54,7 @@ export const hcwApiSlice = apiSlice.injectEndpoints({
 
 
 export const {
+    useGetSearchHcwQuery,
     useGetHcwQuery,
     useGetHcwByIdQuery,
     useUpdateHcwByIdMutation,
