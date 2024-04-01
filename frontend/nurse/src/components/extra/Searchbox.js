@@ -29,7 +29,7 @@ const Searchbox = () => {
             value={searchQuery} 
             onChange={handleInputChange} 
             onKeyDown={handleKeyPress}
-            className='rounded-[20px] p-2 text-center h-16 w-72'
+            className='rounded-[20px] p-2 text-center h-16 w-72 lg:w-[24rem]'
         />
         <span className='inline absolute h-10 w-10 top-4 left-5'>
             { svgIcon }

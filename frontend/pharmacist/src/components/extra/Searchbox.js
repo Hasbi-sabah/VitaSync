@@ -3,7 +3,8 @@ import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import ViewPatient from "../patient/ViewPatient";
 
 
-const LookUp = ({ searchQuery }) => {
+export const LookUp = ({ searchQuery }) => {
+    console.log('got here');
     const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
     console.log(patientInfo)
@@ -21,7 +22,7 @@ const LookUp = ({ searchQuery }) => {
       ) : null;
 }
 
-const Searchbox = () => {
+const Searchbox = ({ scannedId }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [enterPressed, setEnterPressed] = useState(false);
 
@@ -48,12 +49,14 @@ const Searchbox = () => {
                 value={searchQuery} 
                 onChange={handleInputChange} 
                 onKeyDown={handleKeyPress}
-                className='rounded-[20px] p-2 text-center h-16 w-[24rem]'
+                className='rounded-[20px] p-2 text-center h-16 w-72 lg:w-[24rem]'
             />
             <span className='inline absolute h-10 w-10 top-4 left-5'>
                 { svgIcon }
             </span>
             {enterPressed && <LookUp searchQuery={searchQuery} />}
+            {/* {console.log("Search comp", scannedId)} */}
+            {scannedId && <LookUp searchQuery={scannedId} />}
         </div>
       );
 };

@@ -16,7 +16,7 @@ const CreateSearchPatient = ({ setActiveQrScanner }) => {
   //   setActiveQrScanner(true);
   // }
   return (
-    <div className="mt-32 sm:mt-14 lg:mt-10 flex flex-col justify-center lg:flex-row items-center gap-5 sm:gap-8 lg:gap-20">
+    <div className="mt-32 sm:mt-14 lg:mt-10 flex flex-col lg:flex justify-center lg:flex-row flex-wrap items-center gap-5 sm:gap-8 lg:gap-20">
       {showAddPatient && <CreateNewPatient closeOverlay={closeOverlay} />}
       <button
         onClick={handleOnClick}

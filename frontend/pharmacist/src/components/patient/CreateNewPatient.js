@@ -157,6 +157,7 @@ const SignUpForm = ({ closeOverlay }) => {
             alert("New patient created");
             setSubmitting(false);
             resetForm();
+            alert(JSON.stringify(values, null, 2));
             closeOverlay();
           })
           .catch((error) => {
