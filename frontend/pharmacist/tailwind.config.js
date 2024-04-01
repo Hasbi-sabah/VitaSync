@@ -12,6 +12,8 @@ module.exports = {
       'lightBlue': "#2AE10C",
       'textGray': "#3E3E3E",
       'red': '#FF0000',
+      'actualLightBlue': '#0920F6',
+      'actualLightBlue2': "#5161f3"
       // 'userColor1': "#909090"
     },
     extend: {
