@@ -236,7 +236,7 @@ const CreateNewPatient = ({ closeOverlay }) => {
       <div className="flex justify-center items-center lg:mt-16 sm:mt-[10%] mt-[20%] bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
         <div>
           <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-3 lg:mt-1 text-center mb-1">Create Patient Account</h1>
-          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-auto sm:min-h-[60vh] overflow-auto ">{SignUpForm({ closeOverlay })}</div>
+          <div className="mb-12 sm:mb-5 h-[80vh] sm:h-[] sm:min-h-[60vh] overflow-auto ">{SignUpForm({ closeOverlay })}</div>
         </div>
       </div>
     </div>
