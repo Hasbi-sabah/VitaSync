@@ -20,7 +20,7 @@ export const LookUpPatient = ({ searchQuery }) => {
     }, [isLoading, isError, patientInfo])
 
     return showPatientDetails ? (
-        <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} patientInfo={patientInfo}  />
+        <ViewPatient closeOverlay={() => setShowPatientDetails(false)} patientId={searchQuery} patientInfo={patientInfo}  />
       ) : null;
 }
 
@@ -38,40 +38,40 @@ export const LookUpDrug = ({ searchQuery }) => {
         }
     }, [isLoading, isError, drugInfo])
 
-    const dummy_data = [
-        {
-            "commercialName": "Aspirin",
-            "activeIngredient": "Acetylsalicylic acid",
-            "distributor": "Bayer",
-            "dose": "81 mg",
-            "form": "Tablet",
-            "status": true,
-            "price": 5.99,
-            "description": "Aspirin is commonly used for pain relief and to reduce fever or inflammation."
-        },
-        {
-            "commercialName": "Tylenol",
-            "activeIngredient": "Acetaminophen",
-            "distributor": "Johnson & Johnson",
-            "dose": "500 mg",
-            "form": "Caplet",
-            "status": true,
-            "price": 7.49,
-            "description": "Tylenol is a common over-the-counter pain reliever and fever reducer."
-        },
-        {
-            "commercialName": "Advil",
-            "activeIngredient": "Ibuprofen",
-            "distributor": "Pfizer",
-            "dose": "200 mg",
-            "form": "Capsule",
-            "status": false,
-            "price": 8.99,
-            "description": "Advil is used to relieve pain from various conditions such as headache, dental pain, menstrual cramps, muscle aches, or arthritis."
-        }
-    ]
+    // const dummy_data = [
+    //     {
+    //         "commercialName": "Aspirin",
+    //         "activeIngredient": "Acetylsalicylic acid",
+    //         "distributor": "Bayer",
+    //         "dose": "81 mg",
+    //         "form": "Tablet",
+    //         "status": true,
+    //         "price": 5.99,
+    //         "description": "Aspirin is commonly used for pain relief and to reduce fever or inflammation."
+    //     },
+    //     {
+    //         "commercialName": "Tylenol",
+    //         "activeIngredient": "Acetaminophen",
+    //         "distributor": "Johnson & Johnson",
+    //         "dose": "500 mg",
+    //         "form": "Caplet",
+    //         "status": true,
+    //         "price": 7.49,
+    //         "description": "Tylenol is a common over-the-counter pain reliever and fever reducer."
+    //     },
+    //     {
+    //         "commercialName": "Advil",
+    //         "activeIngredient": "Ibuprofen",
+    //         "distributor": "Pfizer",
+    //         "dose": "200 mg",
+    //         "form": "Capsule",
+    //         "status": false,
+    //         "price": 8.99,
+    //         "description": "Advil is used to relieve pain from various conditions such as headache, dental pain, menstrual cramps, muscle aches, or arthritis."
+    //     }
+    // ]
     return showDrugDetails ? (
-        <ViewDrug closeOverlay={() => setShowDrugDetails(false)} drugId={searchQuery} drugInfo={dummy_data[0]} />
+        <ViewDrug closeOverlay={() => setShowDrugDetails(false)} drugId={searchQuery} drugInfo={drugInfo} />
       ) : null;
 }
 

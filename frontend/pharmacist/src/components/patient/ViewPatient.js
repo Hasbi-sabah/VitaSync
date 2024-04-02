@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import PatientDetails from "./PatientDetails";
-import NewPatientRecord from "./NewPatientRecord";
+import PatientPrescriptions from "./PatientPrescriptions";
+import Prescriptions from "../../features/Prescriptions";
+import Records from "../../features/Records";
 
 // API call for patient record
-const ViewPatient = ({ userId, closeOverlay, patientInfo }) => {
+const ViewPatient = ({ patientId, closeOverlay, patientInfo }) => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleHistory = () => {
@@ -29,7 +31,7 @@ const ViewPatient = ({ userId, closeOverlay, patientInfo }) => {
         </h1>
         <div className="mb-4">
           {/* Add more patient details here */}
-          <PatientDetails userId={userId} closeOverlay={closeOverlay} patientInfo={patientInfo} />
+          <PatientDetails patientId={patientId} closeOverlay={closeOverlay} patientInfo={patientInfo} />
         </div>
         <div
           className="rounded-lg h-10 w-full mt-10 flex justify-between items-center cursor-pointer  bg-white"
@@ -61,13 +63,11 @@ const ViewPatient = ({ userId, closeOverlay, patientInfo }) => {
           )}
         </div>
         {showHistory ? (
-          <p className="mt-5 w-full h-12 border">
-            This holds History (To be Implemented)
-          </p>
+          <Records patientId={patientId} />
         ) : (
           ""
         )}
-        <NewPatientRecord closeOverlay={closeOverlay} userId={userId} />
+        <Prescriptions patientId={patientId} />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import Pagination from '../components/pagination/Pagination';
 import ViewPatientRecord from '../components/extra/ViewPatientRecord';
 import RecordItem from '../components/extra/RecordItem';
 
-const Records = () => {
+const Records = ({ patientId }) => {
   //API call to obtain records
 
   const date = new Date()
@@ -88,7 +88,7 @@ const Records = () => {
   
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 5;
+  const pageSize = 2;
 
   const currentPageData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize;

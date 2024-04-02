@@ -4,8 +4,12 @@ import PrescriptionRecordItem from "../components/extra/PrescriptionRecordItem";
 import { useMediaQuery } from "react-responsive";
 import LatestPrescription from "./LatestPrescription";
 
-const Prescriptions = () => {
+const Prescriptions = ({ patientId }) => {
   // API call to /api/patient/${id}/prescription
+  // updatePrescriptionById
+
+  //get prescriptionId not sure how yet
+  const prescriptionId = '';
 
   const dummy_prescriptions = [
     {
@@ -22,7 +26,7 @@ const Prescriptions = () => {
     },
     {
       prescribedById: "doctor_id_2",
-      filledById: "pharmacist_id_2",
+      filledById: "",
       prescribedForId: "patient_id_2",
       status: false,
       notes: "Avoid driving after taking medication",
@@ -46,7 +50,7 @@ const Prescriptions = () => {
     },
     {
       prescribedById: "doctor_id_2",
-      filledById: "pharmacist_id_2",
+      filledById: "",
       prescribedForId: "patient_id_2",
       status: false,
       notes: "Avoid driving after taking medication",
@@ -116,6 +120,7 @@ const Prescriptions = () => {
         view={view}
         handleViewPrescriptions={handleViewPrescriptions}
         handleClosePrescriptions={handleClosePrescriptions}
+        prescriptionId={prescriptionId}
         />
       <table className="w-full text-lg bg-white table-auto">
         <thead>
@@ -137,6 +142,7 @@ const Prescriptions = () => {
               view={view}
               handleViewPrescriptions={handleViewPrescriptions}
               handleClosePrescriptions={handleClosePrescriptions}
+              patientId={patientId}
             />
           ))}
         </tbody>

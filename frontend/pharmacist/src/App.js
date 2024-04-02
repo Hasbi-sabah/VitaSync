@@ -42,13 +42,13 @@ function App() {
     <Routes>
       <Route path="/" element={<Layout />}>
       <Route index element={<Dashboard />} />
+      <Route path="dashboard" element={<Dashboard />} />
+      <Route path="contactHCW" element={<ContactHCW />} />
+      <Route path="logout" element={<Logout />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="dashboard" element={<Dashboard />} />
-          <Route path="contactHCW" element={<ContactHCW />} />
-          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>

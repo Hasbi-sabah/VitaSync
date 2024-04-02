@@ -7,7 +7,14 @@ const LatestPrescription = ({
   view,
   handleViewPrescriptions,
   handleClosePrescriptions,
+  prescriptionId,
 }) => {
+  const handleApprove = (id) => {
+    //POST status
+  }
+  const handleDenial = (id) => {
+    //POST status
+  }
   return (
     <>
       <div className="bg-white rounded-lg relative">
@@ -29,18 +36,10 @@ const LatestPrescription = ({
             </h3>
             <h3 className="text-lg sm:text-[1.3rem] p-1 font-medium">
               <span className="text-actualLightBlue mr-1">Filled By:</span>
-              {latestPrescriptions.filledById}
+              {latestPrescriptions?.filledById}
             </h3>
-            <h3 className="text-lg sm:text-[1.3rem] p-1 font-medium mb-3">
-              <span className="text-actualLightBlue mr-2">
-                Prescription filled:
-              </span>
-              {latestPrescriptions.status ? (
-                <span className="text-green">Filled</span>
-              ) : (
-                <span className="text-red">Pending</span>
-              )}
-            </h3>
+            
+            {/* Add two buttons, fill or not fill */}
             <span
               className="text-lg lg:text-sm text-blue hover:cursor-pointer"
               onClick={handleViewPrescriptions}
@@ -51,6 +50,9 @@ const LatestPrescription = ({
               <ViewPatientPrescriptions
                 data={latestPrescriptions}
                 handleClosePrescriptions={handleClosePrescriptions}
+                handleApprove={handleApprove}
+                handleDenial={handleDenial}
+                prescriptionId={prescriptionId}
               />
             )}
           </div>
