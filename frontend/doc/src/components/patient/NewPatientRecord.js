@@ -162,13 +162,15 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
             if (values.procedures) {
               let proDict = {recordId: recId, name: values.procedures, status: values.status}
               addProcedure({id: userId, data: proDict})
-              .then(() => {
-                console.log("procedure success")
+              .catch((error) => {
+                alert(`Creation failed: ${error.data.error}`);
+                setSubmitting(false);
               })
             }
             setSubmitting(false);
             resetForm();
             closeOverlay();
+            window.location.reload()
           })
 
         if (values.followUp !== "") {
@@ -189,10 +191,10 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           values.followUp = `${year}-${month}-${day} ${hour}:${minute} ${ampm}`
           addAppt({id: userId, data: {time: values.followUp}})
               .then(() => {
-                alert("New appointment created");
                 setSubmitting(false);
                 resetForm();
                 closeOverlay();
+                window.location.reload()
             })
             .catch((error) => {
               alert(`Creation failed: ${error.data.error}`);
@@ -334,22 +336,25 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
               formik={formik}
             />
             <MyTextBoxInput label={"General Notes"} name="notes" type="text" />
-            <MyDateInput label={"Follow Up"} name="followUp" />
+            <div className="flex justify-between">
+              <MyDateInput label={"Follow Up"} name="followUp" />
 
-            <div className="my-5 flex sm:justify-end sm:gap-5 justify-evenly">
-              <button
-                className={`bg-white text-black ${button_style}`}
-                onClick={closeOverlay}
-              >
-                Close
-              </button>
-              <button
-                className={`bg-lightBlue text-white ${button_style}`}
-                type="submit"
-              >
-                Create
-              </button>
+              <div className="my-5 flex sm:justify-end sm:gap-5 justify-evenly">
+                <button
+                  className={`bg-white text-black ${button_style}`}
+                  onClick={closeOverlay}
+                >
+                  Close
+                </button>
+                <button
+                  className={`bg-lightBlue text-white ${button_style}`}
+                  type="submit"
+                >
+                  Create
+                </button>
+              </div>
             </div>
+            
           </Form>
         );
       }}

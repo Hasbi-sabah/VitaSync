@@ -54,7 +54,7 @@ const ContactHCW = () => {
         <h2 className="text-center text-2xl py-4 font-semibold">
           Find a healthcare worker
         </h2>
-        <form onSubmit={handleSumit} className="flex justify-evenly">
+        <form onSubmit={handleSumit} className="flex justify-evenly m-5">
           <select name="roles" onChange={handleFilterChange} className="min-w-48 min-h-12 text-center">
           <option className="text-s" value="">
               Role: All
@@ -86,7 +86,7 @@ const ContactHCW = () => {
         <div
           className={`grid ${
             isMobile ? "grid-cols-1" : isMeduim ? "grid-cols-2" : "grid-cols-3"
-          } gap-4`}
+          } gap-1`}
         >
           {hcwList
            .filter(

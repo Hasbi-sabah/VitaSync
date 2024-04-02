@@ -421,6 +421,8 @@ def delete_patient(patientId, current_user):
     # Archive the patient and user objects (soft delete)
     patient.archive()
     user.archive()
+    for appt in patient.appointments:
+        appt.archive()
 
     # Return an empty JSON response to indicate successful deletion
     return jsonify({})

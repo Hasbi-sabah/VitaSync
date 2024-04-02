@@ -18,6 +18,7 @@ const Records = ({ patientId }) => {
       const dateB = new Date(`${B}:00`);
       return dateA - dateB;
      });    
+     recAndVit.reverse()
   }
 
   const date = new Date()
@@ -30,12 +31,12 @@ const Records = ({ patientId }) => {
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastPageIndex = firstPageIndex + pageSize;
     return recAndVit.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, recAndVit]);
 
 
   if (recAndVit) {
     return (
-    <div className="bg-gray mt-20 pb-12 sm:mt-24 lg:mt-32 mx-4">
+    <div className="bg-gray mt-20 pb-12 sm:mt-12 lg:mt-12 mx-4">
 
     <table className='w-full text-lg bg-white table-auto'>
       <thead>

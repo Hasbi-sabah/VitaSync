@@ -77,7 +77,12 @@ const PatientDetails = ({ userId, closeOverlay }) => {
       conditions: { attr: "Conditions", label: "conditions", value: conditions },
       notes: { attr: "Note", label: "notes", value: notes },
     };
-    const { created_at, temp, bp, bpm, weight, height, glucose, note } = reqVitals.length > 0 ? reqVitals[reqVitals.length - 1] : {};
+    const sortedVitals = reqVitals.slice().sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return dateB - dateA;
+    });
+    const { created_at, temp, bp, bpm, weight, height, glucose, note } = sortedVitals.length > 0 ? reqVitals[0] : {};
 
 
     return (
@@ -126,7 +131,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               {editButton("note")}
             </div>
           </div>
-          <div className="bg-white rounded-3xl w-full mx-auto relative lg:w-[43rem] lg:h-[20rem] p-5">
+          <div className="bg-white rounded-3xl w-full min-h-10 mx-auto relative lg:w-[43rem] p-5">
             <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
               {/* API call to get the vitals */}

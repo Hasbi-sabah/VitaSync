@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import CreateSearchPatient from '../components/extra/CreateSearchPatient';
 import DisplayAppointments from '../components/patient/DisplayAppointments';
 import { useGetHCWAppointmentByIdQuery } from './appointment/appointmentApiSlice';
-import { useGetSearchPatientQuery } from './patient/patientApiSlice';
+import { useGetPatientQuery } from './patient/patientApiSlice';
 
 const Dashboard = () => {
   const currentDate = new Date();
@@ -11,11 +11,9 @@ const Dashboard = () => {
   const formattedDate = currentDate.toISOString().slice(0, 10);
   const start_end = {start_time: formattedDate + ' 12:01 AM', end_time: formattedDate + ' 11:59 PM'}
 
+  // Move the hook calls to the top level
   const { data: patientList } = useGetHCWAppointmentByIdQuery([localStorage.getItem("id"), start_end]);
-  const ids = {
-    ids: patientList ? patientList.map((patient) => patient.patientId) : []
-   };
-  const { data: patientsData } = useGetSearchPatientQuery(ids);
+  const { data: patientsData } = useGetPatientQuery();
   const [patients, setPatients] = useState([]);
   const GetPatient = async () => {
      try {

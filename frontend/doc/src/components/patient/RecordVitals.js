@@ -91,21 +91,15 @@ const RecordVitals = ({closeOverlay, patientId}) => {
                 onSubmit={(values, { setSubmitting, resetForm }) => {
                   addVital([patientId, removeEmptyValues(values)]).unwrap()
                     .then(() => {
-                      alert("New vital created");
                       setSubmitting(false);
                       resetForm();
                       closeOverlay();
+                      window.location.reload()
                   })
                   .catch((error) => {
                     alert(`Creation failed: ${error.data.error}`);
                     setSubmitting(false);
                   })
-                    setTimeout(() => {
-                        // alert(JSON.stringify(values, null, 2));
-                        
-                        setSubmitting(false);
-                        resetForm();
-                      }, 400);
                 }}
             >
                 <Form className='flex flex-col w-[32rem] gap-4'>

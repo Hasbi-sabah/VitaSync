@@ -9,7 +9,7 @@ const ProfileCard = ({ name, speciality, workNumber, workAddress }) => {
         window.open(`https://www.google.com/maps?q=${encodeURIComponent(workAddress)}`);
     }
   return (
-    <div className="rounded-xl bg-white shadow-md h-56 w-[22rem] my-10 p-4 mx-auto">
+    <div className="rounded-xl bg-white shadow-md h-56 w-[22rem] m-5 p-4 mx-auto">
       <h3 className="text-center text-3xl py-2 font-semibold">{name}</h3>
       <span className="text-center block text-">{speciality}</span>
       <br />

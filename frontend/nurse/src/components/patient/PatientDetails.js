@@ -7,7 +7,6 @@ import { useGetPatientMedInfoByIdQuery, useAddPatientMedInfoByIdMutation } from 
 import RecordVitals from "./RecordVitals";
 
 const PatientDetails = ({ userId, closeOverlay }) => {
-  console.log(userId)
   const { data: patientInfo } = useGetPatientByIdQuery(userId);
   const { data: patientMedInfo } = useGetPatientMedInfoByIdQuery(userId);
 
@@ -82,16 +81,16 @@ const PatientDetails = ({ userId, closeOverlay }) => {
 
 
     return (
-      <div className="w-screen sm:w-[100%] lg:w-[60rem]">
-        <div className="flex flex-col lg:flex-row gap-11">
-          <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 sm:w-[26rem] p-3 sm:p-5">
+      <div className="w-full">
+        <div className="flex flex-col justify-center flex-wrap items-center lg:flex-row gap-11">
+          <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 p-3 sm:p-5">
             <div className="">
               <h2 className="text-3xl pb-5 font-semibold text-center">
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
               </h2>
               <div className="flex justify-around text-sm">
-                <span>{sex === "Male" ? "M" : sex === "Female" ? "F" : "N/A"}</span>
-                <span>Age {new Date().getFullYear() - new Date(age).getFullYear() || 'N/A'}</span>
+                <span>{sex}</span>
+                <span>Age {age ? age : ""}</span>
               </div>
               <div className="mt-2 mb-2">
                 <p className="text-lightBlue text-center text-sm">
@@ -127,7 +126,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               {editButton("note")}
             </div>
           </div>
-          <div className="bg-white rounded-3xl mx-auto relative lg:w-[43rem] lg:h-[20rem] p-5">
+          <div className="bg-white rounded-3xl w-full min-h-10 mx-auto relative lg:w-[43rem] p-5">
             <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
               {/* API call to get the vitals */}
