@@ -1,11 +1,13 @@
 import { Formik, Form, useField } from "formik";
 import React, { useState } from "react";
+import { useAddPatientMedInfoByIdMutation } from '../../features/medInfo/medInfoApiSlice';
 import * as Yup from "yup";
 
 const label_style = "pl-2 text-l font-normal";
 
 const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
   //<input>
+  const [addPatientMedInfoByIdMutation, { data: responseData, loading, error }] = useAddPatientMedInfoByIdMutation();
   const TextInput = ({ label, ...props }) => {
     const [field] = useField(props);
     return (
@@ -33,16 +35,19 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         setTimeout(() => {
-          // Update DB
-          alert(JSON.stringify(values, null, 2));
+          addPatientMedInfoByIdMutation([userId, values]);
+          medInfo.value = values[medInfo.label]
+          console.log(medInfo.value)
+          // alert(JSON.stringify(values, null, 2));
+          setFunction(false)
           setSubmitting(false);
         }, 400);
       }}
     >
       <Form>
-        <TextInput label={medInfo.label} name={medInfo.label} type="text" />
+        <TextInput label={medInfo.attr} name={medInfo.label} type="text" />
         {edit ? (
-          <button className="" onClick={() => setFunction(false)}>
+          <button type="submit" className="" >
             Save
           </button>
         ) : (

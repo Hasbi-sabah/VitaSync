@@ -3,6 +3,9 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import RequireAuth from './features/RequireAuth';
 import PatientMan from './features/PatientMan';
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setCredentials } from './features/auth/authSlice';
 import Records from './features/Records';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -21,18 +24,23 @@ function App() {
     const token = urlParams.get("token");
     const userId = urlParams.get("id");
     const role = urlParams.get("role");
-    const username = urlParams.get("username");
-    if(username.includes('.')){
-      username.replace('.', ' ');
-    }
+    if (token){
     dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
-        username: username,
       })
-    );
+    );}
+    else{
+      dispatch(
+        setCredentials({
+          accessToken: localStorage.getItem('token'),
+          userId: localStorage.getItem('id'),
+          role: localStorage.getItem('role'),
+        })
+      )
+    }
     
     // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
     // if (!token) re_routeLogin()

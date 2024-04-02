@@ -25,6 +25,7 @@ function App() {
     if(username.includes('.')){
       username.replace('.', ' ');
     }
+    if (token){
     dispatch(
       setCredentials({
         accessToken: token,
@@ -32,7 +33,16 @@ function App() {
         role: role,
         username: username,
       })
-    );
+    );}
+    else{
+      dispatch(
+        setCredentials({
+          accessToken: localStorage.getItem('token'),
+          userId: localStorage.getItem('id'),
+          role: localStorage.getItem('role'),
+        })
+      )
+    }
     
     // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
     // if (!token) re_routeLogin()

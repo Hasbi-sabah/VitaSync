@@ -13,13 +13,13 @@ from models.user import User
 import random
 
 
-patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient')
+patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat', password='pat')
 # patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient')
-# doc1 = HCW(firstName='John', lastName='Doe', email='john.doe@example.com', role='doctor')
+# doc1 = HCW(firstName='John', lastName='Doe', email='john.doe@example.com', username='doc', password='doc', role='doctor')
 # doc2 = HCW(firstName='Jane', lastName='Smith', email='jane.smith@example.com', role='doctor')
 # nurse1 = HCW(firstName='Alice', lastName='Johnson', email='alice.johnson@example.com', role='nurse')
 # nurse2 = HCW(firstName='Bob', lastName='Williams', email='bob.williams@example.com', role='nurse')
-# pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.com', role='pharmacist', username='pharm', password='pharm')
+# pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.com', role='pharmacist')
 # pharmacist2 = HCW(firstName='Tom', lastName='Jones', email='tom.jones@example.com', role='pharmacist')
 # admin = HCW(firstName='admin', username='admin', password='admin', role='admin')
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')

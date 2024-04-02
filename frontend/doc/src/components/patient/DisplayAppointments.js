@@ -8,7 +8,6 @@ const DisplayAppointments = ({ data, label }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
   const isMobile = useMediaQuery({ maxWidth: 1024 });
-
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastpageIndex = firstPageIndex + pageSize;
@@ -18,7 +17,7 @@ const DisplayAppointments = ({ data, label }) => {
   const location = useLocation();
   const isDashboard = location.pathname === "/dashboard";
   return (
-    <div className="lg:w-[80%] sm:w-[34rem] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:ml-56 lg:mx-auto sm:px-10 pb-8">
+    <div className="lg:w-[80%] sm:w-[34rem] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:px-10 pb-8">
       <h3 className="text-left text-2xl lg:text-xl font-semibold py-3 pl-2 sm:py-6">
         {label}
       </h3>
@@ -30,8 +29,8 @@ const DisplayAppointments = ({ data, label }) => {
             <th className="px-3 lg:px-4">Sex</th>
             <th className="px-3 lg:px-4">Age</th>
             {!isMobile && <th className=" px-4">Contact</th>}
-            {!isMobile && <th className=" px-4">Date</th>}
-            {isDashboard && isMobile && <th className=" px-4">Time</th>}
+            {!isMobile && <th className=" px-4">Time</th>}
+            {isDashboard && isMobile && <th className=" px-4"></th>}
             <th className=""></th>
           </tr>
         </thead>
@@ -39,15 +38,14 @@ const DisplayAppointments = ({ data, label }) => {
         <tbody>
           {currentTableData.map((user, idx) => (
             <UserItem
+              userId={ user.patientId }
               sn={(currentPage - 1) * pageSize + idx + 1}
               key={idx}
               name={`${user.firstName} ${user.lastName}`}
               sex={user.sex === "Male" ? "M" : "F"}
               age={user.birthDate}
               contact={user.phoneNumber}
-              date={user.date}
-              time={"13:00"}
-              userId={user.userId}
+              date={user.time.split(' ')[2] + ' ' + user.time.split(' ')[3]}
             />
           ))}
         </tbody>

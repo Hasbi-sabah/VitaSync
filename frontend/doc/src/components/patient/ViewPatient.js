@@ -12,7 +12,7 @@ const ViewPatient = ({ userId, closeOverlay }) => {
 
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative">
+      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-screen relative lg:min-w-[40rem]">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={closeOverlay}
@@ -67,7 +67,7 @@ const ViewPatient = ({ userId, closeOverlay }) => {
         ) : (
           ""
         )}
-        <NewPatientRecord closeOverlay={closeOverlay} />
+        <NewPatientRecord closeOverlay={closeOverlay} userId={userId} />
       </div>
     </div>
   );

@@ -71,10 +71,6 @@ def add_patient_info(patientId, current_user):
     if not patient:
         return jsonify({"error": "Patient not found"}), 404
 
-    # Check if the patient already has medical information
-    if patient.medicalInfo and not patient.medicalInfo.archived:
-        return jsonify({"error": "Patient already has Medical Info"}), 400
-
     # Determine the content type of the request
     content_type = request.headers.get("Content-Type")
 
@@ -84,14 +80,38 @@ def add_patient_info(patientId, current_user):
     else:
         data = request.form.to_dict()
 
+    
+    # Check if the patient already has medical information
+    if patient.medicalInfo and not patient.medicalInfo.archived:
+        # Update the medical information attributes based on the request data
+        for key, value in data.items():
+            # Check if the requesting user is not an admin and if the key is in restricted fields
+            if current_user.role != "admin" and key in [
+                "id",
+                "created_at",
+                "modified_at",
+                "archived",
+                "patientId",
+            ]:
+                continue
+            # Check if the key exists in the medical information attributes
+            if hasattr(patient.medicalInfo, key):
+                setattr(patient.medicalInfo, key, value)
+
+        # Save the updated medical information
+        patient.medicalInfo.save()
+
+        # Return the updated medical information in JSON format
+        return jsonify(database.get_by_id(MedInfo, patient.medicalInfo.id).to_dict())
+    else:
     # Filter out keys that are not attributes of the MedInfo model
-    new_data = data.copy()
-    for key in data:
-        if not hasattr(MedInfo, key):
-            new_data.pop(key, None)
+        new_data = data.copy()
+        for key in data:
+            if not hasattr(MedInfo, key):
+                new_data.pop(key, None)
 
-    # Create a new MedInfo object with the filtered data and patient ID
-    info = MedInfo(**new_data, patientId=str(patientId))
+        # Create a new MedInfo object with the filtered data and patient ID
+        info = MedInfo(**new_data, patientId=str(patientId))
 
-    # Return the newly created medical information in JSON format
-    return jsonify(database.get_by_id(MedInfo, str(info.id)).to_dict())
+        # Return the newly created medical information in JSON format
+        return jsonify(database.get_by_id(MedInfo, str(info.id)).to_dict())

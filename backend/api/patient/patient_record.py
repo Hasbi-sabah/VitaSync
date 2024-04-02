@@ -72,12 +72,12 @@ def add_patient_record(patientId, current_user):
         data = request.get_json()
     else:
         data = request.form.to_dict()
-
+    print(data)
     # Create a new record object with the provided data
     record = Record(
         diagnosis=data.get("diagnosis", None),
         notes=data.get("notes", None),
-        patientId=patientId,
+        patientId=str(patientId),
         assessedById=current_user.profileId,
     )
 

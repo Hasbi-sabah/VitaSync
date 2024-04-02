@@ -1,6 +1,8 @@
 import React from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
+import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
+
 
 const label_style = "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
 const input_style =
@@ -117,64 +119,76 @@ const MyDateInput = ({ label, ...props }) => {
 };
 
 const SignUpForm = ({ closeOverlay }) => {
+  const [addPatient, { isLoading, isError, error }] = useAddPatientMutation();
   return (
     <Formik
       initialValues={{
-        firstname: "",
-        lastname: "",
-        phone: "",
-        cin: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        CIN: "",
+        username: "",
         email: "",
         sex: "not_say",
-        dob: "",
+        birthDate: "",
         address: "",
       }}
       validationSchema={Yup.object({
-        firstname: Yup.string()
+        firstName: Yup.string()
           .max(15, "Must be 15 characters or less")
           .required("Required"),
-        lastname: Yup.string()
+        lastName: Yup.string()
           .max(20, "Must be 20 characters or less")
           .required("Required"),
-        phone: Yup.string()
-          .max(20, "Must be 20 characters or less")
+        phoneNumber: Yup.string()
           .required("Required"),
         email: Yup.string().email("invalid email address").required("Required"),
-        cin: Yup.string()
-          .matches(/^\d+$/, "Must be a number")
+        CIN: Yup.string()
           .required("Required"),
         sex: Yup.string()
           .oneOf(["male", "female", "others", "not_say"], "Invalid Sex")
           .required("Required"),
-        dob: Yup.date().required("Required"),
-        address: Yup.string(),
+        birthDate: Yup.date().required("Required"),
+        username: Yup.string(),
+        address: Yup.string().required("Required"),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
+        addPatient(values).unwrap()
+          .then(() => {
+            alert("New patient created");
+            setSubmitting(false);
+            resetForm();
+            closeOverlay();
+        })
+        .catch((error) => {
+          alert(`Creation failed: ${error.data.error}`);
           setSubmitting(false);
-          resetForm();
-        }, 400);
+        })
+        // setTimeout(() => {
+        //   alert(JSON.stringify(values, null, 2));
+        //   setSubmitting(false);
+        //   resetForm();
+        // }, 400);
       }}
     >
       <Form className="flex mt-4 lg:mt-2 flex-col gap-3 lg:gap-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
           <MyTextInput
             label={"First Name"}
-            name="firstname"
+            name="firstName"
             type="text"
             placeholder="Sabah"
           />
           <MyTextInput
             label={"Last Name"}
-            name="lastname"
+            name="lastName"
             type="text"
             placeholder="Hasbi"
           />
 
           <MyTextInput
             label={"Phone"}
-            name="phone"
+            name="phoneNumber"
             type="text"
             placeholder="(406) 123-4567"
           />
@@ -187,9 +201,16 @@ const SignUpForm = ({ closeOverlay }) => {
 
           <MyTextInput
             label={"CIN"}
-            name="cin"
-            type="number"
+            name="CIN"
+            type="text"
             placeholder="01234567890123456789"
+          />
+
+          <MyTextInput
+            label={"Username"}
+            name="username"
+            type="username"
+            placeholder="Username"
           />
 
           <MySelect label={"SEX"} name="sex">
@@ -200,9 +221,10 @@ const SignUpForm = ({ closeOverlay }) => {
               Rather not say
             </option>
           </MySelect>
+          <MyDateInput label={"Date of Birth"} name="birthDate" />
         </div>
 
-        <MyDateInput label={"Date of Birth"} name="dob" />
+        
 
         <MyTextBoxInput
           label={"Address"}

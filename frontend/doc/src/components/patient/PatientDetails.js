@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import UpdateMedInfo from "../MedInfo/UpdateMedInfo";
 import Vital from "./Vital";
-// import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
+import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import { useGetPatientVitalByIdQuery } from '../../features/vital/vitalApiSlice'
 import { useGetPatientMedInfoByIdQuery, useAddPatientMedInfoByIdMutation } from '../../features/medInfo/medInfoApiSlice';
 import RecordVitals from "./RecordVitals";
 
-const PatientDetails = ({ userId, closeOverlay, patientInfo }) => {
-  // const { data: patientInfo } = useGetPatientByIdQuery(userId);
+const PatientDetails = ({ userId, closeOverlay }) => {
+  const { data: patientInfo } = useGetPatientByIdQuery(userId);
   const { data: patientMedInfo } = useGetPatientMedInfoByIdQuery(userId);
 
   // Initialize state with an empty object to avoid undefined errors

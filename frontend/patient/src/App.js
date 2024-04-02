@@ -22,19 +22,25 @@ function App() {
     const token = urlParams.get("token");
     const userId = urlParams.get("id");
     const role = urlParams.get("role");
-    const username = urlParams.get("username");
-    if(username.includes('.')){
-      username.replace('.', ' ');
-    }
-    dispatch(
+    if (token){
+      dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
-        username: username,
       })
     );
-    
+  }
+  else{
+    dispatch(
+      setCredentials({
+        accessToken: localStorage.getItem('token'),
+        userId: localStorage.getItem('id'),
+        role: localStorage.getItem('role'),
+      })
+    )
+  }
+  
     // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
     // if (!token) re_routeLogin()
   }, [])
@@ -49,6 +55,10 @@ function App() {
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="contactHCW" element={<ContactHCW />} />
+          <Route path="records" element={<Records />} />
+          <Route path="prescriptions" element={<Prescriptions />} />
           <Route path="patients" element={<PatientMan />} />
           <Route path="records" element={<Records />} />
         </Route>

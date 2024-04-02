@@ -28,7 +28,7 @@ const UpdateMedInfo = ({ medInfo }) => {
       }}
     >
       <Form>
-        <TextInput label={medInfo.label} name={medInfo.label} type="text" />
+        <TextInput label={medInfo.attr} name={medInfo.label} type="text" />
       </Form>
     </Formik>
   );

@@ -5,11 +5,9 @@ import Header from "../features/Header";
 const Layout = () => {
     return (
         <main className='App bg-gray min-h-screen flex'>
-          <section className='relative flex-grow'>
-            <SideMenu />
-            <Header />
-          </section>
-          <section className='flex-grow'>
+          <SideMenu />
+          <Header />
+          <section className='lg:ml-72 sm:ml-56 flex-grow'>
             <Outlet />
           </section>
         </main>

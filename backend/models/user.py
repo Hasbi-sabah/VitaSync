@@ -34,8 +34,7 @@ class User(BM, Base):
         - kwargs: keyword arguments to set user attributes
         """
         super().__init__(**kwargs)
-        print("Username: ", self.username)
-        print("Password: ", self.password)
+        print("username: ", self.username)
 
     def __setattr__(self, __name: str, __value: Any) -> None:
         """
@@ -47,6 +46,7 @@ class User(BM, Base):
         """
         print(__value)
         if __name == "password" or __name == "token":
+            print("password: ", __value)
             __value = bcrypt.hashpw(__value.encode("utf-8"), bcrypt.gensalt())
         return super().__setattr__(__name, __value)
 

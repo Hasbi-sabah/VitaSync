@@ -97,6 +97,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
   //Date
   const MyDateInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
+    const currentDateTime = new Date().toISOString().substring(0, 10);
     return (
       <div className="px-2 lg:pl-8">
         <label className={`${label_style}`} htmlFor={props.id || props.name}>
@@ -107,6 +108,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
             meta.touched && meta.error ? "border border-red animate-shake" : ""
           }`}
           type="date"
+          max={currentDateTime}
           {...field}
           {...props}
         />
@@ -122,33 +124,34 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
     return (
       <Formik
         initialValues={{
-          firstname: "",
-          lastname: "",
-          phone: "",
-          cin: "",
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          CIN: "",
+          username: "",
           email: "",
           sex: "not_say",
-          dob: "",
+          birthDate: "",
           address: "",
         }}
         validationSchema={Yup.object({
-          firstname: Yup.string()
+          firstName: Yup.string()
             .max(15, "Must be 15 characters or less")
             .required("Required"),
-          lastname: Yup.string()
+          lastName: Yup.string()
             .max(20, "Must be 20 characters or less")
             .required("Required"),
-          phone: Yup.string()
-            .matches(/^\d+$/, "Must be a number")
+          phoneNumber: Yup.string()
             .required("Required"),
           email: Yup.string().email("invalid email address").required("Required"),
-          cin: Yup.string()
+          CIN: Yup.string()
             .required("Required"),
           sex: Yup.string()
             .oneOf(["male", "female", "others", "not_say"], "Invalid Sex")
             .required("Required"),
-          dob: Yup.date().required("Required"),
-          address: Yup.string(),
+          birthDate: Yup.date().required("Required"),
+          username: Yup.string(),
+          address: Yup.string().required("Required"),
         })}
         onSubmit={(values, { setSubmitting, resetForm }) => {
           addPatient(values).unwrap()
@@ -159,7 +162,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
               closeOverlay();
           })
           .catch((error) => {
-            console.error("Creation failed", error);
+            alert(`Creation failed: ${error.data.error}`);
             setSubmitting(false);
           })
           // setTimeout(() => {
@@ -173,20 +176,20 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
             <MyTextInput
               label={"First Name"}
-              name="firstname"
+              name="firstName"
               type="text"
               placeholder="Sabah"
             />
             <MyTextInput
               label={"Last Name"}
-              name="lastname"
+              name="lastName"
               type="text"
               placeholder="Hasbi"
             />
 
             <MyTextInput
               label={"Phone"}
-              name="phone"
+              name="phoneNumber"
               type="text"
               placeholder="(406) 123-4567"
             />
@@ -199,9 +202,16 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
 
             <MyTextInput
               label={"CIN"}
-              name="cin"
-              type="number"
+              name="CIN"
+              type="text"
               placeholder="01234567890123456789"
+            />
+
+            <MyTextInput
+              label={"Username"}
+              name="username"
+              type="username"
+              placeholder="Username"
             />
 
             <MySelect label={"SEX"} name="sex">
@@ -212,9 +222,10 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
                 Rather not say
               </option>
             </MySelect>
+            <MyDateInput label={"Date of Birth"} name="birthDate" />
           </div>
 
-          <MyDateInput label={"Date of Birth"} name="dob" />
+          
 
           <MyTextBoxInput
             label={"Address"}

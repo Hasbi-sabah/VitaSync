@@ -10,10 +10,13 @@ export const recordApiSlice = apiSlice.injectEndpoints({
         }),
 
         addPatientRecordById: builder.mutation({
-            query: (id, data) => ({
+            query: ({id, data}) => ({
                 url: `/api/patient/${id}/record`,
                 method: "POST",
-                body: { ...data },
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 
