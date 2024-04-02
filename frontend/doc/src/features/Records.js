@@ -30,7 +30,7 @@ const Records = ({ patientId }) => {
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastPageIndex = firstPageIndex + pageSize;
     return recAndVit.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  }, [currentPage, recAndVit]);
 
 
   if (recAndVit) {

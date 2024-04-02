@@ -45,7 +45,7 @@ def get_all_drugs(current_user):
     return jsonify(res)
 
 
-@api.route("/drug_lookup", methods=["GET"], strict_slashes=False)
+@api.route("/drug_lookup", methods=["POST"], strict_slashes=False)
 @token_required(["doctor", "nurse", "pharmacist", "patient"])
 def drug_lookup(current_user):
     """
@@ -69,7 +69,7 @@ def drug_lookup(current_user):
 
     # Perform drug lookup based on the provided name (if any)
     res = [drug.to_dict() for drug in database.drug_lookup(name=data.get("name", ""))]
-
+    print(res)
     # Return the list of drugs in JSON format
     return jsonify(res)
 

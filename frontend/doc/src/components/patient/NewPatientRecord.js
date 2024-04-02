@@ -4,6 +4,7 @@ import { FieldArray, Form, Formik, useField } from "formik";
 import { useAddPatientAppointmentByIdMutation } from "../../features/appointment/appointmentApiSlice"
 import { useAddPatientRecordByIdMutation } from "../../features/record/recordApiSlice"
 import { useAddPatientProcedureByIdMutation } from "../../features/procedure/procedureApiSlice"
+import SearchBoxSmall from "../extra/SearchboxSmall";
 
 const label_style = "font-semibold text-lg text-left pt-6";
 const input_style =
@@ -29,12 +30,12 @@ export const MyTextBoxInput = ({ label, rows = 3, formik, ...props }) => {
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
-      {props.name == 'procedures' && <label class="inline-flex float-right items-center cursor-pointer">
+      {props.name === 'procedures' && <label class="inline-flex float-right items-center cursor-pointer">
       <p class="mr-3">{isToggled ? 'Performed' : 'Not performed'}</p>      
         <input 
           type="checkbox"
           value="" 
-          class="sr-only peer"
+          className="sr-only peer"
           checked={isToggled}
           onChange={handleToggleChange} 
         />
@@ -77,18 +78,18 @@ const MyDateInput = ({ label, ...props }) => {
 };
 
 const NewPatientRecord = ({ userId, closeOverlay }) => {
-  const [drugOptions, setDrugOptions] = useState([]);
+  // const [drugOptions, setDrugOptions] = useState([]);
   const [vaccineOptions, setVaccineOptions] = useState([]);
 
-  // API calls
-  const fetchDrugs = async () => {};
-  const fetchVaccine = async () => {};
+  // // API calls
+  // const fetchDrugs = async () => {};
+  // const fetchVaccine = async () => {};
 
-  useEffect(() => {
-    // Fetch drugs from API
-    fetchDrugs().then((data) => setDrugOptions(sampleDrugs));
-    fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
-  }, []);
+  // useEffect(() => {
+  //   // Fetch drugs from API
+  //   fetchDrugs().then((data) => setDrugOptions(sampleDrugs));
+  //   fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
+  // }, []);
 
   const sampleDrugs = [
     { id: 1, name: "Drug A" },
@@ -123,6 +124,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
   const [addRecord, { recInfo }] = useAddPatientRecordByIdMutation()
   const [addProcedure, { proInfo }] = useAddPatientProcedureByIdMutation()
   const [isProcedurePerformed, setIsProcedurePerformed] = useState(false);
+  const [drugOptions, setDrugOptions] = useState([]);
 
 
   // Function to update the toggle state
@@ -233,6 +235,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
                       <div key={index} className="flex justify-between p-3 mt-2">
                         <div>
                           {index + 1}.
+                          <SearchBoxSmall key={index} userId={userId} setDrugOptions={setDrugOptions} />
                           <select
                             className={`${input_style} inline ml-4 pl-2`}
                             name={`prescriptions.${index}.drug`}
@@ -240,9 +243,10 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
                             value={prescribe.drug}
                           >
                             <option value="">Select drug</option>
+                            {console.log("Inside man", drugOptions)}
                             {drugOptions.map((drug) => (
                               <option key={drug.id} value={drug.id}>
-                                {drug.name}
+                                {drug.commercialName}
                               </option>
                             ))}
                           </select>
