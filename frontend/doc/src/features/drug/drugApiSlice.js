@@ -9,6 +9,16 @@ export const drugApiSlice = apiSlice.injectEndpoints({
             }),
         }),
 
+        drugLookUp: builder.query({
+            query: (data) => ({
+                url: '/api/drug_lookup',
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }),
+        }),
         getDrugById: builder.query({
             query: (id) => ({
                 url: `/api/drug/${id}`,
@@ -47,4 +57,5 @@ export const {
     useAddDrugMutation,
     useUpdateDrugByIdMutation,
     useDeleteDrugByIdMutation,
+    useDrugLookUpQuery,
 } = drugApiSlice;

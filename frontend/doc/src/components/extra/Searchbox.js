@@ -3,7 +3,25 @@ import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import ViewPatient from "../patient/ViewPatient";
 
 
-const LookUp = ({ searchQuery }) => {
+const LookUpPatient = ({ searchQuery }) => {
+    const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
+    const [showPatientDetails, setShowPatientDetails] = useState(false);
+    console.log(patientInfo)
+
+    useEffect(() => {
+        if (!isLoading && !isError && patientInfo) {
+            setShowPatientDetails(true);
+        } else {
+            setShowPatientDetails(false);
+        }
+    }, [isLoading, isError, patientInfo, searchQuery])
+
+    return showPatientDetails ? (
+        <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />
+      ) : null;
+}
+
+export const LookUpDrug = ({ searchQuery }) => {
     const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
     console.log(patientInfo)
@@ -53,9 +71,10 @@ const Searchbox = () => {
             <span className='inline absolute h-10 w-10 top-4 left-5'>
                 { svgIcon }
             </span>
-            {enterPressed && <LookUp searchQuery={searchQuery} />}
+            {enterPressed && <LookUpPatient searchQuery={searchQuery} />}
         </div>
       );
 };
+
 
 export default Searchbox
