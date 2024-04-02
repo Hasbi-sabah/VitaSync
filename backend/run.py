@@ -37,7 +37,7 @@ app.register_blueprint(api)
 # dev routes for frontend, to be removed in production
 # as one link will take over
 cors_config = {
-    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003"],
+    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004"],
     "supports_credentials": True
 }
 CORS(app, **cors_config)

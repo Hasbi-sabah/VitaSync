@@ -1,5 +1,6 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { logOut } from '../features/auth/authSlice'
+import { useDispatch } from 'react-redux';
 
 const Logout = () => {
   const re_routeLogin = () => {

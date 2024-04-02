@@ -1,10 +1,6 @@
-import { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
-import { useDispatch } from "react-redux";
 import { useLoginMutation } from "./authApiSlice";
-
-import React from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
 
@@ -38,24 +34,17 @@ const MyTextInput = ({ label, ...props }) => {
 };
 
 const Login = () => {
-  // const userRef = useRef();
   const errRef = useRef();
-  // const [user, setUser] = useState("");
-  // const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
+  const [login] = useLoginMutation();
 
-  // useEffect(() => {
-  //   if (userRef.current)
-  //   userRef.current.focus();
-  // }, [userRef.current]);
 
-  const handleRedirect = (userId, role, token) => {
-    const params = `token=${token}&role=${role}&id=${userId}`;
-    console.log(userId)
+  const handleRedirect = (userId, role, token, username) => {
+    const params = `token=${token}&role=${role}&id=${userId}&username=${username}`;
+    // console.log(userId)
     if (role === "doctor" || role === "admin")
       window.location.href = `http://localhost:3001/dashboard?${params}`;
     else if (role === "nurse")
@@ -67,10 +56,35 @@ const Login = () => {
     else navigate("/login");
     return null;
   }
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      setIsLoading(true)
+      // console.log(values);
+      const userData = await login(values).unwrap();
+      handleRedirect(userData.id, userData.role, userData.token, values.username);
+      resetForm();
+    } catch (err) {
+      console.log(`Error : `, err);
+      if (err?.originalStatus) {
+        setErrMsg("No Server Response");
+      } else {
+        setErrMsg();
+      }
+      if (errMsg && errRef.current) {
+        errRef.current.focus();
+      }
+    } finally{
+      setSubmitting(false);
+      setIsLoading(false);
+    }
+  }
   return (
     <div className="flex w-[100vw] h-[100vh] items-center">
       <div className="h-[100%] bg-lightBlue w-[50%] mr-auto"></div>
       <div className="w-[50%]">
+        {isLoading ? (
+          <div>Loading....</div>
+        ) : 
         <Formik
           initialValues={{
             username: "",
@@ -80,29 +94,8 @@ const Login = () => {
             username: Yup.string().required("Field Required"),
             password: Yup.string().required("Field Required"),
           })}
-          onSubmit={async (values, { setSubmitting, resetForm }) => {
-            try {
-              const userData = await login(values).unwrap();
-              console.log(userData);
-              setSubmitting(false);
-              handleRedirect(userData.id, userData.role, userData.token);
-              resetForm();
-            } catch (err) {
-              console.log(`Error : `, err);
-              if (err?.originalStatus) {
-                setErrMsg("No Server Response");
-              } else {
-                setErrMsg();
-              }
-              if (errMsg && errRef.current) {
-                errRef.current.focus();
-              }
-            }
-          }}
+          onSubmit={handleSubmit}
         >
-          {isLoading ? (
-            <h1>Loading...</h1>
-          ) : (
             <div className="flex flex-col justify-center items-center">
               <p
                 ref={errRef}
@@ -125,8 +118,8 @@ const Login = () => {
                 </button>
               </Form>
             </div>
-          )}
         </Formik>
+        }
       </div>
     </div>
   );

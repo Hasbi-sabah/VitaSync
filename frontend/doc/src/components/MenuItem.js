@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import {useMediaQuery} from 'react-responsive';
+import { useState, useEffect } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { useMediaQuery } from "react-responsive";
 
 const MenuItem = ({ label }) => {
     const dashboardIcon = <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#ffffff" viewBox="0 0 256 256"><path d="M104,40H56A16,16,0,0,0,40,56v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,104,40Zm0,64H56V56h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V56A16,16,0,0,0,200,40Zm0,64H152V56h48v48Zm-96,32H56a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,104,136Zm0,64H56V152h48v48Zm96-64H152a16,16,0,0,0-16,16v48a16,16,0,0,0,16,16h48a16,16,0,0,0,16-16V152A16,16,0,0,0,200,136Zm0,64H152V152h48v48Z"></path></svg>
@@ -28,24 +28,44 @@ const MenuItem = ({ label }) => {
     const location = useLocation();
     const [isActive, setIsActive] = useState(false)
   useEffect(() => {
-      setIsActive(location.pathname === `/${label}`);
-    }, [label, location.pathname]);
+    setIsActive(location.pathname === `/${label}`);
+  }, [label, location.pathname]);
 
-    const isMobile = useMediaQuery({maxWidth:640});
+  const isMobile = useMediaQuery({ maxWidth: 640 });
   return (
     <Link to={`/${label}`}>
-    <>
-        <div className={`${label === 'logout' ? 'sm:fixed sm:bottom-0 sm:w-56 lg:w-64' : '' }`}>
-          {!isMobile && label === 'logout' && <hr className={`h-1 bg-white block`}/>}
-            <div className={`flex items-center h-20 sm:gap-2 lg:gap-10 lg:h-20 sm:h-32 cursor-pointer ${isActive ? 'bg-darkBlue' : 'bg-blue hover:bg-lightBlue'} `}>
-              <span className='px-5 sm:px-3 lg:px-4'>{icons[label]}</span>
-              {!isMobile && <span className={`text-white max-w-20 text-left ${isActive ? 'text-lg sm:text-2xl lg:text-lg' : 'text-base sm:text-xl lg:text-base'}`}>{labels[label]}</span>}
-            </div>
-          <hr className={`h-1 bg-white block`}/>
+      <>
+        <div
+          className={`${
+            label === "logout" ? "sm:fixed sm:bottom-0 sm:w-56 lg:w-64" : ""
+          }`}
+        >
+          {!isMobile && label === "logout" && (
+            <hr className={`h-1 bg-white block`} />
+          )}
+          <div
+            className={`flex items-center h-20 sm:gap-2 lg:gap-10 lg:h-20 sm:h-32 cursor-pointer ${
+              isActive ? "bg-darkBlue" : "bg-blue hover:bg-lightBlue"
+            } `}
+          >
+            <span className="px-5 sm:px-3 lg:px-4">{icons[label]}</span>
+            {!isMobile && (
+              <span
+                className={`text-white max-w-20 text-left ${
+                  isActive
+                    ? "text-lg sm:text-2xl lg:text-lg"
+                    : "text-base sm:text-xl lg:text-base"
+                }`}
+              >
+                {labels[label]}
+              </span>
+            )}
+          </div>
+          <hr className={`h-1 bg-white block`} />
         </div>
-    </>
+      </>
     </Link>
-  )
-}
+  );
+};
 
-export default MenuItem
+export default MenuItem;
