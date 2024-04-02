@@ -9,11 +9,11 @@ const PatientPrescriptions = ({ patientId }) => {
         if (prescriptions) {
           const prescriptionDetails = {
           }
-            setPrescriptionList();
+            setPrescriptionList(prescriptions);
         }
       }, [prescriptions]);
   return (
-    <div>PatientPrescriptions</div>
+    <div>{console.log(prescriptionList)}</div>
   )
 }
 

@@ -17,7 +17,7 @@ const DisplayAppointments = ({ data, label }) => {
   const location = useLocation();
   const isDashboard = location.pathname === "/dashboard";
   return (
-    <div className="lg:w-[80%] sm:w-[34rem] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:px-10 pb-8">
+    <div className="lg:w-[80%] w-[90%] sm:w-[80%] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:px-10 pb-8">
       <h3 className="text-left text-2xl lg:text-xl font-semibold py-3 pl-2 sm:py-6">
         {label}
       </h3>

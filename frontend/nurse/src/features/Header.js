@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import MediaQuery from 'react-responsive';
-import logo from '../inverted_logo.jpg';
 import { useMediaQuery } from "react-responsive";
-import { useSelector } from 'react-redux';
 
 import { useGetHcwByIdQuery } from './hcw/hcwApiSlice';
 
