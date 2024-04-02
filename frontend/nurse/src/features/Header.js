@@ -3,7 +3,7 @@ import MediaQuery from 'react-responsive';
 import { useGetHcwByIdQuery } from './hcw/hcwApiSlice';
 
 const Header = () => {
-  const { data: hcwInfo, isLoading } = useGetHcwByIdQuery(sessionStorage.getItem("id"));
+  const { data: hcwInfo, isLoading } = useGetHcwByIdQuery(localStorage.getItem("id"));
 
   if (!isLoading) {
     return (

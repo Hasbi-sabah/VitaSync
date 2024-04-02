@@ -21,20 +21,20 @@ function App() {
     return null;
   };
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const userId = urlParams.get("id");
-    const role = urlParams.get("role");
-    if (token){
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const userId = urlParams.get("id");
+  const role = urlParams.get("role");
+  if (token && userId && role) {
     dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
       })
-    );}
-    else{
+    );    
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
       dispatch(
         setCredentials({
           accessToken: localStorage.getItem('token'),
@@ -43,21 +43,17 @@ function App() {
         })
       )
     }
-    
-    // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
-    // if (!token) re_routeLogin()
-  }, [])
   return (
     <Routes>
       <Route path="login" element={<Login />} />
       <Route index element={<Public />} />
       <Route path="/" element={<Layout />}>
-      <Route path="dashboard" element={<Dashboard />} />
 
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="contactHCW" element={<ContactHCW />} />
           <Route path="records" element={<Records />} />
           <Route path="prescriptions" element={<Prescriptions />} />

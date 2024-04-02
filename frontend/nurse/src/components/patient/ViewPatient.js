@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import PatientDetails from "./PatientDetails";
 import NewPatientRecord from "./NewPatientRecord";
+import { selectPinnedIds } from '../../features/auth/authSlice'
+import {addPinnedId, removePinnedId} from "../../features/auth/authSlice"
 
 // API call for patient record
 const ViewPatient = ({ userId, closeOverlay }) => {
@@ -10,6 +13,20 @@ const ViewPatient = ({ userId, closeOverlay }) => {
     setShowHistory(!showHistory);
   };
 
+  const dispatch = useDispatch();
+  const pinnedIds = useSelector(selectPinnedIds); 
+  const isUserPinned = pinnedIds.includes(userId);
+
+ const handlePinUser = () => {
+    if (isUserPinned) {
+      dispatch(removePinnedId({ patientId: userId }));
+    } else {
+      dispatch(addPinnedId({ patientId: userId }));
+    }
+    window.location.reload()
+ };
+
+  
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
       <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 min-h-96 z-20 overflow-auto pt-12 sm:max-w-screen relative lg:min-w-[40rem]">
@@ -27,6 +44,9 @@ const ViewPatient = ({ userId, closeOverlay }) => {
         <h1 className="text-2xl text-left text-white font-bold mb-10">
           View Patient Details
         </h1>
+        <button onClick={handlePinUser} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          {isUserPinned ? "Unpin Profile" : "Pin Profile"}
+        </button>
         <div className="mb-4">
           {/* Add more patient details here */}
           <PatientDetails userId={userId} closeOverlay={closeOverlay} />

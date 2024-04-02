@@ -5,6 +5,7 @@ import { useLocation } from "react-router-dom";
 
 const UserItem = ({ patientId, sn, name, sex, age, contact, date, time}) => {
   const location = useLocation();
+  age = new Date().getFullYear() - new Date(age).getFullYear() || 'N/A'
   const isDashboard = location.pathname === '/dashboard';
   const bgColor = sn % 2 === 1 ? "bg-gray" : "";
   const [showPatientDetails, setShowPatientDetails] = useState(false);
@@ -19,16 +20,13 @@ const UserItem = ({ patientId, sn, name, sex, age, contact, date, time}) => {
   const isMobile = useMediaQuery({maxWidth:1024});
   return (
     <tr className={`text-textGray text-xl lg:text-base text-center h-12 ${bgColor}`}>
-      <td>{sn}</td>
-      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-left text-wrap mx-auto">{name}</td>
+      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-center text-wrap mx-auto">{name}</td>
       <td>{sex}</td>
       <td>{age}</td>
       {!isMobile && <td>{contact}</td>}
-      {!isMobile && <td>{date}</td>}
-      {isDashboard && isMobile && <td>{time}</td>}
       <td>
         {/* Overlay */}
-        {showPatientDetails && <ViewPatient closeOverlay={closeOverlay} patientId={patientId} />}
+        {showPatientDetails && <ViewPatient closeOverlay={closeOverlay} userId={patientId} />}
         <svg
           onClick={handleOnClick}
           className="hover:cursor-pointer"

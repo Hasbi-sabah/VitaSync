@@ -2,7 +2,6 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { setCredentials } from "./authSlice";
 import { useLoginMutation } from "./authApiSlice";
 
 import React from "react";
@@ -85,13 +84,6 @@ const Login = () => {
             try {
               const userData = await login(values).unwrap();
               console.log(userData);
-              dispatch(
-                setCredentials({
-                  accessToken: userData.token,
-                  userId: userData.userId,
-                  role: userData.role,
-                })
-              );
               setSubmitting(false);
               handleRedirect(userData.id, userData.role, userData.token);
               resetForm();

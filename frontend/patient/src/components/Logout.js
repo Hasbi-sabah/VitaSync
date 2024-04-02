@@ -6,12 +6,9 @@ const Logout = () => {
       window.location.href = "http://localhost:3000/login";
       return null;
     };
-  return (
-    <>
-        {logOut()}
-        {re_routeLogin()}
-    </>
-  )
+    logOut()
+    re_routeLogin()
+  return null
 }
 
 export default Logout

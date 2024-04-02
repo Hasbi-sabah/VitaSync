@@ -2,17 +2,32 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const patientApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        getSearchPatient: builder.query({
+            query: (data) => ({
+                url: "/api/search_patient",
+                method: "POST",
+                body: { ...data },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }),
+            // transformResponse: (response) => {
+            //     console.log("Server Response:", response);
+            //     return response;
+            // }
+        }),
+
         getPatient: builder.query({
             query: () => ({
-                url: "/api/patient",
-                method: "GET",
+                url: `/api/patient`,
+                method: "GET"
             }),
         }),
-        
+
         getPatientById: builder.query({
             query: (id) => ({
                 url: `/api/patient/${id}`,
-                method: "GET",
+                method: "GET"
             }),
         }),
         
@@ -42,6 +57,7 @@ export const patientApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+    useGetSearchPatientQuery,
     useGetPatientQuery,
     useGetPatientByIdQuery,
     useUpdatePatientByIdMutation,

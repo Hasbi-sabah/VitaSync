@@ -16,20 +16,20 @@ function App() {
     return null;
   };
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const userId = urlParams.get("id");
-    const role = urlParams.get("role");
-    if (token){
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const userId = urlParams.get("id");
+  const role = urlParams.get("role");
+  if (token && userId && role) {
     dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
       })
-    );}
-    else{
+    );
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
       dispatch(
         setCredentials({
           accessToken: localStorage.getItem('token'),
@@ -38,10 +38,6 @@ function App() {
         })
       )
     }
-    
-    // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
-    // if (!token) re_routeLogin()
-  }, [])
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

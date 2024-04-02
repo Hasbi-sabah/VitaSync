@@ -7,6 +7,7 @@ import { useGetPatientMedInfoByIdQuery, useAddPatientMedInfoByIdMutation } from 
 import RecordVitals from "./RecordVitals";
 
 const PatientDetails = ({ userId, closeOverlay }) => {
+  console.log(userId)
   const { data: patientInfo } = useGetPatientByIdQuery(userId);
   const { data: patientMedInfo } = useGetPatientMedInfoByIdQuery(userId);
 
@@ -89,8 +90,8 @@ const PatientDetails = ({ userId, closeOverlay }) => {
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
               </h2>
               <div className="flex justify-around text-sm">
-                <span>{sex}</span>
-                <span>Age {age ? age : ""}</span>
+                <span>{sex === "Male" ? "M" : sex === "Female" ? "F" : "N/A"}</span>
+                <span>Age {new Date().getFullYear() - new Date(age).getFullYear() || 'N/A'}</span>
               </div>
               <div className="mt-2 mb-2">
                 <p className="text-lightBlue text-center text-sm">

@@ -71,7 +71,8 @@ def list_patients(current_user):
             data = {'ids': ids.split(',')}
         else:
             data = None
-    if data and data.get('ids', None):
+    print(data)
+    if data and data.get('ids', None) != None:
         patients_list = []
         ids = data.get('ids', None)
         for id in ids:
