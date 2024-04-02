@@ -3,6 +3,7 @@ import * as Yup from "yup";
 import { FieldArray, Form, Formik, useField } from "formik";
 import { useAddPatientAppointmentByIdMutation } from "../../features/appointment/appointmentApiSlice"
 import { useAddPatientRecordByIdMutation } from "../../features/record/recordApiSlice"
+import { useAddPatientProcedureByIdMutation } from "../../features/procedure/procedureApiSlice"
 
 const label_style = "font-semibold text-lg text-left pt-6";
 const input_style =
@@ -14,13 +15,31 @@ const removeEmptyValues = (obj) => {
   return Object.fromEntries(filteredEntries);
   };
 //<Textbox>
-export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
+export const MyTextBoxInput = ({ label, rows = 3, formik, ...props }) => {
   const [field, meta] = useField(props);
+  const [isToggled, setIsToggled] = useState(false);
+
+  const handleToggleChange = (event) => {
+     const newStatus = event.target.checked;
+     setIsToggled(newStatus);
+     formik.setFieldValue("status", newStatus);
+  };
   return (
     <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white text-left ">
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
+      {props.name == 'procedures' && <label class="inline-flex float-right items-center cursor-pointer">
+      <p class="mr-3">{isToggled ? 'Performed' : 'Not performed'}</p>      
+        <input 
+          type="checkbox"
+          value="" 
+          class="sr-only peer"
+          checked={isToggled}
+          onChange={handleToggleChange} 
+        />
+        <div class="relative w-11 h-6 bg-gray peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-lightBlue dark:peer-focus:ring-lightBlue2 rounded-full peer dark:bg-darkBlue peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-400 peer-checked:bg-blue"></div>
+        </label>}
       <hr className="text-[#909090] pt-3" />
       <textarea
         className={`resize-none input p-3 bg-gray block rounded-md w-full mt-1 focus:outline-none focus:ring-2 focus:ring-lightBlue ${
@@ -102,6 +121,14 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
   );
   const [addAppt, { apptInfo }] = useAddPatientAppointmentByIdMutation()
   const [addRecord, { recInfo }] = useAddPatientRecordByIdMutation()
+  const [addProcedure, { proInfo }] = useAddPatientProcedureByIdMutation()
+  const [isProcedurePerformed, setIsProcedurePerformed] = useState(false);
+
+
+  // Function to update the toggle state
+  const handleToggleChange = (newStatus) => {
+     setIsProcedurePerformed(newStatus);
+  };
   return (
     <Formik
       initialValues={{
@@ -110,12 +137,14 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
         notes: "",
         procedures: "",
         vaccine: [],
+        status: false,
         followUp: "",
       }}
       validationSchema={Yup.object({
         diagnosis: Yup.string(),
         notes: Yup.string(),
         procedures: Yup.string(),
+        status: Yup.bool(),
         followUp: Yup.date(),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
@@ -130,7 +159,16 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
         addRecord({id: userId, data: recDict})
           .then((result) => {
             const recId = result.data.id
-            
+            if (values.procedures) {
+              let proDict = {recordId: recId, name: values.procedures, status: values.status}
+              addProcedure({id: userId, data: proDict})
+              .then(() => {
+                console.log("procedure success")
+              })
+            }
+            setSubmitting(false);
+            resetForm();
+            closeOverlay();
           })
 
         if (values.followUp !== "") {
@@ -234,14 +272,6 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
                 )}
               </FieldArray>
             </div>
-
-            <MyTextBoxInput label={"Diagnosis"} name="diagnosis" type="text" />
-            <MyTextBoxInput
-              label={"Procedures"}
-              name="procedures"
-              type="text"
-            />
-
             {/* Vaccine */}
             <div className="rounded-lg min-h-18 w-full mt-10 p-4 bg-white relative">
               <h3 className="font-semibold text-lg text-left ">Vaccine</h3>
@@ -296,6 +326,13 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
                 )}
               </FieldArray>
             </div>
+            <MyTextBoxInput label={"Diagnosis"} name="diagnosis" type="text" />
+            <MyTextBoxInput
+              label={"Procedures"}
+              name="procedures"
+              type="text"
+              formik={formik}
+            />
             <MyTextBoxInput label={"General Notes"} name="notes" type="text" />
             <MyDateInput label={"Follow Up"} name="followUp" />
 

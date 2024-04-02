@@ -56,28 +56,6 @@ const Login = () => {
     else navigate("/login");
     return null;
   }
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      setIsLoading(true)
-      // console.log(values);
-      const userData = await login(values).unwrap();
-      handleRedirect(userData.id, userData.role, userData.token, values.username);
-      resetForm();
-    } catch (err) {
-      console.log(`Error : `, err);
-      if (err?.originalStatus) {
-        setErrMsg("No Server Response");
-      } else {
-        setErrMsg();
-      }
-      if (errMsg && errRef.current) {
-        errRef.current.focus();
-      }
-    } finally{
-      setSubmitting(false);
-      setIsLoading(false);
-    }
-  }
   return (
     <div className="flex w-[100vw] h-[100vh] items-center">
       <div className="h-[100%] bg-lightBlue w-[50%] mr-auto"></div>
@@ -94,7 +72,25 @@ const Login = () => {
             username: Yup.string().required("Field Required"),
             password: Yup.string().required("Field Required"),
           })}
-          onSubmit={handleSubmit}
+          onSubmit={async (values, { setSubmitting, resetForm }) => {
+            try {
+              const userData = await login(values).unwrap();
+              console.log(userData);
+              setSubmitting(false);
+              handleRedirect(userData.id, userData.role, userData.token);
+              resetForm();
+            } catch (err) {
+              console.log(`Error : `, err);
+              if (err?.originalStatus) {
+                setErrMsg("No Server Response");
+              } else {
+                setErrMsg();
+              }
+              if (errMsg && errRef.current) {
+                errRef.current.focus();
+              }
+            }
+          }}
         >
             <div className="flex flex-col justify-center items-center">
               <p

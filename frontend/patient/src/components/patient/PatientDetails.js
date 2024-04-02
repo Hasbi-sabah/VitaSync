@@ -64,7 +64,7 @@ const PatientDetails = ({ patientId }) => {
               </h2>
               <div className="flex justify-between text-sm">
                 <span>{sex}</span>
-                <span>Age {age ? age : ""}</span>
+                <span>Age {new Date().getFullYear() - new Date(age).getFullYear() || 'N/A'}</span>
               </div>
               <div className="mt-2 mb-2">
                 <p className="text-lightBlue text-left text-sm">

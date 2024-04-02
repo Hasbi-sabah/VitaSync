@@ -12,7 +12,7 @@ const CreateSearchPatient = () => {
     setShowAddPatient(false);
   };
   return (
-      <div className="mt-32 sm:mt-24 lg:mt-32 flex flex-col justify-center lg:flex-row items-center gap-5 sm:gap-8 sm:ml-56 lg:ml-64 lg:gap-52">
+      <div className="mt-32 sm:mt-24 lg:mt-32 flex flex-col justify-center lg:flex-row items-center gap-5 sm:gap-8 lg:gap-20">
         {showAddPatient && <CreateNewPatient closeOverlay={closeOverlay} />}
         <button onClick={handleOnClick} className='uppercase bg-blue text-white h-16 w-72 rounded-[20px] relative font-semibold text-base hover:bg-lightBlue'>
           <span className="absolute top-3 left-5">

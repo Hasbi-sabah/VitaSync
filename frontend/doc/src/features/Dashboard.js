@@ -11,7 +11,7 @@ const Dashboard = () => {
   const formattedDate = currentDate.toISOString().slice(0, 10);
   const start_end = {start_time: formattedDate + ' 12:01 AM', end_time: formattedDate + ' 11:59 PM'}
 
-  const { data: patientList } = useGetHCWAppointmentByIdQuery([sessionStorage.getItem("id"), start_end]);
+  const { data: patientList } = useGetHCWAppointmentByIdQuery([localStorage.getItem("id"), start_end]);
   const ids = {
     ids: patientList ? patientList.map((patient) => patient.patientId) : []
    };

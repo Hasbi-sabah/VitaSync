@@ -7,8 +7,10 @@ import Records from './features/Records';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
+import Prescriptions from './features/Prescriptions';
 import Logout from './components/Logout';
 import ContactHCW from './features/ContactHCW';
+
 
 function App() {
   const dispatch = useDispatch()
@@ -17,40 +19,32 @@ function App() {
     return null;
   };
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const userId = urlParams.get("id");
-    const role = urlParams.get("role");
-    if (token){
-      dispatch(
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const userId = urlParams.get("id");
+  const role = urlParams.get("role");
+  if (token && userId && role) {
+    dispatch(
       setCredentials({
         accessToken: token,
         userId: userId,
         role: role,
       })
-    );
-  }
-  else{
-    dispatch(
-      setCredentials({
-        accessToken: localStorage.getItem('token'),
-        userId: localStorage.getItem('id'),
-        role: localStorage.getItem('role'),
-      })
-    )
-  }
-  
-    // console.log(`token: ${token}, id: ${userId}, role: ${role}`)
-    // if (!token) re_routeLogin()
-  }, [])
+    );    
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+      dispatch(
+        setCredentials({
+          accessToken: localStorage.getItem('token'),
+          userId: localStorage.getItem('id'),
+          role: localStorage.getItem('role'),
+        })
+      )
+    }
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-      <Route index element={<Dashboard />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="logout" element={<Logout />} />
-      <Route path="contactHCW" element={<ContactHCW />} />
+
         {/* pulic routes*/}
         
         {/* private routes*/}
@@ -60,7 +54,7 @@ function App() {
           <Route path="records" element={<Records />} />
           <Route path="prescriptions" element={<Prescriptions />} />
           <Route path="patients" element={<PatientMan />} />
-          <Route path="records" element={<Records />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>

@@ -65,12 +65,13 @@ def get_all_hcws(current_user):
     """
 
     # Retrieve all healthcare workers from the database and convert them to dictionaries
-    res = [
-        hcw.to_dict()
-        for hcw in database.get_all(HCW)
-        if current_user.role == "admin"
-        or database.get_by_id(User, hcw.userId).role != "admin"
-    ]
+    res = []
+    for hcw in database.get_all(HCW):
+        role = database.get_by_id(User, hcw.userId).role
+        if current_user.role == "admin" or role != "admin":
+            hcw = hcw.to_dict()
+            hcw['role'] = role
+            res.append(hcw)
 
     # Return a JSON response with the list of healthcare workers
     return jsonify(res)
@@ -144,7 +145,6 @@ def get_hcw(hcwId, current_user):
     :return: A JSON response containing the detailed healthcare worker information.
     :rtype: flask.Response
     :raises 404: If the specified healthcare worker ID is not found in the database.
-    :raises 403: If the user does not have sufficient privileges to access the information.
     """
 
     # Retrieve the healthcare worker object from the database based on the provided ID
@@ -153,10 +153,6 @@ def get_hcw(hcwId, current_user):
     # Check if the healthcare worker exists
     if not hcw:
         return jsonify({"error": "Health Care Worker not found!"}), 404
-
-    # Check if the current user has sufficient privileges to access the information
-    if current_user.role != "admin" and current_user.profileId != str(hcwId):
-        return {"error": "Insufficient privileges!"}, 403
 
     # Return a JSON response containing the detailed healthcare worker information
     return jsonify(hcw.to_dict())
@@ -205,7 +201,6 @@ def add_hcw(current_user):
         "lastName",
         "CIN",
         "licence",
-        "speciality",
         "workAddress",
         "workNumber",
         "role",
