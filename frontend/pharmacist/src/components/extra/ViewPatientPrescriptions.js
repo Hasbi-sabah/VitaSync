@@ -1,6 +1,6 @@
 import React from "react";
 
-const ViewPatientPrescriptions = ({ data, handleClosePrescriptions, handleApprove, handleDenial }) => {
+const ViewPatientPrescriptions = ({ data, handleClosePrescriptions, handleApprove, handleDenial, prescriptionId }) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
       <div className="bg-lightBlue2 rounded-lg mb-10 shadow-lg sm:p-6 z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative">
@@ -49,7 +49,7 @@ const ViewPatientPrescriptions = ({ data, handleClosePrescriptions, handleApprov
                           height="32"
                           fill="#00ff00"
                           viewBox="0 0 256 256"
-                          onClick={""}
+                          onClick={handleApprove(prescriptionId)}
                           className="hover:cursor-pointer"
                         >
                           <path d="M229.66,77.66l-128,128a8,8,0,0,1-11.32,0l-56-56a8,8,0,0,1,11.32-11.32L96,188.69,218.34,66.34a8,8,0,0,1,11.32,11.32Z"></path>
@@ -60,7 +60,7 @@ const ViewPatientPrescriptions = ({ data, handleClosePrescriptions, handleApprov
                           height="32"
                           fill="#ff0000"
                           viewBox="0 0 256 256"
-                          onClick={""}
+                          onClick={handleDenial(prescriptionId)}
                           className="hover:cursor-pointer"
                         >
                           <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm88,104a87.56,87.56,0,0,1-20.41,56.28L71.72,60.4A88,88,0,0,1,216,128ZM40,128A87.56,87.56,0,0,1,60.41,71.72L184.28,195.6A88,88,0,0,1,40,128Z"></path>
