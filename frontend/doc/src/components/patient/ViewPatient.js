@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PatientDetails from "./PatientDetails";
 import NewPatientRecord from "./NewPatientRecord";
+import Records from "../../features/Records";
 
 // API call for patient record
 const ViewPatient = ({ userId, closeOverlay }) => {
@@ -11,8 +12,8 @@ const ViewPatient = ({ userId, closeOverlay }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-screen relative lg:min-w-[40rem]">
+    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 pt-24">
+      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-full relative lg:min-w-[40rem] lg:ml-64 sm:ml-56 w-full sm:w-[80%]">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={closeOverlay}
@@ -61,9 +62,7 @@ const ViewPatient = ({ userId, closeOverlay }) => {
           )}
         </div>
         {showHistory ? (
-          <p className="mt-5 w-full h-12 border">
-            This holds History (To be Implemented)
-          </p>
+          <Records patientId={userId} />
         ) : (
           ""
         )}

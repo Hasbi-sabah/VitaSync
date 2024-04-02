@@ -1,32 +1,70 @@
-import React from 'react'
-import DisplayPatients from '../components/patient/DisplayPatients';
+import React, { useMemo, useState } from 'react'
+import Pagination from '../components/pagination/Pagination';
+import { useGetPatientRecordByIdQuery } from "./record/recordApiSlice"
+import { useGetPatientVitalByIdQuery } from "./vital/vitalApiSlice"
+import RecordItem from '../components/extra/RecordItem';
 
-const Records = () => {
-    const currentDate = new Date();
-    const date = currentDate.getDate();
-    const month = currentDate.getMonth();
-    const year = currentDate.getFullYear();
-  
-    const day = "" + date + "/"  + month +  "/" + year;
-    const patient1 = {'userId': '123', 'firstName': 'Bob', 'lastName': 'The Builder', 'sex': 'Male', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient2 = {'userId': '103', 'firstName': 'Bob', 'lastName': 'The Builder', 'sex': 'Male', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient3 = {'userId': '113', 'firstName': 'Bob', 'lastName': 'The Builder', 'sex': 'Male', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient4 = {'userId': '13', 'firstName': 'Bob', 'lastName': 'The Builder', 'sex': 'Male', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient5 = {'userId': '23', 'firstName': 'Bob', 'lastName': 'The Builder', 'sex': 'Male', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient6 = {'userId': '3', 'firstName': 'Bob', 'lastName': 'The Builder Of The Great Wall', 'sex': 'Female', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient7 = {'userId': '3', 'firstName': 'Bob', 'lastName': 'The Builder Of The Great Wall', 'sex': 'Female', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient8 = {'userId': '3', 'firstName': 'Bob', 'lastName': 'The Builder Of The Great Wall', 'sex': 'Female', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient9 = {'userId': '3', 'firstName': 'Bob', 'lastName': 'The Builder Of The Great Wall', 'sex': 'Female', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    const patient10 = {'userId': '3', 'firstName': 'Bob', 'lastName': 'The Builder Of The Great Wall', 'sex': 'Female', 'birthDate': '26', 'phoneNumber': '(406) 555-0120', 'date': day}
-    
-    const data = [patient1, patient2, patient3, patient4, patient5, patient6, patient7, patient8, patient9, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient1, patient2, patient3, patient4, patient5, patient6, patient7, patient8, patient9, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10, patient10];
-  
-    const label = "Records"
-    return (
-      <div className='bg-gray pb-12 mt-24'>
-        <DisplayPatients data={data} label={label}/>
-      </div>
-    )
+const Records = ({ patientId }) => {
+  //API call to obtain records
+  const { data: records } = useGetPatientRecordByIdQuery(patientId)
+  const { data: vitals } = useGetPatientVitalByIdQuery(patientId)
+
+  let recAndVit = []
+  if (records && vitals) {
+    recAndVit = records.concat(vitals).sort((a, b) => {
+      const A = a.created_at.replace(' at ', 'T').replace(' AM', '').replace(' PM', '');
+      const B = b.created_at.replace(' at ', 'T').replace(' AM', '').replace(' PM', '');
+      const dateA = new Date(`${A}:00`);
+      const dateB = new Date(`${B}:00`);
+      return dateA - dateB;
+     });    
   }
+
+  const date = new Date()
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
+  console.log(recAndVit)
+
+  const currentPageData = useMemo(() => {
+    const firstPageIndex = (currentPage - 1) * pageSize;
+    const lastPageIndex = firstPageIndex + pageSize;
+    return recAndVit.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
+
+  if (recAndVit) {
+    return (
+    <div className="bg-gray mt-20 pb-12 sm:mt-24 lg:mt-32 mx-4">
+
+    <table className='w-full text-lg bg-white table-auto'>
+      <thead>
+        <tr>
+          <td colSpan={3} className='text-3xl py-4 font-semibold text-center bg-lightBlue text-white'>Medical History</td>
+        </tr>
+      </thead>
+      <tbody className=''>
+        {currentPageData.map((record, idx) => (
+          <RecordItem 
+            sn={(currentPage - 1) * pageSize + idx + 1}
+            key={record.id}
+            data={record}
+          />
+        ))}
+      </tbody>
+    </table>
+    <div className='flex justify-end'>
+      <Pagination
+        className={""}
+        currentPage={currentPage}
+        totalCount={recAndVit.length}
+        pageSize={pageSize}
+        onPageChange={(page) => setCurrentPage(page)}
+      />
+    </div>
+  </div>
+  )
+}
+}
 
 export default Records

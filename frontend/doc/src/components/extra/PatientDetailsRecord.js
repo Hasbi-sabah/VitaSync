@@ -1,4 +1,5 @@
 import React from "react";
+import Vital from "../patient/Vital";
 
 const PatientDetailsRecord = ({ data }) => {
   // API call for vitals
