@@ -1,15 +1,17 @@
 import React, { useEffect } from 'react';
 import MediaQuery from 'react-responsive';
 import { useGetHcwByIdQuery } from './hcw/hcwApiSlice';
+import logo from '../inverted_logo.jpg';
 
 const Header = () => {
   const { data: hcwInfo, isLoading } = useGetHcwByIdQuery(localStorage.getItem("id"));
-
+  const isMobile = MediaQuery({ maxWidth:640 })
   if (!isLoading) {  
     return (
         <header className='h-14 sm:h-[6vh] lg:h-[10vh] w-screen fixed top-0 flex justify-between items-center px-3 sm:px-5 bg-white z-50'>
+          {isMobile ? <div></div> : ''}
           <div className="ml-44 sm:ml-20 lg:ml-0">
-            <img className='h-14' src="/inverted_logo.jpg" alt='LOGO' />
+            <img className='h-12 sm:h-[5vh] lg:h-[9vh]' src={logo} alt='LOGO' />
           </div>
           <div className='flex align-center justify-center'>
             <MediaQuery minWidth={640}>

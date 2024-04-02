@@ -34,7 +34,8 @@ class User(BM, Base):
         - kwargs: keyword arguments to set user attributes
         """
         super().__init__(**kwargs)
-        print("username: ", self.username)
+        print("Username: ", self.username)
+        print("Password: ", self.password)
 
     def __setattr__(self, __name: str, __value: Any) -> None:
         """

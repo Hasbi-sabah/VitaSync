@@ -11,7 +11,6 @@ const authSlice = createSlice({
         setCredentials: (state, action) => {
             const {accessToken, userId, role} = action.payload;
             state.userId = userId;
-            state.username = username;
             state.token = accessToken;
             state.role = role;
             localStorage.setItem('role', role);
