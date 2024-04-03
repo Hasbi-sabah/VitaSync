@@ -218,7 +218,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="others">Others</option>
-              <option value="not_say" selected>
+              <option value="not_say" defaultValue>
                 Rather not say
               </option>
             </MySelect>

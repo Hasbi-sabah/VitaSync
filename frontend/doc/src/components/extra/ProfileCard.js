@@ -15,7 +15,7 @@ const ProfileCard = ({ name, speciality, workNumber, workAddress }) => {
       <br />
       <div>
         <div className="mb-4">
-          <a href={`tel:${workNumber}`} onclick={handlePhoneClick} className="hover:text-actualLightBlue">
+          <a href={`tel:${workNumber}`} onClick={handlePhoneClick} className="hover:text-actualLightBlue">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
