@@ -1,5 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useRef, useState } from "react";
 import { useLoginMutation } from "./authApiSlice";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
@@ -36,24 +35,28 @@ const MyTextInput = ({ label, ...props }) => {
 const Login = () => {
   const errRef = useRef();
   const [errMsg, setErrMsg] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const navigate = useNavigate();
+  /* const [isLoading, setIsLoading] = useState(false); */
+  const [isLoading] = useState(false);
 
   const [login] = useLoginMutation();
 
-
+  const authLink = process.env.REACT_APP_AUTH_URL;
+  const docLink = process.env.REACT_APP_DOC_URL;
+  const nurseLink = process.env.REACT_APP_NUR_URL;
+  const patientLink = process.env.REACT_APP_PAT_URL;
+  const pharmacyLink = process.env.REACT_APP_PHA_URL;
   const handleRedirect = (userId, role, token, username) => {
     const params = `token=${token}&role=${role}&id=${userId}&username=${username}`;
     // console.log(userId)
     if (role === "doctor" || role === "admin")
-      window.location.href = `http://localhost:3001/dashboard?${params}`;
+      window.location.href = `${docLink}/dashboard?${params}`;
     else if (role === "nurse")
-      window.location.href = `http://localhost:3002/dashboard?${params}`;
+      window.location.href = `${nurseLink}/dashboard?${params}`;
     else if (role === "patient")
-      window.location.href = `http://localhost:3003/dashboard?${params}`;
+      window.location.href = `${patientLink}/dashboard?${params}`;
     else if (role === "pharmacist")
-      window.location.href = `http://localhost:3004/dashboard?${params}`;
-    else navigate("/login");
+      window.location.href = `${pharmacyLink}/dashboard?${params}`;
+    else window.location.href = `${authLink}/dashboard?${params}`;
     return null;
   }
   return (

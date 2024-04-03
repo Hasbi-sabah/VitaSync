@@ -1,14 +1,21 @@
-import React from 'react'
-import { logOut } from '../features/auth/authSlice'
+import { useEffect } from "react";
+import { logOut } from "../features/auth/authSlice";
+import { useDispatch } from "react-redux";
 
+const authLink = process.env.REACT_APP_AUTH_URL;
 const Logout = () => {
-  const re_routeLogin = () => {
-      window.location.href = "http://localhost:3000/login";
-      return null;
-    };
-    logOut()
-    re_routeLogin()
-  return null
-}
+  const dispatch = useDispatch();
 
-export default Logout
+  useEffect(() => {
+    const handleLogOut = () => {
+      dispatch(logOut());
+      window.location.href = `${authLink}/login`;
+    };
+
+    handleLogOut();
+  }, [dispatch]);
+
+  return null;
+};
+
+export default Logout;

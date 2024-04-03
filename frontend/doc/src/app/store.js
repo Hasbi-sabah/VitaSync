@@ -9,5 +9,5 @@ export const store = configureStore({
     },
     middleware: getDefaultMiddleware => 
         getDefaultMiddleware().concat(apiSlice.middleware),
-    devTools: true //Make false later
+    devTools: process.env.REACT_APP_DEVTOOLS
 });
