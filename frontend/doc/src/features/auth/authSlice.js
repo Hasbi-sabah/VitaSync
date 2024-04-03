@@ -5,25 +5,26 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         userId: null, 
-        token: sessionStorage.getItem('token'),
-        role: sessionStorage.getItem('role') },
+        token: null,
+        role: null },
     reducers: {
         setCredentials: (state, action) => {
-            console.log(`SESSION token ${sessionStorage.getItem('token')} , role: ${sessionStorage.getItem('role')}`);
             const {accessToken, userId, role} = action.payload;
-            console.log(`token ${accessToken}, id: ${userId}, role: ${role}`);
-            
             state.userId = userId;
             state.token = accessToken;
             state.role = role;
-            sessionStorage.setItem('role', role);
-            sessionStorage.setItem('id', userId);
-            sessionStorage.setItem('token', accessToken);
+            localStorage.setItem('role', role);
+            localStorage.setItem('id', userId);
+            localStorage.setItem('token', accessToken);
+            console.log(state.userId, state.token, state.role)
         },  
         logOut: (state, action) => {
-            state.user = null;
+            state.userId = null;
             state.token = null;
-            sessionStorage.removeItem('token');
+            state.role = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('role');
         },
     },
 });

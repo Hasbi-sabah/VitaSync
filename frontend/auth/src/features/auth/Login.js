@@ -1,13 +1,9 @@
-import { useRef, useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-
-import { useDispatch } from "react-redux";
-import { setCredentials } from "./authSlice";
+import React, { useRef, useState } from "react";
 import { useLoginMutation } from "./authApiSlice";
-
-import React from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
+import LoadingScreen from '../../components/LoadingScreen';
+
 
 const label_style = " pl-2 text-lg font-normal";
 const input_style =
@@ -15,7 +11,6 @@ const input_style =
 const button_style =
   "h-10 w-[100%] px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
-//<input>
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -39,34 +34,34 @@ const MyTextInput = ({ label, ...props }) => {
 };
 
 const Login = () => {
-  // const userRef = useRef();
   const errRef = useRef();
-  // const [user, setUser] = useState("");
-  // const [pwd, setPwd] = useState("");
   const [errMsg, setErrMsg] = useState("");
-  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [login, { isLoading }] = useLoginMutation();
-  const dispatch = useDispatch();
+  const [login] = useLoginMutation();
 
-  // useEffect(() => {
-  //   if (userRef.current)
-  //   userRef.current.focus();
-  // }, [userRef.current]);
-
-  const handleRedirect = (userId, role, token) => {
-    const params = `token=${token}&role=${role}&id=${userId}`;
-    console.log(userId)
+  const authLink = process.env.REACT_APP_AUTH_URL;
+  const docLink = process.env.REACT_APP_DOC_URL;
+  const nurseLink = process.env.REACT_APP_NUR_URL;
+  const patientLink = process.env.REACT_APP_PAT_URL;
+  const pharmacyLink = process.env.REACT_APP_PHA_URL;
+  const handleRedirect = (userId, role, token, username) => {
+    const params = `token=${token}&role=${role}&id=${userId}&username=${username}`;
+    setIsLoading(false);
     if (role === "doctor" || role === "admin")
-      window.location.href = `http://localhost:3001/dashboard?${params}`;
+      window.location.href = `${docLink}/dashboard?${params}`;
     else if (role === "nurse")
-      window.location.href = `http://localhost:3002/dashboard?${params}`;
+      window.location.href = `${nurseLink}/dashboard?${params}`;
     else if (role === "patient")
-      window.location.href = `http://localhost:3003/dashboard?${params}`;
+      window.location.href = `${patientLink}/dashboard?${params}`;
     else if (role === "pharmacist")
-      window.location.href = `http://localhost:3004/dashboard?${params}`;
-    else navigate("/login");
+      window.location.href = `${pharmacyLink}/dashboard?${params}`;
+    else window.location.href = `${authLink}/dashboard?${params}`;
     return null;
+  }
+  
+  if (isLoading) {
+    return <LoadingScreen />;
   }
   return (
     <div className="flex w-[100vw] h-[100vh] items-center">
@@ -82,25 +77,17 @@ const Login = () => {
             password: Yup.string().required("Field Required"),
           })}
           onSubmit={async (values, { setSubmitting, resetForm }) => {
+            setIsLoading(true);
             try {
               const userData = await login(values).unwrap();
-              console.log(userData);
-              dispatch(
-                setCredentials({
-                  accessToken: userData.token,
-                  userId: userData.userId,
-                  role: userData.role,
-                })
-              );
-              setSubmitting(false);
               handleRedirect(userData.id, userData.role, userData.token);
               resetForm();
             } catch (err) {
-              console.log(`Error : `, err);
+              setIsLoading(false);
               if (err?.originalStatus) {
-                setErrMsg("No Server Response");
+                errMsg = "No Server Response";
               } else {
-                setErrMsg();
+                errMsg = err.data.error;
               }
               if (errMsg && errRef.current) {
                 errRef.current.focus();
@@ -108,15 +95,12 @@ const Login = () => {
             }
           }}
         >
-          {isLoading ? (
-            <h1>Loading...</h1>
-          ) : (
             <div className="flex flex-col justify-center items-center">
               <p
                 ref={errRef}
                 className={errMsg ? "errmsg" : "hidden"}
                 aria-label=""
-              ></p>
+              >{errMsg}</p>
               <h1 className="text-xl font-semibold">Login</h1>
               <Form className="">
                 <MyTextInput label={"Username"} name="username" type="text" />
@@ -133,7 +117,6 @@ const Login = () => {
                 </button>
               </Form>
             </div>
-          )}
         </Formik>
       </div>
     </div>

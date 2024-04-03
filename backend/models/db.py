@@ -194,6 +194,7 @@ class DB:
                 self.__session.query(Appointment)
                 .filter_by(**id, archived=False)
                 .filter(Appointment.time.between(start_time, end_time))
+                .order_by(Appointment.time.asc())
                 .all()
             )
         else:
@@ -201,6 +202,7 @@ class DB:
                 self.__session.query(Appointment)
                 .filter_by(archived=False)
                 .filter(Appointment.time.between(start_time, end_time))
+                .order_by(Appointment.time.asc())
                 .all()
             )
 

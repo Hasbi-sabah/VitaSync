@@ -120,7 +120,7 @@ def notify(userId, flag, **data):
     if response.status_code == 200 or response.status_code == 201:
         print("sent successfully")
     else:
-        print("Something Went Wrong")
+        print("Something Went Wrong", response.text)
 
 
 def make_qr(id):

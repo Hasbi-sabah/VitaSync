@@ -1,5 +1,6 @@
 import React from 'react';
 import PatientDetailsRecord from './PatientDetailsRecord';
+import PatientDetailsVital from './PatientVitalsRecord';
 
 const ViewPatientRecord = ({ data, handleCloseRecord}) => {
   return (
@@ -20,9 +21,11 @@ const ViewPatientRecord = ({ data, handleCloseRecord}) => {
           Record Details
         </h1>
         <div className="mb-10">
-          {/* Add more patient details here */}
+          {data.assessedById ? (
           <PatientDetailsRecord data={data} />
-
+          ) : (
+          <PatientDetailsVital data={data} />
+          )}
         </div>
       </div>
     </div>

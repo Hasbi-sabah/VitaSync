@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
 import RequireAuth from './features/RequireAuth';
 import PatientMan from './features/PatientMan';
-import Records from './features/Records';
+import ContactHCW from './features/ContactHCW';
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
@@ -16,11 +16,11 @@ function App() {
     return null;
   };
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const token = urlParams.get("token");
-    const userId = urlParams.get("id");
-    const role = urlParams.get("role");
+  const urlParams = new URLSearchParams(window.location.search);
+  const token = urlParams.get("token");
+  const userId = urlParams.get("id");
+  const role = urlParams.get("role");
+  if (token && userId && role) {
     dispatch(
       setCredentials({
         accessToken: token,
@@ -28,22 +28,27 @@ function App() {
         role: role,
       })
     );
-    
-    console.log(`token: ${token}, id: ${userId}, role: ${role}`)
-    // if (!token) re_routeLogin()
-  }, [])
+    window.history.replaceState({}, document.title, window.location.pathname);
+  } else {
+      dispatch(
+        setCredentials({
+          accessToken: localStorage.getItem('token'),
+          userId: localStorage.getItem('id'),
+          role: localStorage.getItem('role'),
+        })
+      )
+    }
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
       <Route index element={<Dashboard />} />
-      <Route path="dashboard" element={<Dashboard />} />
-      <Route path="logout" element={<Logout />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
-          <Route path="patients" element={<PatientMan />} />
-          <Route path="records" element={<Records />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="contactHCW" element={<ContactHCW />} />
+          <Route path="logout" element={<Logout />} />
         </Route>
 
       </Route>

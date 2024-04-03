@@ -25,13 +25,10 @@ const DisplayPatients = ({ data, label }) => {
       <table className="min-w-full text-base">
         <thead className="h-12">
           <tr className="bg-darkBlue text-white">
-            <th className="px-3 sm:px-4 text-lg sm:text-base">SN</th>
             <th className="px-4 ">Name</th>
             <th className="px-3 lg:px-4">Sex</th>
             <th className="px-3 lg:px-4">Age</th>
             {!isMobile && <th className=" px-4">Contact</th>}
-            {!isMobile && <th className=" px-4">Date</th>}
-            {isDashboard && isMobile && <th className=" px-4">Time</th>}
             <th className=""></th>
           </tr>
         </thead>
@@ -39,15 +36,14 @@ const DisplayPatients = ({ data, label }) => {
         <tbody>
           {currentTableData.map((user, idx) => (
             <UserItem
-              sn={(currentPage - 1) * pageSize + idx + 1}
               key={idx}
               name={`${user.firstName} ${user.lastName}`}
-              sex={user.sex === "Male" ? "M" : "F"}
+              sex={user.sex === "Male" ? "M" : user.sex === "Female" ? "F" : "N/A"}
               age={user.birthDate}
               contact={user.phoneNumber}
               date={user.date}
               time={"12:00"}
-              userId={user.userId}
+              patientId={user.id}
             />
           ))}
         </tbody>

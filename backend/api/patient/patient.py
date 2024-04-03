@@ -48,9 +48,9 @@ def get_all_extended_patients(current_user):
     return jsonify(res)
 
 
-@api.route("/patient", methods=["GET"], strict_slashes=False)
+@api.route("/search_patient", methods=["POST"], strict_slashes=False)
 @token_required(["doctor", "nurse", "pharmacist"])
-def get_all_patients(current_user):
+def list_patients(current_user):
     """
     Get details of all patients.
 
@@ -66,9 +66,13 @@ def get_all_patients(current_user):
     if content_type == "application/json":
         data = request.get_json()
     else:
-        data = {'ids': request.args.get('ids', None).split(',')}
+        ids = request.args.get('ids', None)
+        if ids:
+            data = {'ids': ids.split(',')}
+        else:
+            data = None
     print(data)
-    if data and data.get('ids', None):
+    if data and data.get('ids', None) != None:
         patients_list = []
         ids = data.get('ids', None)
         for id in ids:
@@ -82,6 +86,28 @@ def get_all_patients(current_user):
     # Return the list of patient dictionaries as a JSON response
     return jsonify([patient.to_dict() for patient in patients_list])
 
+@api.route("/patient", methods=["GET"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist"])
+def get_all_patients(current_user):
+    """
+    Get all healthcare workers.
+
+    This endpoint returns a list of healthcare workers.
+
+    Available for all roles.
+
+    :param current_user: Current authenticated user (obtained from token)
+    :return: JSON response with a list of healthcare workers
+    """
+
+    # Retrieve all healthcare workers from the database and convert them to dictionaries
+    res = [
+        patient.to_dict()
+        for patient in database.get_all(Patient)
+    ]
+
+    # Return a JSON response with the list of healthcare workers
+    return jsonify(res)
 
 @api.route("/patient/<uuid:patientId>", methods=["GET"], strict_slashes=False)
 @token_required(["doctor", "nurse", "pharmacist", "patient"])
@@ -347,7 +373,7 @@ def update_patient(patientId, current_user):
                 return jsonify({"error": "Invalid input format. Ex: 2024-04-01"}), 400
             if timestamp > time.time():
                 return jsonify({"error": "BirthDate can't be in the future"}), 400
-            data["birthDate"] = timestamp
+            value = timestamp
 
         # Update patient attributes if the key exists in the Patient model
         if hasattr(patient, key):
@@ -395,6 +421,8 @@ def delete_patient(patientId, current_user):
     # Archive the patient and user objects (soft delete)
     patient.archive()
     user.archive()
+    for appt in patient.appointments:
+        appt.archive()
 
     # Return an empty JSON response to indicate successful deletion
     return jsonify({})

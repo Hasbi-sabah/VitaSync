@@ -6,7 +6,7 @@ from models.hcw import HCW
 from api.base import input_to_timestamp
 
 
-@api.route("/hcw/<uuid:hcwId>/appointment", methods=["GET"], strict_slashes=False)
+@api.route("/hcw/<uuid:hcwId>/appointment", methods=["POST"], strict_slashes=False)
 @token_required(["doctor"])
 def get_all_hcw_appointments(hcwId, current_user):
     """
@@ -42,7 +42,7 @@ def get_all_hcw_appointments(hcwId, current_user):
         data = request.get_json()
     else:
         data = request.form.to_dict()
-
+    print(data)
     if data:
         # Extract start_time and end_time parameters from the data, if provided
         start_time = data.get("start_time", None)

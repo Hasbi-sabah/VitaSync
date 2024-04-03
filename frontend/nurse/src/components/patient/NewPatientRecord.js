@@ -151,7 +151,6 @@ const NewPatientRecord = ({ closeOverlay }) => {
             </div>
 
             <MyTextBoxInput label={"Diagnosis"} name="diagnosis" type="text" />
-            <MyTextBoxInput label={"Notes"} name="notes" type="text" />
             <MyTextBoxInput
               label={"Procedures"}
               name="procedures"
@@ -209,6 +208,7 @@ const NewPatientRecord = ({ closeOverlay }) => {
                   </div>
                 )}
               </FieldArray>
+              <MyTextBoxInput label={"General Notes"} name="notes" type="text" />
             </div>
 
             <MyDateInput label={"Follow Up"} name="followUp" />

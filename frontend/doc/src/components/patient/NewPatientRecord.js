@@ -1,21 +1,46 @@
 import React, { useEffect, useState } from "react";
 import * as Yup from "yup";
 import { FieldArray, Form, Formik, useField } from "formik";
+import { useAddPatientAppointmentByIdMutation } from "../../features/appointment/appointmentApiSlice"
+import { useAddPatientRecordByIdMutation } from "../../features/record/recordApiSlice"
+import { useAddPatientProcedureByIdMutation } from "../../features/procedure/procedureApiSlice"
+import SearchBoxSmall from "../extra/SearchboxSmall";
 
 const label_style = "font-semibold text-lg text-left pt-6";
 const input_style =
   "block rounded-xl text-sm h-10 w-64 mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
 const button_style =
   "sm:h-14 sm:w-28 px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
-
+const removeEmptyValues = (obj) => {
+  const filteredEntries = Object.entries(obj).filter(([key, value]) => value !== '' && value.length > 0);
+  return Object.fromEntries(filteredEntries);
+  };
 //<Textbox>
-export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
+export const MyTextBoxInput = ({ label, rows = 3, formik, ...props }) => {
   const [field, meta] = useField(props);
+  const [isToggled, setIsToggled] = useState(false);
+
+  const handleToggleChange = (event) => {
+     const newStatus = event.target.checked;
+     setIsToggled(newStatus);
+     formik.setFieldValue("status", newStatus);
+  };
   return (
     <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white text-left ">
       <label className={`${label_style}`} htmlFor={props.id || props.name}>
         {label}
       </label>
+      {props.name === 'procedures' && <label class="inline-flex float-right items-center cursor-pointer">
+      <p class="mr-3">{isToggled ? 'Performed' : 'Not performed'}</p>      
+        <input 
+          type="checkbox"
+          value="" 
+          className="sr-only peer"
+          checked={isToggled}
+          onChange={handleToggleChange} 
+        />
+        <div class="relative w-11 h-6 bg-gray peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-lightBlue dark:peer-focus:ring-lightBlue2 rounded-full peer dark:bg-darkBlue peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-500 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-400 peer-checked:bg-blue"></div>
+        </label>}
       <hr className="text-[#909090] pt-3" />
       <textarea
         className={`resize-none input p-3 bg-gray block rounded-md w-full mt-1 focus:outline-none focus:ring-2 focus:ring-lightBlue ${
@@ -35,6 +60,7 @@ export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
 //Date
 const MyDateInput = ({ label, ...props }) => {
   const [field] = useField(props);
+  const currentDateTime = new Date().toISOString().substring(0, 16);
   return (
     <div className="text-left mt-3">
       <label className={`${label_style} text-white`} htmlFor={props.id || props.name}>
@@ -42,7 +68,8 @@ const MyDateInput = ({ label, ...props }) => {
       </label>
       <input
         className={`input px-5 ${input_style} `}
-        type="date"
+        type="datetime-local"
+        min={currentDateTime}
         {...field}
         {...props}
       />
@@ -50,36 +77,26 @@ const MyDateInput = ({ label, ...props }) => {
   );
 };
 
-const NewPatientRecord = ({ closeOverlay }) => {
-  const [drugOptions, setDrugOptions] = useState([]);
+const NewPatientRecord = ({ userId, closeOverlay }) => {
+  // const [drugOptions, setDrugOptions] = useState([]);
   const [vaccineOptions, setVaccineOptions] = useState([]);
 
-  // API calls
-  const fetchDrugs = async () => {};
-  const fetchVaccine = async () => {};
+  // // API calls
+  // const fetchDrugs = async () => {};
+  // const fetchVaccine = async () => {};
 
-  useEffect(() => {
-    // Fetch drugs from API
-    fetchDrugs().then((data) => setDrugOptions(sampleDrugs));
-    fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
-  }, []);
+  // useEffect(() => {
+  //   // Fetch drugs from API
+  //   fetchDrugs().then((data) => setDrugOptions(sampleDrugs));
+  //   fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
+  // }, []);
 
-  const sampleDrugs = [
-    { id: 1, name: "Drug A" },
-    { id: 2, name: "Drug B" },
-    { id: 3, name: "Drug C" },
-    // Add more sample drugs as needed
-  ];
-  const sampleVaccines = [
-    { id: 1, name: "Vaccine A" },
-    { id: 2, name: "Vaccine B" },
-    { id: 3, name: "Vaccine C" },
-  ];
 
-  const addDrugButton = ({ handleAddDrug}, type ) => (
+
+  const addDrugButton = ({ handleAddDrug }, type) => (
     <div
       className="absolute top-3 right-7 bg-lightBlue2 cursor-pointer hover:bg-lightBlue h-10 p-3 flex items-center mr-2"
-      onClick={() => handleAddDrug(type)}
+      onClick={() => handleAddDrug('', type, '')}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -92,7 +109,27 @@ const NewPatientRecord = ({ closeOverlay }) => {
       </svg>
       <p className="text-white text-lg pl-2">Add drug</p>
     </div>
-  );
+ );
+  const [addAppt, { apptInfo }] = useAddPatientAppointmentByIdMutation()
+  const [addRecord, { recInfo }] = useAddPatientRecordByIdMutation()
+  const [addProcedure, { proInfo }] = useAddPatientProcedureByIdMutation()
+  const [isProcedurePerformed, setIsProcedurePerformed] = useState(false);
+  const [drugOptions, setDrugOptions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredDrugs, setFilteredDrugs] = useState([]);
+  const [selectedDrug, setSelectedDrug] = useState({ id: '', index: -1 });
+
+  useEffect(() => {
+   const results = drugOptions.filter(drug =>
+     drug.commercialName.toLowerCase().includes(searchTerm.toLowerCase())
+   );
+   setFilteredDrugs(results);
+}, [searchTerm, drugOptions]);
+
+  // Function to update the toggle state
+  const handleToggleChange = (newStatus) => {
+     setIsProcedurePerformed(newStatus);
+  };
   return (
     <Formik
       initialValues={{
@@ -101,71 +138,149 @@ const NewPatientRecord = ({ closeOverlay }) => {
         notes: "",
         procedures: "",
         vaccine: [],
+        status: false,
         followUp: "",
       }}
       validationSchema={Yup.object({
-        diagnosis: Yup.string().required("Required"),
+        diagnosis: Yup.string(),
         notes: Yup.string(),
         procedures: Yup.string(),
+        status: Yup.bool(),
         followUp: Yup.date(),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          alert(JSON.stringify(values, null, 2));
-          setSubmitting(false);
-          resetForm();
-        }, 400);
+        let recDict = {};
+        let promises = []
+        if (values.notes !== "") {
+          recDict.notes = values.notes;
+        }
+        if (values.diagnosis !== "") {
+          recDict.diagnosis = values.diagnosis;
+          }
+        if (values.procedures) {
+          let proDict = {name: values.procedures, status: values.status}
+          let promise = addProcedure({id: userId, data: proDict})
+          .then((res) => {
+            recDict['procedureId'] = res.data.id
+          })
+          .catch((error) => {
+            alert(`Procedure reation failed: ${error.data.error}`);
+            setSubmitting(false);
+          })
+          promises.push(promise);
+        }
+        Promise.all(promises)
+          .then(() => {   
+            addRecord({id: userId, data: recDict})
+            .then(() => {
+              // alert('rec created yay')         
+              setSubmitting(false);
+              resetForm();
+              window.location.reload()
+            })
+          })
+          .catch((error) => {
+            alert(`Initial request failed: ${error.data.error}`);
+            setSubmitting(false);
+          })
+
+        if (values.followUp !== "") {
+          const followUpDate = new Date(values.followUp);
+
+          // Format the date part
+          const year = followUpDate.getFullYear();
+          const month = String(followUpDate.getMonth() + 1).padStart(2, '0'); // Months are 0-based in JavaScript
+          const day = String(followUpDate.getDate()).padStart(2, '0');
+      
+          // Format the time part with AM/PM
+          let hour = followUpDate.getHours();
+          const minute = String(followUpDate.getMinutes()).padStart(2, '0');
+          const ampm = hour >= 12 ? 'PM' : 'AM';
+          hour = hour % 12 || 12; // Convert to 12-hour format and handle 0 hour
+      
+          // Construct the formatted string
+          values.followUp = `${year}-${month}-${day} ${hour}:${minute} ${ampm}`
+          addAppt({id: userId, data: {time: values.followUp}})
+              .then(() => {
+                setSubmitting(false);
+                resetForm();
+                closeOverlay();
+                window.location.reload()
+            })
+            .catch((error) => {
+              alert(`Creation failed: ${error.data.error}`);
+              setSubmitting(false);
+            })
+        }
       }}
     >
       {(formik) => {
-        const handleAddDrug = (type) => {
+
+        const handleDosageChange = (event, index) => {
+          const dosage = event.target.value;
+          const currentDrugs = Array.isArray(formik.values.prescriptions) ? formik.values.prescriptions : [];
+          const updatedDrugs = currentDrugs.map((drug, i) => {
+             if (i === index) {
+               return { ...drug, dosage };
+             }
+             return drug;
+          });
+          formik.setFieldValue(`prescriptions.${index}.dosage`, dosage);
+         };
+         const handleDrugSelection = (id, name, index) => {
+          // setSelectedDrug({ id, index });
+          formik.setFieldValue(`prescriptions.${index}.name`, name);
+         };
+        const handleAddDrug = (id='', type='', instructions='') => {
+          const currentDrugs = Array.isArray(formik.values[type]) ? formik.values[type] : [];
           formik.setFieldValue(type, [
-            ...formik.values[type],
-            { drug: "", dosage: "" }, // Initialize with empty values
+            ...currentDrugs,
+            { drug: id, instructions: instructions }, // Initialize with empty values
           ]);
         };
         return (
           <Form className="flex mt-4 flex-col gap-3">
             {/* Prescription */}
-            <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white relative">
-              <h3 className="font-semibold text-lg text-left pt-6">
+            <div className="rounded-lg min-h-18 w-full mt-10 p-4 bg-white relative">
+              <h3 className="font-semibold text-lg text-left">
                 Prescriptions
               </h3>
 
               {/* Add drug button */}
               {addDrugButton({ handleAddDrug }, "prescriptions")}
-
               <FieldArray name="prescriptions">
                 {(arrayHelpers) => (
                   <div>
                     {formik.values.prescriptions.map((prescribe, index) => (
-                      <div key={index} className="flex justify-between p-3">
+                      <div key={index} className="flex justify-between p-3 mt-2">
                         <div>
                           {index + 1}.
-                          <select
-                            className={`${input_style} inline ml-4 pl-2`}
-                            name={`prescriptions.${index}.drug`}
-                            onChange={formik.handleChange}
-                            value={prescribe.drug}
-                          >
-                            <option value="">Select drug</option>
-                            {drugOptions.map((drug) => (
-                              <option key={drug.id} value={drug.id}>
-                                {drug.name}
-                              </option>
+
+                          <SearchBoxSmall key={index} setDrugOptions={setDrugOptions} />
+                          <div className="mt-2">
+                            {filteredDrugs.map((drug) => (
+                              <div
+                                key={drug.id}
+                                name={`prescriptions.${index}.name`}
+                                className="p-2 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-100"
+                                onClick={() => handleDrugSelection(drug.id, drug.commercialName, index)}
+                                value={prescribe.drug}
+                              >
+                                {drug.commercialName}
+                              </div>
                             ))}
-                          </select>
+                          </div>
                         </div>
                         <input
                           type="text"
                           name={`prescriptions.${index}.dosage`}
-                          onChange={formik.handleChange}
+                          onChange={(event) => handleDosageChange(event, index)}
                           value={prescribe.dosage}
                           className={`${input_style} p-3 h-12 w-[24rem]`}
                           placeholder="Dosage instructions"
                         />
                         <svg
-                          className="cursor-pointer"
+                          className="cursor-pointer mt-3"
                           onClick={() => arrayHelpers.remove(index)}
                           xmlns="http://www.w3.org/2000/svg"
                           width="32"
@@ -181,18 +296,9 @@ const NewPatientRecord = ({ closeOverlay }) => {
                 )}
               </FieldArray>
             </div>
-
-            <MyTextBoxInput label={"Diagnosis"} name="diagnosis" type="text" />
-            <MyTextBoxInput label={"Notes"} name="notes" type="text" />
-            <MyTextBoxInput
-              label={"Procedures"}
-              name="procedures"
-              type="text"
-            />
-
             {/* Vaccine */}
-            <div className="rounded-lg min-h-48 w-full mt-10 p-4 bg-white relative">
-              <h3 className="font-semibold text-lg text-left pt-6">Vaccine</h3>
+            <div className="rounded-lg min-h-18 w-full mt-10 p-4 bg-white relative">
+              <h3 className="font-semibold text-lg text-left ">Vaccine</h3>
 
               {/* Add drug button */}
               {addDrugButton({ handleAddDrug }, "vaccine")}
@@ -225,7 +331,7 @@ const NewPatientRecord = ({ closeOverlay }) => {
                           value={prescribe.dosage}
                           className={`resize-none input p-3 bg-gray block rounded-md w-[20rem] mt-1 focus:outline-none focus:ring-2 focus:ring-lightBlue`}
                           rows={4}
-                          placeholder="Vaccine instructions"
+                          placeholder="Notes"
                         />
                         <svg
                           className="cursor-pointer"
@@ -244,23 +350,33 @@ const NewPatientRecord = ({ closeOverlay }) => {
                 )}
               </FieldArray>
             </div>
+            <MyTextBoxInput label={"Diagnosis"} name="diagnosis" type="text" />
+            <MyTextBoxInput
+              label={"Procedures"}
+              name="procedures"
+              type="text"
+              formik={formik}
+            />
+            <MyTextBoxInput label={"General Notes"} name="notes" type="text" />
+            <div className="flex justify-between">
+              <MyDateInput label={"Follow Up"} name="followUp" />
 
-            <MyDateInput label={"Follow Up"} name="followUp" />
-
-            <div className="my-5 flex sm:justify-end sm:gap-5 justify-evenly">
-              <button
-                className={`bg-white text-black ${button_style}`}
-                onClick={closeOverlay}
-              >
-                Close
-              </button>
-              <button
-                className={`bg-lightBlue text-white ${button_style}`}
-                type="submit"
-              >
-                Create
-              </button>
+              <div className="my-5 flex sm:justify-end sm:gap-5 justify-evenly">
+                <button
+                  className={`bg-white text-black ${button_style}`}
+                  onClick={closeOverlay}
+                >
+                  Close
+                </button>
+                <button
+                  className={`bg-lightBlue text-white ${button_style}`}
+                  type="submit"
+                >
+                  Create
+                </button>
+              </div>
             </div>
+            
           </Form>
         );
       }}

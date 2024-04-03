@@ -1,18 +1,34 @@
 import React, { useState } from "react";
 import PatientDetails from "./PatientDetails";
-import NewPatientRecord from "./NewPatientRecord";
+import Records from "../../features/Records";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectPinnedIds } from '../../features/auth/authSlice'
+import {addPinnedId, removePinnedId} from "../../features/auth/authSlice"
 
 // API call for patient record
-const ViewPatient = ({ patientId, closeOverlay }) => {
+const ViewPatient = ({ userId, closeOverlay }) => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleHistory = () => {
     setShowHistory(!showHistory);
   };
 
+  const dispatch = useDispatch();
+  const pinnedIds = useSelector(selectPinnedIds); 
+  const isUserPinned = pinnedIds.includes(userId);
+
+ const handlePinUser = () => {
+    if (isUserPinned) {
+      dispatch(removePinnedId({ patientId: userId }));
+    } else {
+      dispatch(addPinnedId({ patientId: userId }));
+    }
+    window.location.reload()
+ };
+
   return (
-    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative">
+    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 pt-24">
+      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-full relative lg:min-w-[40rem] lg:ml-64 sm:ml-56 w-full sm:w-[80%]">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={closeOverlay}
@@ -27,9 +43,12 @@ const ViewPatient = ({ patientId, closeOverlay }) => {
         <h1 className="text-2xl text-left text-white font-bold mb-10">
           View Patient Details
         </h1>
+        <button onClick={handlePinUser} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+          {isUserPinned ? "Unpin Profile" : "Pin Profile"}
+        </button>
         <div className="mb-4">
           {/* Add more patient details here */}
-          <PatientDetails patientId={patientId} closeOverlay={closeOverlay} />
+          <PatientDetails userId={userId} closeOverlay={closeOverlay} />
         </div>
         <div
           className="rounded-lg h-10 w-full mt-10 flex justify-between items-center cursor-pointer  bg-white"
@@ -61,13 +80,10 @@ const ViewPatient = ({ patientId, closeOverlay }) => {
           )}
         </div>
         {showHistory ? (
-          <p className="mt-5 w-full h-12 border">
-            This holds History (To be Implemented)
-          </p>
+          <Records patientId={userId} />
         ) : (
           ""
         )}
-        <NewPatientRecord closeOverlay={closeOverlay} patientId={patientId} />
       </div>
     </div>
   );

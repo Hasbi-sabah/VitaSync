@@ -11,18 +11,24 @@ export const appointmentApiSclice = apiSlice.injectEndpoints({
         }),
 
         getHCWAppointmentById: builder.query({
-            query: (id, data) => ({
-                url: `/api/hcw/${id}/appointment`,
-                method: "GET",
-                params: { ...data }
+            query: (data) => ({
+                url: `/api/hcw/${data[0]}/appointment`,
+                method: "POST",
+                body: JSON.stringify(data[1]),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 
         addPatientAppointmentById: builder.mutation({
-            query: (id, data) => ({
+            query: ({id, data}) => ({
                 url: `/api/patient/${id}/appointment`,
                 method: "POST",
-                body: { ...data }
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 

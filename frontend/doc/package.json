@@ -5,6 +5,7 @@
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.1",
     "classnames": "^2.5.1",
+    "dotenv": "^16.4.5",
     "formik": "^2.4.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -15,7 +16,7 @@
     "yup": "^1.4.0"
   },
   "scripts": {
-    "start": "PORT=3001 react-scripts start",
+    "start": "BROWSER=NONE PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

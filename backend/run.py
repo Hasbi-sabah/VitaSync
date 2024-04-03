@@ -37,7 +37,15 @@ app.register_blueprint(api)
 # dev routes for frontend, to be removed in production
 # as one link will take over
 cors_config = {
-    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001"],
+    "origins": [
+        "http://vitasync.me",
+        "https://vitasync.pagekite.me",
+        "https://api-vitasync.pagekite.me",
+        "https://doc-vitasync.pagekite.me",
+        "https://nurse-vitasync.pagekite.me",
+        "https://patient-vitasync.pagekite.me",
+        "https://pharmacy-vitasync.pagekite.me",
+        ],
     "supports_credentials": True
 }
 CORS(app, **cors_config)
@@ -49,7 +57,7 @@ app.jinja_env.globals.update(datetime=datetime)
 
 # Define job_scheduler function to run scheduled jobs continuously
 # Define job_scheduler function to run scheduled jobs continuously
-def job_scheduler():
+""" def job_scheduler():
     while True:
         with app.app_context():
             schedule.run_pending()
@@ -59,18 +67,18 @@ def job_scheduler():
 # Define the job function to be scheduled
 def run_job(app):
     with app.app_context():
-        check_appointments()
+        check_appointments() """
 
 if __name__ == '__main__':
     """Run the app in debug mode."""
     # Schedule job to run at specific time daily
     # Schedule job to run at specific time daily
-    schedule.every().day.at("16:00").do(run_job, app)
+    """ schedule.every().day.at("16:00").do(run_job, app)
     
     # Start the job scheduler
     
     # Start the job scheduler
-    job_scheduler()
+    job_scheduler() """
     
     # Run the Flask app in debug mode
     
