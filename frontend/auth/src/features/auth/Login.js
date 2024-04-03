@@ -102,11 +102,11 @@ const Login = () => {
               <Form className="">
                 <div className={"mb-5"}>
                   <MyTextInput label={"Username"} name="username" type="text" />
-                  {(errCode === 404) ? <span
+                  {(errMsg) ? <span
                     ref={errRef}
-                    className={`${errMsg ? "errmsg" : "hidden"} text-red ml-3 mt-[-1]`}
+                    className={`${errMsg ? "errmsg" : "hidden"} text-red error pl-5`}
                     aria-label=""
-                  >{errMsg}</span> : ""}
+                  > Wrong credentials</span> : ""}
                 </div>
                 <div className={"mb-5"}>
                   <MyTextInput
@@ -114,11 +114,6 @@ const Login = () => {
                     name="password"
                     type="password"
                   />
-                  {(errCode === 401) ? <span
-                  ref={errRef}
-                  className={`${errMsg ? "errmsg" : "hidden"} text-red ml-3`}
-                  aria-label=""
-                                >{errMsg}</span> : ""}
                 </div>
                 <button
                   className={`bg-lightBlue text-white ${button_style}`}
