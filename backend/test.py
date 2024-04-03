@@ -13,15 +13,16 @@ from models.user import User
 import random
 
 
-# patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat', password='pat')
-# # patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient')
-doc1 = HCW(firstName='John', lastName='Doe', username='doc1', password='doc1', role='doctor')
-doc2 = HCW(firstName='Jane', lastName='Smith', role='doctor', username='doc2', password='doc2')
-nurse1 = HCW(firstName='Alice', lastName='Johnson', role='nurse', username='nurse1', password='nurse1')
-nurse2 = HCW(firstName='Bob', lastName='Williams', role='nurse', username='nurse2', password='nurse2')
-pharmacist1 = HCW(firstName='Eva', lastName='Davis', role='pharmacist', username='pharm1', password='pharm1')
-pharmacist2 = HCW(firstName='Tom', lastName='Jones', role='pharmacist', username='pharm2', password='pharm2')
-# # admin = HCW(firstName='admin', username='admin', password='admin', role='admin')
+patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat', password='pat')
+patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient', username='pat2', password='pat2')
+doc1 = HCW(firstName='John', lastName='Doe', username='doc1', password='doc1', role='doctor', speciality='Cardiology', workNumber='123-456-7890', workAddress='123 Main St, City, Country')
+doc2 = HCW(firstName='Jane', lastName='Smith', role='doctor', username='doc2', password='doc2', speciality='Pediatrics', workNumber='987-654-3210', workAddress='456 Elm St, City, Country')
+nurse1 = HCW(firstName='Alice', lastName='Johnson', role='nurse', username='nurse1', password='nurse1', speciality='Emergency Care', workNumber='111-222-3333', workAddress='789 Oak St, City, Country')
+nurse2 = HCW(firstName='Bob', lastName='Williams', role='nurse', username='nurse2', password='nurse2', speciality='Surgery', workNumber='444-555-6666', workAddress='101 Pine St, City, Country')
+pharmacist1 = HCW(firstName='Eva', lastName='Davis', role='pharmacist', username='pharm1', password='pharm1', speciality='Clinical Pharmacy', workNumber='777-888-9999', workAddress='321 Cedar St, City, Country')
+pharmacist2 = HCW(firstName='Tom', lastName='Jones', role='pharmacist', username='pharm2', password='pharm2', speciality='Hospital Pharmacy', workNumber='222-333-4444', workAddress='555 Maple St, City, Country')
+
+admin = HCW(firstName='admin', username='admin', password='admin', role='admin')
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
 # patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')
