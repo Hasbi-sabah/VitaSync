@@ -8,7 +8,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 const label_style = " pl-2 text-lg font-normal";
 const input_style =
-  "block rounded-xl h-7 w-60 mb-5 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
+  "block rounded-xl h-7 w-60 mb-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
 const button_style =
   "h-10 w-[100%] px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
@@ -37,6 +37,7 @@ const MyTextInput = ({ label, ...props }) => {
 const Login = () => {
   const errRef = useRef();
   const [errMsg, setErrMsg] = useState("");
+  const [errCode, setErrCode] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -83,9 +84,12 @@ const Login = () => {
             } catch (err) {
               setIsLoading(false);
               if (err?.originalStatus) {
-                errMsg = "No Server Response";
+                setErrCode(err?.status)
+                setErrMsg("No Server Response");
               } else {
-                errMsg = err.data.error;
+                // console.log(err);
+                setErrCode(err?.status)
+                setErrMsg(err.data.error);
               }
               if (errMsg && errRef.current) {
                 errRef.current.focus();
@@ -94,19 +98,28 @@ const Login = () => {
           }}
         >
             <div className="flex flex-col justify-center items-center">
-              <p
-                ref={errRef}
-                className={errMsg ? "errmsg" : "hidden"}
-                aria-label=""
-              >{errMsg}</p>
               <h1 className="text-xl font-semibold">Login</h1>
               <Form className="">
-                <MyTextInput label={"Username"} name="username" type="text" />
-                <MyTextInput
-                  label={"Password"}
-                  name="password"
-                  type="password"
-                />
+                <div className={"mb-5"}>
+                  <MyTextInput label={"Username"} name="username" type="text" />
+                  {(errCode === 404) ? <span
+                    ref={errRef}
+                    className={`${errMsg ? "errmsg" : "hidden"} text-red ml-3 mt-[-1]`}
+                    aria-label=""
+                  >{errMsg}</span> : ""}
+                </div>
+                <div className={"mb-5"}>
+                  <MyTextInput
+                    label={"Password"}
+                    name="password"
+                    type="password"
+                  />
+                  {(errCode === 401) ? <span
+                  ref={errRef}
+                  className={`${errMsg ? "errmsg" : "hidden"} text-red ml-3`}
+                  aria-label=""
+                                >{errMsg}</span> : ""}
+                </div>
                 <button
                   className={`bg-lightBlue text-white ${button_style}`}
                   type="submit"
