@@ -11,10 +11,6 @@ export const patientApiSlice = apiSlice.injectEndpoints({
                     'Content-Type': 'application/json',
                 },
             }),
-            // transformResponse: (response) => {
-            //     console.log("Server Response:", response);
-            //     return response;
-            // }
         }),
 
         getPatient: builder.query({

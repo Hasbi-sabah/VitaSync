@@ -17,6 +17,7 @@ module.exports = {
     extend: {
       spacing: {
         '128': '32rem',
+        '150': '40rem'
       },
       keyframes: {
         shake: {

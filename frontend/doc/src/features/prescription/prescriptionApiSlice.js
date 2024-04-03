@@ -10,10 +10,9 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
         }),
 
         addPatientPrescriptionById: builder.mutation({
-            query: (id, data) => ({
+            query: (id) => ({
                 url: `/api/patient/${id}/prescription`,
-                method: "POST",
-                body: { ...data }
+                method: "POST"
             }),
         }),
         
