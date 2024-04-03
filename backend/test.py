@@ -15,12 +15,12 @@ import random
 
 # patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat', password='pat')
 # # patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient')
-# # doc1 = HCW(firstName='John', lastName='Doe', email='john.doe@example.com', username='doc', password='doc', role='doctor')
-# # doc2 = HCW(firstName='Jane', lastName='Smith', email='jane.smith@example.com', role='doctor')
-# # nurse1 = HCW(firstName='Alice', lastName='Johnson', email='alice.johnson@example.com', role='nurse')
-# # nurse2 = HCW(firstName='Bob', lastName='Williams', email='bob.williams@example.com', role='nurse')
-pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.com', role='pharmacist', username='pharm', password='pharm')
-# # pharmacist2 = HCW(firstName='Tom', lastName='Jones', email='tom.jones@example.com', role='pharmacist')
+doc1 = HCW(firstName='John', lastName='Doe', username='doc1', password='doc1', role='doctor')
+doc2 = HCW(firstName='Jane', lastName='Smith', role='doctor', username='doc2', password='doc2')
+nurse1 = HCW(firstName='Alice', lastName='Johnson', role='nurse', username='nurse1', password='nurse1')
+nurse2 = HCW(firstName='Bob', lastName='Williams', role='nurse', username='nurse2', password='nurse2')
+pharmacist1 = HCW(firstName='Eva', lastName='Davis', role='pharmacist', username='pharm1', password='pharm1')
+pharmacist2 = HCW(firstName='Tom', lastName='Jones', role='pharmacist', username='pharm2', password='pharm2')
 # # admin = HCW(firstName='admin', username='admin', password='admin', role='admin')
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
@@ -34,32 +34,103 @@ pharmacist1 = HCW(firstName='Eva', lastName='Davis', email='eva.davis@example.co
 # record5 = Record(diagnosis="Migraine", notes="Prescribed pain medication, advised to rest in a quiet environment", patientId=patient2.id, assessedById=doc2.id)
 # record6 = Record(diagnosis="Common cold")
 
-# drug_entries = [
-#     {'commercialName': 'Aspirin', 'activeIngredient': 'Acetylsalicylic Acid', 'distributor': 'Pharma Inc.',
-#      'description': 'Pain reliever and anti-inflammatory drug', 'dose': '75mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Paracetamol', 'activeIngredient': 'Paracetamol', 'distributor': 'MediCorp',
-#      'description': 'Commonly used for pain relief and reducing fever', 'dose': '500mg', 'form': 'Capsule', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Amoxicillin', 'activeIngredient': 'Amoxicillin', 'distributor': 'MediCo',
-#      'description': 'Antibiotic used to treat bacterial infections', 'dose': '250mg', 'form': 'Capsule', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Ibuprofen', 'activeIngredient': 'Ibuprofen', 'distributor': 'MediPharm',
-#      'description': 'Nonsteroidal anti-inflammatory drug (NSAID)', 'dose': '200mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Omeprazole', 'activeIngredient': 'Omeprazole', 'distributor': 'PharmaCorp',
-#      'description': 'Proton pump inhibitor used to reduce stomach acid', 'dose': '20mg', 'form': 'Capsule', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Simvastatin', 'activeIngredient': 'Simvastatin', 'distributor': 'PharmaCo',
-#      'description': 'Lipid-lowering medication', 'dose': '40mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Metformin', 'activeIngredient': 'Metformin', 'distributor': 'MediHealth',
-#      'description': 'Used to treat type 2 diabetes mellitus', 'dose': '500mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Prednisone', 'activeIngredient': 'Prednisone', 'distributor': 'PharmaHealth',
-#      'description': 'Corticosteroid medication', 'dose': '5mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Lisinopril', 'activeIngredient': 'Lisinopril', 'distributor': 'PharmaMed',
-#      'description': 'Used to treat high blood pressure and heart failure', 'dose': '10mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Albuterol', 'activeIngredient': 'Albuterol', 'distributor': 'MediPharma',
-#      'description': 'Bronchodilator used to treat asthma and COPD', 'dose': '2mg', 'form': 'Tablet', 'status': True, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Inactive Drug', 'activeIngredient': 'Inactive Ingredient', 'distributor': 'Inactive Distributor',
-#      'description': 'This is an inactive drug for testing purposes', 'dose': '10mg', 'form': 'Tablet', 'status': False, 'price': round(random.uniform(20, 100), 2)},
-#     {'commercialName': 'Inactive Drug 2', 'activeIngredient': 'Inactive Ingredient', 'distributor': 'Inactive Distributor',
-#      'description': 'This is another inactive drug for testing purposes', 'dose': '20mg', 'form': 'Capsule', 'status': False, 'price': round(random.uniform(20, 100), 2)},
-# ]
+drugs = [
+    Drug(commercialName='Aspirin', activeIngredient='Acetylsalicylic Acid', distributor='ABC Pharmaceuticals', description='Pain reliever and anti-inflammatory drug', dose='325 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Aspirin', activeIngredient='Acetylsalicylic Acid', distributor='ABC Pharmaceuticals', description='Pain reliever and anti-inflammatory drug', dose='81 mg', form='Chewable tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Aspirin', activeIngredient='Acetylsalicylic Acid', distributor='ABC Pharmaceuticals', description='Pain reliever and anti-inflammatory drug', dose='500 mg', form='Effervescent tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Aspirin', activeIngredient='Acetylsalicylic Acid', distributor='ABC Pharmaceuticals', description='Pain reliever and anti-inflammatory drug', dose='1000 mg', form='Powder for solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Tylenol', activeIngredient='Paracetamol', distributor='XYZ Pharmaceuticals', description='Fever reducer and mild pain reliever', dose='500 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Tylenol', activeIngredient='Paracetamol', distributor='XYZ Pharmaceuticals', description='Fever reducer and mild pain reliever', dose='325 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Tylenol', activeIngredient='Paracetamol', distributor='XYZ Pharmaceuticals', description='Fever reducer and mild pain reliever', dose='650 mg', form='Liquid suspension', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Tylenol', activeIngredient='Paracetamol', distributor='XYZ Pharmaceuticals', description='Fever reducer and mild pain reliever', dose='1000 mg', form='Suppository', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='40 mg', form='Oral solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='5 mg', form='Oral solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metformin', activeIngredient='Metformin Hydrochloride', distributor='MediCorp', description='Antidiabetic medication for type 2 diabetes', dose='500 mg', form='Extended-release tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metformin', activeIngredient='Metformin Hydrochloride', distributor='MediCorp', description='Antidiabetic medication for type 2 diabetes', dose='250 mg', form='Immediate-release tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metformin', activeIngredient='Metformin Hydrochloride', distributor='MediCorp', description='Antidiabetic medication for type 2 diabetes', dose='850 mg', form='Extended-release tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metformin', activeIngredient='Metformin Hydrochloride', distributor='MediCorp', description='Antidiabetic medication for type 2 diabetes', dose='1000 mg', form='Oral solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Prilosec', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Prilosec', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Prilosec', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='40 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Prilosec', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='20 mg', form='Liquid suspension', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Amoxicillin', activeIngredient='Amoxicillin', distributor='Healthcare Distributors', description='Antibiotic for bacterial infections', dose='1000 mg', form='Powder for suspension', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Amoxicillin', activeIngredient='Amoxicillin', distributor='Healthcare Distributors', description='Antibiotic for bacterial infections', dose='500 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Amoxicillin', activeIngredient='Amoxicillin', distributor='Healthcare Distributors', description='Antibiotic for bacterial infections', dose='250 mg', form='Chewable tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Amoxicillin', activeIngredient='Amoxicillin', distributor='Healthcare Distributors', description='Antibiotic for bacterial infections', dose='1000 mg', form='Powder for suspension', status=True, price=round(random.uniform(20, 100), 2)),    
+    Drug(commercialName='Lipitor', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lipitor', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lipitor', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='40 mg', form='Extended-release tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lipitor', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ventolin', activeIngredient='Albuterol Sulfate', distributor='PharmaXpress', description='Bronchodilator for asthma and COPD', dose='2 mg', form='Inhaler', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ventolin', activeIngredient='Albuterol Sulfate', distributor='PharmaXpress', description='Bronchodilator for asthma and COPD', dose='4 mg', form='Inhaler', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ventolin', activeIngredient='Albuterol Sulfate', distributor='PharmaXpress', description='Bronchodilator for asthma and COPD', dose='8 mg', form='Inhaler', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ventolin', activeIngredient='Albuterol Sulfate', distributor='PharmaXpress', description='Bronchodilator for asthma and COPD', dose='1 mg', form='Nebulizer solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Valium', activeIngredient='Diazepam', distributor='MediSafe', description='Benzodiazepine for anxiety and seizures', dose='5 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Claritin', activeIngredient='Loratadine', distributor='MegaPharma', description='Antihistamine for allergies and hay fever', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Cozaar', activeIngredient='Losartan Potassium', distributor='PharmaLink', description='ARB for hypertension and heart failure', dose='50 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Coumadin', activeIngredient='Warfarin Sodium', distributor='MediLife', description='Anticoagulant for blood clot prevention', dose='2 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Synthroid', activeIngredient='Levothyroxine Sodium', distributor='Global Med', description='Thyroid hormone replacement therapy', dose='100 mcg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Hydrochlorothiazide', activeIngredient='Hydrochlorothiazide', distributor='HealthCo', description='Diuretic for hypertension and edema', dose='25 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Zantac', activeIngredient='Ranitidine Hydrochloride', distributor='PharmaGen', description='H2 blocker for acid reflux and ulcers', dose='150 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Cipro', activeIngredient='Ciprofloxacin', distributor='MediNet', description='Fluoroquinolone antibiotic for infections', dose='500 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Cymbalta', activeIngredient='Duloxetine Hydrochloride', distributor='PharmaHub', description='SNRI antidepressant for depression and anxiety', dose='60 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Singulair', activeIngredient='Montelukast Sodium', distributor='HealthMed', description='Leukotriene receptor antagonist for asthma and allergies', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lyrica', activeIngredient='Pregabalin', distributor='PharmaDirect', description='Anticonvulsant for neuropathic pain and seizures', dose='75 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Zocor', activeIngredient='Simvastatin', distributor='MediGroup', description='Statins for lowering cholesterol levels', dose='20 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Advil', activeIngredient='Ibuprofen', distributor='PharmaCo', description='Nonsteroidal anti-inflammatory drug (NSAID)', dose='200 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Zyrtec', activeIngredient='Cetirizine', distributor='MediPharm', description='Antihistamine for allergies and hives', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Norvasc', activeIngredient='Amlodipine', distributor='CardioMed', description='Calcium channel blocker for hypertension', dose='5 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Prozac', activeIngredient='Fluoxetine', distributor='MentalHealth', description='SSRI antidepressant for depression and anxiety', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Xanax', activeIngredient='Alprazolam', distributor='AnxietyRelief', description='Benzodiazepine for anxiety disorders', dose='0.5 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Prednisone', activeIngredient='Prednisone', distributor='AntiInflammatory', description='Corticosteroid for inflammation and autoimmune conditions', dose='5 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metoprolol', activeIngredient='Metoprolol Tartrate', distributor='HeartCare', description='Beta-blocker for hypertension and heart conditions', dose='25 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Flonase', activeIngredient='Fluticasone', distributor='NasalHealth', description='Nasal corticosteroid for allergies and nasal congestion', dose='50 mcg', form='Nasal Spray', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ativan', activeIngredient='Lorazepam', distributor='SleepWell', description='Benzodiazepine for anxiety and insomnia', dose='1 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Cephalexin', activeIngredient='Cephalexin', distributor='InfectoCare', description='Antibiotic for bacterial infections', dose='500 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Zoloft', activeIngredient='Sertraline', distributor='MentalHealth', description='SSRI antidepressant for depression and anxiety', dose='50 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Gabapentin', activeIngredient='Gabapentin', distributor='NeuroPharma', description='Anticonvulsant for neuropathic pain and seizures', dose='300 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Benadryl', activeIngredient='Diphenhydramine', distributor='AllergyRelief', description='Antihistamine for allergies and sleep aid', dose='25 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Crestor', activeIngredient='Rosuvastatin', distributor='CholesterolCare', description='Statins for lowering cholesterol levels', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Bactrim', activeIngredient='Sulfamethoxazole/Trimethoprim', distributor='InfectoCare', description='Antibiotic for bacterial infections', dose='800/160 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Seroquel', activeIngredient='Quetiapine', distributor='MentalHealth', description='Atypical antipsychotic for schizophrenia and bipolar disorder', dose='100 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lexapro', activeIngredient='Escitalopram', distributor='MentalHealth', description='SSRI antidepressant for depression and anxiety', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Nexium', activeIngredient='Esomeprazole', distributor='GastroCare', description='Proton pump inhibitor for acid reflux and ulcers', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Hydrocodone', activeIngredient='Hydrocodone/Acetaminophen', distributor='PainRelief', description='Opioid pain medication', dose='5/325 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lantus', activeIngredient='Insulin Glargine', distributor='DiabetesCare', description='Long-acting insulin for diabetes', dose='100 units/mL', form='Injection', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Viagra', activeIngredient='Sildenafil', distributor='ErectileHealth', description='Phosphodiesterase inhibitor for erectile dysfunction', dose='50 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Celebrex', activeIngredient='Celecoxib', distributor='PainRelief', description='COX-2 inhibitor for pain and inflammation', dose='200 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Alprazolam', activeIngredient='Alprazolam', distributor='AnxietyRelief', description='Benzodiazepine for anxiety disorders', dose='0.25 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Pravastatin', activeIngredient='Pravastatin', distributor='CholesterolCare', description='Statins for lowering cholesterol levels', dose='40 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metronidazole', activeIngredient='Metronidazole', distributor='InfectoCare', description='Antibiotic and antiprotozoal agent', dose='500 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metronidazole', activeIngredient='Metronidazole', distributor='InfectoCare', description='Antibiotic and antiprotozoal agent', dose='250 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metronidazole', activeIngredient='Metronidazole', distributor='InfectoCare', description='Antibiotic and antiprotozoal agent', dose='0.75% cream', form='Topical Cream', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Metronidazole', activeIngredient='Metronidazole', distributor='InfectoCare', description='Antibiotic and antiprotozoal agent', dose='500 mg', form='Vaginal Gel', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Amoxicillin', activeIngredient='Amoxicillin', distributor='Healthcare Distributors', description='Antibiotic for bacterial infections', dose='250 mg', form='Chewable Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Amoxicillin', activeIngredient='Amoxicillin', distributor='Healthcare Distributors', description='Antibiotic for bacterial infections', dose='125 mg/5 mL', form='Oral Suspension', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Loratadine', activeIngredient='Loratadine', distributor='MegaPharma', description='Antihistamine for allergies and hay fever', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Loratadine', activeIngredient='Loratadine', distributor='MegaPharma', description='Antihistamine for allergies and hay fever', dose='5 mg', form='Chewable Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Loratadine', activeIngredient='Loratadine', distributor='MegaPharma', description='Antihistamine for allergies and hay fever', dose='5 mg/5 mL', form='Oral Solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='10 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='5 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Lisinopril', activeIngredient='Lisinopril', distributor='Pharma Solutions', description='ACE inhibitor for hypertension and heart failure', dose='2.5 mg', form='Oral Solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Atorvastatin', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='40 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Atorvastatin', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Atorvastatin', activeIngredient='Atorvastatin Calcium', distributor='PharmaCare', description='Statins for lowering cholesterol levels', dose='80 mg', form='Extended-release Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Omeprazole', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='20 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Omeprazole', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='40 mg', form='Delayed-release Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Omeprazole', activeIngredient='Omeprazole', distributor='Global Pharma', description='Proton pump inhibitor for acid reflux and ulcers', dose='10 mg', form='Oral Suspension', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ciprofloxacin', activeIngredient='Ciprofloxacin', distributor='MediNet', description='Fluoroquinolone antibiotic for infections', dose='500 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ciprofloxacin', activeIngredient='Ciprofloxacin', distributor='MediNet', description='Fluoroquinolone antibiotic for infections', dose='250 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Ciprofloxacin', activeIngredient='Ciprofloxacin', distributor='MediNet', description='Fluoroquinolone antibiotic for infections', dose='0.3% Eye Drops', form='Eye Drops', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Diazepam', activeIngredient='Diazepam', distributor='MediSafe', description='Benzodiazepine for anxiety and seizures', dose='5 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Diazepam', activeIngredient='Diazepam', distributor='MediSafe', description='Benzodiazepine for anxiety and seizures', dose='10 mg', form='Injection', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Diazepam', activeIngredient='Diazepam', distributor='MediSafe', description='Benzodiazepine for anxiety and seizures', dose='2 mg/mL', form='Oral Solution', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Warfarin', activeIngredient='Warfarin Sodium', distributor='MediLife', description='Anticoagulant for blood clot prevention', dose='2 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Warfarin', activeIngredient='Warfarin Sodium', distributor='MediLife', description='Anticoagulant for blood clot prevention', dose='1 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
+    Drug(commercialName='Warfarin', activeIngredient='Warfarin Sodium', distributor='MediLife', description='Anticoagulant for blood clot prevention', dose='5 mg', form='Injection', status=True, price=round(random.uniform(20, 100), 2))
+]
 
 # drugs = [Drug(**entry) for entry in drug_entries]
 

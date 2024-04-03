@@ -1,6 +1,10 @@
 from flask import jsonify, request
 from api import api
 from api.auth_middleware import token_required
+from models.vaccine import Vaccine
+from models.vital import Vital
+from models.procedure import Procedure
+from models.prescription import Prescription
 from models import database
 from models.patient import Patient
 from models.record import Record
@@ -72,13 +76,21 @@ def add_patient_record(patientId, current_user):
         data = request.get_json()
     else:
         data = request.form.to_dict()
-    print(data)
     # Create a new record object with the provided data
+    print(data)
+    ids = {'prescriptionId': Prescription, 'procedureId': Procedure, 'vitalsId': Vital, 'vaccineId': Vaccine}
+    recDict = {}
+    for id in ids:
+        itemId = data.get(id, None)
+        if itemId:
+            if database.get_by_id(ids[id], itemId):
+                recDict[id] = itemId
     record = Record(
         diagnosis=data.get("diagnosis", None),
         notes=data.get("notes", None),
         patientId=str(patientId),
         assessedById=current_user.profileId,
+        **recDict
     )
 
     # Save the new record to the database and return its details in the JSON response

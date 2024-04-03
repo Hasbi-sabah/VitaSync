@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
 import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
+import ViewPatient from "./ViewPatient";
+
 
   const label_style = "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
   const input_style =
@@ -121,7 +123,23 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
 
   const SignUpForm = ({ closeOverlay }) => {
     const [addPatient, { isLoading, isError, error }] = useAddPatientMutation();
+    const [patientId, setPatientId] = useState(null);
+    const handleSubmit = (values, { setSubmitting, resetForm }) => {
+      addPatient(values)
+        .unwrap()
+        .then((res) => {
+          setPatientId(res.id);
+          setSubmitting(false);
+          resetForm();
+          closeOverlay();
+        })
+        .catch((error) => {
+          alert(`Creation failed: ${error.data.error}`);
+          setSubmitting(false);
+        });
+    };
     return (
+      <>
       <Formik
         initialValues={{
           firstName: "",
@@ -153,24 +171,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
           username: Yup.string(),
           address: Yup.string().required("Required"),
         })}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
-          addPatient(values).unwrap()
-            .then(() => {
-              alert("New patient created");
-              setSubmitting(false);
-              resetForm();
-              closeOverlay();
-          })
-          .catch((error) => {
-            alert(`Creation failed: ${error.data.error}`);
-            setSubmitting(false);
-          })
-          // setTimeout(() => {
-          //   alert(JSON.stringify(values, null, 2));
-          //   setSubmitting(false);
-          //   resetForm();
-          // }, 400);
-        }}
+        onSubmit={handleSubmit}
       >
         <Form className="flex mt-4 lg:mt-2 flex-col gap-3 lg:gap-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
@@ -224,9 +225,6 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
             </MySelect>
             <MyDateInput label={"Date of Birth"} name="birthDate" />
           </div>
-
-          
-
           <MyTextBoxInput
             label={"Address"}
             name="address"
@@ -250,6 +248,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
           </div>
         </Form>
       </Formik>
+      </>
     );
   };
 

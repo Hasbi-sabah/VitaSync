@@ -5,27 +5,44 @@ import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import { useGetPatientVitalByIdQuery } from '../../features/vital/vitalApiSlice'
 import { useGetPatientMedInfoByIdQuery, useAddPatientMedInfoByIdMutation } from '../../features/medInfo/medInfoApiSlice';
 import RecordVitals from "./RecordVitals";
+import LoadingScreen from '../../components/LoadingScreen';
 
 const PatientDetails = ({ userId, closeOverlay }) => {
-  const { data: patientInfo } = useGetPatientByIdQuery(userId);
-  const { data: patientMedInfo } = useGetPatientMedInfoByIdQuery(userId);
+  const { data: patientInfo, isLoading: isPatientInfoLoading } = useGetPatientByIdQuery(userId);
+  const { data: patientMedInfo, isLoading: isPatientMedInfoLoading } = useGetPatientMedInfoByIdQuery(userId);
+  const { data: reqVitals, isLoading: isVitalsLoading } = useGetPatientVitalByIdQuery(userId);
 
   // Initialize state with an empty object to avoid undefined errors
   const [medDetails, setMedDetails] = useState({});
 
+  const [isLoading, setIsLoading] = useState(true); // Initialize isLoading to true
   useEffect(() => {
     if (patientInfo && patientMedInfo) {
+      const calculateAge = (dob) => {
+        const birthDate = new Date(dob);
+        const currentDate = new Date();
+        let age = currentDate.getFullYear() - birthDate.getFullYear();
+        const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age;
+      };
       const reqPatientDetails = {
         medicalInfo: { allergies: patientMedInfo.allergies, conditions: patientMedInfo.conditions, notes: patientMedInfo.notes },
         firstName: patientInfo.firstName,
         lastName: patientInfo.lastName,
         phoneNumber: patientInfo.phoneNumber,
         sex: patientInfo.sex,
-        age: patientInfo.birthDate,
+        age: calculateAge(patientInfo.birthDate),
       };
       setMedDetails(reqPatientDetails);
     }
   }, [patientInfo, patientMedInfo]);
+  useEffect(() => {
+    if (!isPatientInfoLoading || !isPatientMedInfoLoading || !isVitalsLoading) {
+      setIsLoading(false)
+    }}, [isPatientInfoLoading, isPatientMedInfoLoading, isVitalsLoading]);
 
   // const [addPatientMedInfoById] = useAddPatientMedInfoByIdMutation();
 
@@ -37,8 +54,6 @@ const PatientDetails = ({ userId, closeOverlay }) => {
   const { medicalInfo, firstName, lastName, phoneNumber, sex, age } = medDetails;
   const { allergies, conditions, notes } = medicalInfo || {};
   const currentDate = new Date();
-
-  const { data: reqVitals } = useGetPatientVitalByIdQuery(userId);
 
   const [editAllergies, setEditAllergies] = useState(false);
   const [editConditions, setEditConditions] = useState(false);
@@ -71,6 +86,9 @@ const PatientDetails = ({ userId, closeOverlay }) => {
   const closeVitalsOverlay = () => {
     setAddVitals(false);
   }
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   if (medicalInfo && reqVitals){
     const fillDetails = {
       allergies: { attr: "Known Allergies", label: "allergies", value: allergies },
@@ -78,24 +96,24 @@ const PatientDetails = ({ userId, closeOverlay }) => {
       notes: { attr: "Note", label: "notes", value: notes },
     };
     const sortedVitals = reqVitals.slice().sort((a, b) => {
-      const dateA = new Date(a.created_at);
-      const dateB = new Date(b.created_at);
+      const dateA = new Date(a.created_at.replace(' at ', ' '));
+      const dateB = new Date(b.created_at.replace(' at ', ' '));
       return dateB - dateA;
     });
-    const { created_at, temp, bp, bpm, weight, height, glucose, note } = sortedVitals.length > 0 ? reqVitals[0] : {};
-
+    console.log(sortedVitals)
+    const { created_at, temp, bp, bpm, weight, height, glucose, note } = sortedVitals.length > 0 ? sortedVitals[0] : {};
 
     return (
       <div className="w-full">
-        <div className="flex flex-col justify-center flex-wrap items-center lg:flex-row gap-11">
+        <div className="flex flex-col justify-center flex-wrap items-center pl-7 lg:flex-row gap-11">
           <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 p-3 sm:p-5">
             <div className="">
               <h2 className="text-3xl pb-5 font-semibold text-center">
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
               </h2>
               <div className="flex justify-around text-sm">
-                <span>{sex}</span>
-                <span>Age {age ? age : ""}</span>
+                <span>Sex: {sex}</span>
+                <span>Age: {age ? age : "N/Y"}</span>
               </div>
               <div className="mt-2 mb-2">
                 <p className="text-lightBlue text-center text-sm">
@@ -135,6 +153,8 @@ const PatientDetails = ({ userId, closeOverlay }) => {
             <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
               {/* API call to get the vitals */}
+              {created_at ? (
+              <>
               <Vital
                 Vitalreading={temp + " °C"}
                 vitalName={"Temperature"}
@@ -165,6 +185,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
                 vitalName={"Blood Glucose"}
                 currentDate={created_at}
               ></Vital>
+              </>):("No available vitals!")}
               {addVitals && <RecordVitals closeOverlay={closeVitalsOverlay} patientId={userId}/>}
               <div
                 className="absolute top-3 right-7 bg-lightBlue2 cursor-pointer hover:bg-lightBlue h-10 p-3 flex items-center mr-2"

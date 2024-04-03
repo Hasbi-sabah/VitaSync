@@ -2,6 +2,8 @@ import React, { useRef, useState } from "react";
 import { useLoginMutation } from "./authApiSlice";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
+import LoadingScreen from '../../components/LoadingScreen';
+
 
 const label_style = " pl-2 text-lg font-normal";
 const input_style =
@@ -9,7 +11,6 @@ const input_style =
 const button_style =
   "h-10 w-[100%] px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
-//<input>
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -47,7 +48,7 @@ const Login = () => {
   const pharmacyLink = process.env.REACT_APP_PHA_URL;
   const handleRedirect = (userId, role, token, username) => {
     const params = `token=${token}&role=${role}&id=${userId}&username=${username}`;
-    // console.log(userId)
+    setIsLoading(false);
     if (role === "doctor" || role === "admin")
       window.location.href = `${docLink}/dashboard?${params}`;
     else if (role === "nurse")
@@ -59,13 +60,14 @@ const Login = () => {
     else window.location.href = `${authLink}/dashboard?${params}`;
     return null;
   }
+  
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   return (
     <div className="flex w-[100vw] h-[100vh] items-center">
       <div className="h-[100%] bg-lightBlue w-[50%] mr-auto"></div>
       <div className="w-[50%]">
-        {isLoading ? (
-          <div>Loading....</div>
-        ) : 
         <Formik
           initialValues={{
             username: "",
@@ -76,18 +78,17 @@ const Login = () => {
             password: Yup.string().required("Field Required"),
           })}
           onSubmit={async (values, { setSubmitting, resetForm }) => {
+            setIsLoading(true);
             try {
               const userData = await login(values).unwrap();
-              console.log(userData);
-              setSubmitting(false);
               handleRedirect(userData.id, userData.role, userData.token);
               resetForm();
             } catch (err) {
-              console.log(`Error : `, err);
+              setIsLoading(false);
               if (err?.originalStatus) {
-                setErrMsg("No Server Response");
+                errMsg = "No Server Response";
               } else {
-                setErrMsg();
+                errMsg = err.data.error;
               }
               if (errMsg && errRef.current) {
                 errRef.current.focus();
@@ -100,7 +101,7 @@ const Login = () => {
                 ref={errRef}
                 className={errMsg ? "errmsg" : "hidden"}
                 aria-label=""
-              ></p>
+              >{errMsg}</p>
               <h1 className="text-xl font-semibold">Login</h1>
               <Form className="">
                 <MyTextInput label={"Username"} name="username" type="text" />
@@ -118,7 +119,6 @@ const Login = () => {
               </Form>
             </div>
         </Formik>
-        }
       </div>
     </div>
   );

@@ -16,51 +16,61 @@ const DisplayAppointments = ({ data, label }) => {
 
   const location = useLocation();
   const isDashboard = location.pathname === "/dashboard";
-  return (
-    <div className="lg:w-[80%] w-[90%] sm:w-[80%] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:px-10 pb-8">
-      <h3 className="text-left text-2xl lg:text-xl font-semibold py-3 pl-2 sm:py-6">
-        {label}
-      </h3>
-      <table className="min-w-full text-base">
-        <thead className="h-12">
-          <tr className="bg-darkBlue text-white">
-            <th className="px-3 sm:px-4 text-lg sm:text-base">SN</th>
-            <th className="px-4 ">Name</th>
-            <th className="px-3 lg:px-4">Sex</th>
-            <th className="px-3 lg:px-4">Age</th>
-            {!isMobile && <th className=" px-4">Contact</th>}
-            {!isMobile && <th className=" px-4">Time</th>}
-            {isDashboard && isMobile && <th className=" px-4"></th>}
-            <th className=""></th>
-          </tr>
-        </thead>
-
-        <tbody>
-          {currentTableData.map((user, idx) => (
-            <UserItem
-              userId={ user.patientId }
-              sn={(currentPage - 1) * pageSize + idx + 1}
-              key={idx}
-              name={`${user.firstName} ${user.lastName}`}
-              sex={user.sex === "Male" ? "M" : "F"}
-              age={user.birthDate}
-              contact={user.phoneNumber}
-              date={user.time.split(' ')[2] + ' ' + user.time.split(' ')[3]}
-            />
-          ))}
-        </tbody>
-      </table>
-      <div className="flex justify-end">
-        <Pagination
-          className={"pagination-bar"}
-          currentPage={currentPage}
-          totalCount={data.length}
-          pageSize={pageSize}
-          onPageChange={(page) => setCurrentPage(page)}
-        />
+  if (currentTableData.length > 0) {
+    return (
+      <div className="lg:w-[80%] w-[90%] sm:w-[80%] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:px-10 pb-8">
+        <h3 className="text-left text-2xl lg:text-xl font-semibold py-3 pl-2 sm:py-6">
+          {label}
+        </h3>
+        <table className="min-w-full text-base">
+          <thead className="h-12">
+            <tr className="bg-darkBlue text-white">
+              <th className="px-3 sm:px-4 text-lg sm:text-base">SN</th>
+              <th className="px-4 ">Name</th>
+              <th className="px-3 lg:px-4">Sex</th>
+              <th className="px-3 lg:px-4">Age</th>
+              {!isMobile && <th className=" px-4">Contact</th>}
+              {!isMobile && <th className=" px-4">Time</th>}
+              {isDashboard && isMobile && <th className=" px-4"></th>}
+              <th className=""></th>
+            </tr>
+          </thead>
+  
+          <tbody>
+            {currentTableData.map((user, idx) => (
+              <UserItem
+                userId={ user.patientId }
+                sn={(currentPage - 1) * pageSize + idx + 1}
+                key={idx}
+                name={`${user.firstName} ${user.lastName}`}
+                sex={user.sex === "Male" ? "M" : user.sex === "Female" ? "F" : "N/A"}
+                dob={user.birthDate}
+                contact={user.phoneNumber}
+                date={user.time.split(' ')[2] + ' ' + user.time.split(' ')[3]}
+              />
+            ))}
+          </tbody>
+        </table>
+        <div className="flex justify-end">
+          <Pagination
+            className={"pagination-bar"}
+            currentPage={currentPage}
+            totalCount={data.length}
+            pageSize={pageSize}
+            onPageChange={(page) => setCurrentPage(page)}
+          />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="lg:w-[80%] w-[90%] sm:w-[80%] sm:rounded-[1.875rem] bg-white mt-9 mx-5 sm:px-10 pb-2">
+        <h3 className="text-center text-2xl lg:text-xl font-semibold py-3 pl-2 sm:py-6">
+          No recorded appointments for today!
+        </h3>
+      </div>
+    )
+  }
 };
 
 export default DisplayAppointments;
