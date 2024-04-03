@@ -64,8 +64,8 @@ const Login = () => {
   }
   return (
     <div className="flex w-[100vw] h-[100vh] items-center">
-      <div className="h-[100%] bg-lightBlue w-[50%] mr-auto"></div>
-      <div className="w-[50%]">
+      <div className="h-[100%] bg-lightBlue sm:w-[50%] mr-auto"></div>
+      <div className="w-full sm:w-[50%]">
         <Formik
           initialValues={{
             username: "",
