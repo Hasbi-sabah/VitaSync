@@ -291,6 +291,7 @@ def add_patient(current_user):
     notify(
         patient.userId,
         1,
+        id=patient.id,
         name=f"{patient.lastName} {patient.firstName}",
         username=user.username,
         password=data["password"],

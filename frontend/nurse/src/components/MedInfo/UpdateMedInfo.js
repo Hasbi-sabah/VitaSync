@@ -20,6 +20,7 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
           {...field}
           {...props}
           disabled={!edit}
+          placeholder='None'
         />
       </div>
     );
@@ -34,26 +35,34 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
         [medInfo.label]: Yup.string(),
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          addPatientMedInfoByIdMutation([userId, values]);
-          medInfo.value = values[medInfo.label]
-          console.log(medInfo.value)
-          // alert(JSON.stringify(values, null, 2));
-          setFunction(false)
-          setSubmitting(false);
-        }, 400);
+        addPatientMedInfoByIdMutation([userId, values]);
+        medInfo.value = values[medInfo.label]
+        console.log(medInfo.value)
+        // alert(JSON.stringify(values, null, 2));
+        setFunction(false)
+        setSubmitting(false);
       }}
     >
+     {({ resetForm }) => (
       <Form>
         <TextInput label={medInfo.attr} name={medInfo.label} type="text" />
         {edit ? (
-          <button type="submit" className="" >
+          <div className="flex justify-end pt-2 space-x-4">
+            <button type="submit" className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
             Save
           </button>
+            <button type="button" onClick={() => {
+                setFunction(false);
+                resetForm();
+              }} className="bg-red hover:bg-gray-700 text-white font-bold py-2 px-4 rounded" >
+              Cancel
+            </button>
+          </div>
         ) : (
           ""
         )}
       </Form>
+     )}
     </Formik>
   );
 };

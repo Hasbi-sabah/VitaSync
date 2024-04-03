@@ -1,4 +1,5 @@
 from datetime import datetime
+import threading
 from flask import Flask
 from flask_cors import CORS
 from api import api
@@ -47,19 +48,22 @@ CORS(app, **cors_config)
 # Update Jinja environment with custom global functions
 app.jinja_env.globals.update(datetime=datetime)
 
-# Define job_scheduler function to run scheduled jobs continuously
+# Define job function to be scheduled
+def run_job():
+    with app.app_context():
+        check_appointments()
+
 # Define job_scheduler function to run scheduled jobs continuously
 def job_scheduler():
     while True:
-        with app.app_context():
-            schedule.run_pending()
+        schedule.run_pending()
         time.sleep(1)
 
-# Define the job function to be scheduled
-# Define the job function to be scheduled
-def run_job(app):
-    with app.app_context():
-        check_appointments()
+# Start the scheduler in a separate thread
+scheduler_thread = threading.Thread(target=job_scheduler)
+scheduler_thread.start()
+
+
 
 if __name__ == '__main__':
     """Run the app in debug mode."""

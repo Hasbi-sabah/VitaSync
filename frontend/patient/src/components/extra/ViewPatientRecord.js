@@ -5,7 +5,7 @@ import PatientDetailsVital from './PatientVitalsRecord';
 const ViewPatientRecord = ({ data, handleCloseRecord}) => {
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-lightBlue2 rounded-lg mb-10 shadow-lg sm:p-6 z-20 overflow-auto pt-12 sm:max-w-screen h-full sm:ml-56 lg:ml-64 relative ove">
+      <div className="bg-lightBlue rounded-lg mb-10 shadow-lg sm:p-6 z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative ove">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={handleCloseRecord}

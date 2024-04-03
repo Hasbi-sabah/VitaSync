@@ -17,13 +17,23 @@ const PatientDetails = ({ patientId }) => {
 
   useEffect(() => {
     if (patientInfo && patientMedInfo) {
+      const calculateAge = (dob) => {
+        const birthDate = new Date(dob);
+        const currentDate = new Date();
+        let age = currentDate.getFullYear() - birthDate.getFullYear();
+        const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+        if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+          age--;
+        }
+        return age;
+      };
       const reqPatientDetails = {
         medicalInfo: { allergies: patientMedInfo.allergies, conditions: patientMedInfo.conditions, notes: patientMedInfo.notes },
         firstName: patientInfo.firstName,
         lastName: patientInfo.lastName,
         phoneNumber: patientInfo.phoneNumber,
         sex: patientInfo.sex,
-        age: patientInfo.birthDate,
+        age: calculateAge(patientInfo.birthDate),
       };
       setMedDetails(reqPatientDetails);
     }
@@ -52,22 +62,27 @@ const PatientDetails = ({ patientId }) => {
       conditions: { attr: "Conditions", label: "conditions", value: conditions },
       notes: { attr: "Note", label: "notes", value: notes },
     };
+    const sortedVitals = reqVitals.slice().sort((a, b) => {
+      const dateA = new Date(a.created_at.replace(' at ', ' '));
+      const dateB = new Date(b.created_at.replace(' at ', ' '));
+      return dateB - dateA;
+    });
     console.log(patientInfo)
-    const { created_at, temp, bp, bpm, weight, height, glucose, note } = reqVitals.length > 0 ? reqVitals[reqVitals.length - 1] : {};
+    const { created_at, temp, bp, bpm, weight, height, glucose, note } = sortedVitals.length > 0 ? sortedVitals[0] : {};
     return (
       <div className="w-screen sm:w-[100%]">
-        <div className="flex flex-col lg:flex-row justify-evenly sm:items-center lg:items-baseline">
+        <div className="flex flex-col lg:flex-row justify-evenly pl-10 sm:items-center lg:items-baseline">
           <div className="bg-white rounded-3xl relative mx-4 sm:mx-2 sm:w-[26rem] p-3 sm:p-5 px-8">
             <div className="">
               <h2 className="text-3xl font-semibold text-center">
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
               </h2>
               <div className="flex justify-between text-sm">
-                <span>{sex}</span>
-                <span>Age {new Date().getFullYear() - new Date(age).getFullYear() || 'N/A'}</span>
+              <span>Sex: {sex}</span>
+                <span>Age: {age ? age : "N/Y"}</span>
               </div>
               <div className="mt-2 mb-2">
-                <p className="text-lightBlue text-left text-sm">
+                <p className="text-lightBlue text-center text-sm">
                   {phoneNumber ? phoneNumber : ""}
                 </p>
               </div>
@@ -92,10 +107,12 @@ const PatientDetails = ({ patientId }) => {
             </div>
           </div>
           {isMobile && (location.pathname === "/dashboard") && <Caption />}
-          <div className="bg-white rounded-3xl mx-auto relative lg:w-[43rem] lg:h-[20rem] p-5 mt-8 lg:mt-0">
+          <div className="bg-white rounded-3xl w-full min-h-10 mx-auto relative lg:w-[43rem] p-5">
             <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
               {/* API call to get the vitals */}
+              {created_at ? (
+              <>
               <Vital
                 Vitalreading={temp + " °C"}
                 vitalName={"Temperature"}
@@ -126,6 +143,7 @@ const PatientDetails = ({ patientId }) => {
                 vitalName={"Blood Glucose"}
                 currentDate={created_at}
               ></Vital>
+              </>):("No available vitals!")}
             </div>
           </div>
         </div>

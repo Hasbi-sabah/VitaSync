@@ -7,7 +7,7 @@ const Dashboard = () => {
   const [activeQrScanner, setActiveQrScanner] = useState(false)
   const [callSearch, setCallSearch] = useState('');
   return (
-    <div className='bg-gray mt-16 pb-12 flex flex-col items-center justify-center sm:mt-28'>
+    <div className='bg-gray pb-12 flex flex-col items-center justify-center'>
       <CreateSearchPatient setActiveQrScanner={setActiveQrScanner} callSearch={callSearch}/>
       {activeQrScanner && <QrScan setCallSearch={setCallSearch} setActiveQrScanner={setActiveQrScanner} />}
       {callSearch && <LookUpPatient searchQuery={callSearch} />}

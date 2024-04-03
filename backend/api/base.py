@@ -73,7 +73,8 @@ def notify(userId, flag, **data):
     # Determine the subject and HTML content based on the flag
     if flag == 1:
         subject = "Registration Complete"
-        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}</body></html>'
+        img_base64 = base64.b64encode(make_qr(data['id']).getvalue()).decode('utf-8')
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}<img src="data:image/png;base64,{img_base64}" alt="QR Code"></body></html>'
     elif flag == 2:
         subject = "Appointment Confirmed"
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'

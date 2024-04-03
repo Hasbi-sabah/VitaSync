@@ -9,10 +9,10 @@ export const vitalApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         addPatientVitalById: builder.mutation({
-            query: (id, data) => ({
-                url: `/api/patient/${id}/vital`,
+            query: (data) => ({
+                url: `/api/patient/${data[0]}/vital`,
                 method: "POST",
-                body: { ...data },
+                body: { ...data[1] },
             }),
         }),
         deleteVitalById: builder.mutation({

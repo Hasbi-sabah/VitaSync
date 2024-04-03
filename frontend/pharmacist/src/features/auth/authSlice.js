@@ -5,27 +5,26 @@ const authSlice = createSlice({
     name: "auth",
     initialState: {
         userId: null, 
-        username: null, 
-        token: sessionStorage.getItem('token'),
-        role: sessionStorage.getItem('role') },
+        token: null,
+        role: null },
     reducers: {
         setCredentials: (state, action) => {
-            console.log(`SESSION token ${sessionStorage.getItem('token')} , role: ${sessionStorage.getItem('role')}`);
-            const {accessToken, userId, role, username} = action.payload;
-            console.log(`token ${accessToken}, id: ${userId}, role: ${role}, username: ${username}`);
-            
+            const {accessToken, userId, role} = action.payload;
             state.userId = userId;
-            state.username = username;
             state.token = accessToken;
             state.role = role;
-            sessionStorage.setItem('role', role);
-            sessionStorage.setItem('id', userId);
-            sessionStorage.setItem('token', accessToken);
+            localStorage.setItem('role', role);
+            localStorage.setItem('id', userId);
+            localStorage.setItem('token', accessToken);
+            console.log(state.userId, state.token, state.role)
         },  
         logOut: (state, action) => {
-            state.user = null;
+            state.userId = null;
             state.token = null;
-            sessionStorage.removeItem('token');
+            state.role = null;
+            localStorage.removeItem('token');
+            localStorage.removeItem('id');
+            localStorage.removeItem('role');
         },
     },
 });
@@ -37,4 +36,3 @@ export default authSlice.reducer;
 export const selectCurrentRole = (state) => state.auth.role;
 export const selectCurrentToken = (state) => state.auth.token;
 export const selectCurrentUserId = (state) => state.auth.userId;
-export const selectCurrentUsername = (state) => state.auth.username;

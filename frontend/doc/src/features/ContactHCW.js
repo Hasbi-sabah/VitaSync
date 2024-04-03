@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import ProfileCard from "../components/extra/ProfileCard";
 import { useMediaQuery } from "react-responsive";
 import { useGetHcwQuery } from './hcw/hcwApiSlice';
+import LoadingScreen from "../components/LoadingScreen"
 
 const ContactHCW = () => {
-  const { data: hcwList } = useGetHcwQuery();
+  const { data: hcwList, isLoading } = useGetHcwQuery();
   console.log(hcwList);
   const [searchTerm, setSearchTerm] = useState("");
-
   const handleSumit = (event) => {
     event.preventDefault();
   };
@@ -48,6 +48,9 @@ const ContactHCW = () => {
   };
   const isMobile = useMediaQuery({ maxWidth: 1000 });
   const isMeduim = useMediaQuery({ maxWidth: 1425 });
+  if (isLoading) {
+    return <LoadingScreen />; 
+ }
   if (hcwList) {
     return (
       <div className="bg-gray mt-16 pb-12 sm:mt-28 lg:mt-32">
@@ -107,7 +110,13 @@ const ContactHCW = () => {
         </div>
       </div>
     );
+  } else {
+    <div className="bg-gray mt-16 pb-12 sm:mt-28 lg:mt-32">
+        <h2 className="text-center text-2xl py-4 font-semibold">
+          NO data available!
+        </h2>
+    </div>
   }
-};
+}; 
 
 export default ContactHCW;
