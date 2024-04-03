@@ -36,8 +36,7 @@ const MyTextInput = ({ label, ...props }) => {
 const Login = () => {
   const errRef = useRef();
   const [errMsg, setErrMsg] = useState("");
-  /* const [isLoading, setIsLoading] = useState(false); */
-  const [isLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [login] = useLoginMutation();
 
