@@ -4,13 +4,13 @@ import { selectCurrentToken } from "./auth/authSlice";
 
 
 const RequireAuth = () => {
-    const token = useSelector(selectCurrentToken);
+    const token = localStorage.getItem('token');
 
     const re_routeLogin = () => {
       window.location.href = "http://localhost:3000/login";
       return null;
     };
-    if (!token) {
+    if (token === null || !token) {
       re_routeLogin();
       return null; 
   }
