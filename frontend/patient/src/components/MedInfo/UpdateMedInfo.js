@@ -20,6 +20,7 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
           {...field}
           {...props}
           disabled={!edit}
+          placeholder='None'
         />
       </div>
     );
@@ -27,32 +28,15 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
 
   return (
     <Formik
-      initialValues={{
-        [medInfo.label]: medInfo.value,
-      }}
-      validationSchema={Yup.object({
-        [medInfo.label]: Yup.string(),
-      })}
-      onSubmit={(values, { setSubmitting, resetForm }) => {
-        setTimeout(() => {
-          addPatientMedInfoByIdMutation([userId, values]);
-          medInfo.value = values[medInfo.label]
-          console.log(medInfo.value)
-          // alert(JSON.stringify(values, null, 2));
-          setFunction(false)
-          setSubmitting(false);
-        }, 400);
-      }}
+    initialValues={{
+      [medInfo.label]: medInfo.value,
+    }}
+    validationSchema={Yup.object({
+      [medInfo.label]: Yup.string(),
+    })}
     >
       <Form>
         <TextInput label={medInfo.attr} name={medInfo.label} type="text" />
-        {edit ? (
-          <button type="submit" className="" >
-            Save
-          </button>
-        ) : (
-          ""
-        )}
       </Form>
     </Formik>
   );

@@ -10,16 +10,26 @@ export const procedureApiSclice = apiSlice.injectEndpoints({
         }),
 
         addPatientProcedureById: builder.mutation({
-            query: (id, data) => ({
+            query: ({id, data}) => ({
                 url: `/api/patient/${id}/procedure`,
                 method: "POST",
-                body: { ...data }
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
         }),
 
         getProcedureById: builder.query({
             query: (id) => ({
                 url: `/api/procedure/${id}`,
+                method: "GET",
+            }),
+        }),
+
+        getProcedurePerformeddById: builder.mutation({
+            query: (id) => ({
+                url: `/api/procedure/${id}/perform`,
                 method: "POST",
             }),
         }),
@@ -45,6 +55,7 @@ export const {
     useGetPatientProcedureByIdQuery,
     useAddPatientProcedureByIdMutation,
     useGetProcedureByIdQuery,
+    useGetProcedurePerformeddByIdMutation,
     useUpdateProcedureByIdMutation,
     useDeleteProcedureByIdMutation,
 } = procedureApiSclice;
