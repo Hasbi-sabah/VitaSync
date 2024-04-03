@@ -4,6 +4,7 @@ import CreateSearchPatient from '../components/extra/CreateSearchPatient';
 import DisplayAppointments from '../components/patient/DisplayAppointments';
 import { useGetHCWAppointmentByIdQuery } from './appointment/appointmentApiSlice';
 import { useGetPatientQuery } from './patient/patientApiSlice';
+import LoadingScreen from '../components/LoadingScreen';
 
 const Dashboard = () => {
   const currentDate = new Date();
@@ -12,22 +13,21 @@ const Dashboard = () => {
   const start_end = {start_time: formattedDate + ' 12:01 AM', end_time: formattedDate + ' 11:59 PM'}
 
   // Move the hook calls to the top level
-  const { data: patientList } = useGetHCWAppointmentByIdQuery([localStorage.getItem("id"), start_end]);
-  const { data: patientsData } = useGetPatientQuery();
+  const { data: patientList, isLoading: isPatientListLoading } = useGetHCWAppointmentByIdQuery([localStorage.getItem("id"), start_end]);
+  const { data: patientsData, isLoading: isPatientsDataLoading } = useGetPatientQuery();
   const [patients, setPatients] = useState([]);
-  const GetPatient = async () => {
-     try {
-       if (patientList && patientsData) {
-         setPatients(patientsData);
-       }
-     } catch (error) {
-       console.error(error);
-     }
-  };
+  const [isLoading, setIsLoading] = useState(true);
  
   useEffect(() => {
-     GetPatient();
+     if (patientList && patientsData) {
+       setPatients(patientsData);
+       setIsLoading(false);
+     }
   }, [patientList, patientsData]);
+  
+  if (isLoading) {
+     return <LoadingScreen />
+  }
   
   if (patientsData && patientList) {
     const mergedArray = patientList.map(obj1 => {
@@ -44,6 +44,8 @@ const Dashboard = () => {
       </div>
     );
   }
+  
+  return null; // This will render nothing if there's no data and not loading
 }
 
 export default Dashboard;

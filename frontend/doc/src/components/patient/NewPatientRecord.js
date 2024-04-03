@@ -91,22 +91,12 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
   //   fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
   // }, []);
 
-  const sampleDrugs = [
-    { id: 1, name: "Drug A" },
-    { id: 2, name: "Drug B" },
-    { id: 3, name: "Drug C" },
-    // Add more sample drugs as needed
-  ];
-  const sampleVaccines = [
-    { id: 1, name: "Vaccine A" },
-    { id: 2, name: "Vaccine B" },
-    { id: 3, name: "Vaccine C" },
-  ];
 
-  const addDrugButton = ({ handleAddDrug}, type ) => (
+
+  const addDrugButton = ({ handleAddDrug }, type) => (
     <div
       className="absolute top-3 right-7 bg-lightBlue2 cursor-pointer hover:bg-lightBlue h-10 p-3 flex items-center mr-2"
-      onClick={() => handleAddDrug(type)}
+      onClick={() => handleAddDrug('', type, '')}
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -119,13 +109,22 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
       </svg>
       <p className="text-white text-lg pl-2">Add drug</p>
     </div>
-  );
+ );
   const [addAppt, { apptInfo }] = useAddPatientAppointmentByIdMutation()
   const [addRecord, { recInfo }] = useAddPatientRecordByIdMutation()
   const [addProcedure, { proInfo }] = useAddPatientProcedureByIdMutation()
   const [isProcedurePerformed, setIsProcedurePerformed] = useState(false);
   const [drugOptions, setDrugOptions] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filteredDrugs, setFilteredDrugs] = useState([]);
+  const [selectedDrug, setSelectedDrug] = useState({ id: '', index: -1 });
 
+  useEffect(() => {
+   const results = drugOptions.filter(drug =>
+     drug.commercialName.toLowerCase().includes(searchTerm.toLowerCase())
+   );
+   setFilteredDrugs(results);
+}, [searchTerm, drugOptions]);
 
   // Function to update the toggle state
   const handleToggleChange = (newStatus) => {
@@ -151,28 +150,38 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
       })}
       onSubmit={(values, { setSubmitting, resetForm }) => {
         let recDict = {};
+        let promises = []
         if (values.notes !== "") {
           recDict.notes = values.notes;
         }
         if (values.diagnosis !== "") {
           recDict.diagnosis = values.diagnosis;
           }
-        console.log(recDict)
-        addRecord({id: userId, data: recDict})
-          .then((result) => {
-            const recId = result.data.id
-            if (values.procedures) {
-              let proDict = {recordId: recId, name: values.procedures, status: values.status}
-              addProcedure({id: userId, data: proDict})
-              .catch((error) => {
-                alert(`Creation failed: ${error.data.error}`);
-                setSubmitting(false);
-              })
-            }
+        if (values.procedures) {
+          let proDict = {name: values.procedures, status: values.status}
+          let promise = addProcedure({id: userId, data: proDict})
+          .then((res) => {
+            recDict['procedureId'] = res.data.id
+          })
+          .catch((error) => {
+            alert(`Procedure reation failed: ${error.data.error}`);
             setSubmitting(false);
-            resetForm();
-            closeOverlay();
-            window.location.reload()
+          })
+          promises.push(promise);
+        }
+        Promise.all(promises)
+          .then(() => {   
+            addRecord({id: userId, data: recDict})
+            .then(() => {
+              // alert('rec created yay')         
+              setSubmitting(false);
+              resetForm();
+              window.location.reload()
+            })
+          })
+          .catch((error) => {
+            alert(`Initial request failed: ${error.data.error}`);
+            setSubmitting(false);
           })
 
         if (values.followUp !== "") {
@@ -203,20 +212,30 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
               setSubmitting(false);
             })
         }
-        // setTimeout(() => {
-
-        //   const cleanedValues = removeEmptyValues(values);
-        //   const { apptInfo } = useAddPatientAppointmentByIdMutation([userId, values.followUp])
-        //   // alert(JSON.stringify(removeEmptyValues(values), null, 2));
-
-        // }, 400);
       }}
     >
       {(formik) => {
-        const handleAddDrug = (type) => {
+
+        const handleDosageChange = (event, index) => {
+          const dosage = event.target.value;
+          const currentDrugs = Array.isArray(formik.values.prescriptions) ? formik.values.prescriptions : [];
+          const updatedDrugs = currentDrugs.map((drug, i) => {
+             if (i === index) {
+               return { ...drug, dosage };
+             }
+             return drug;
+          });
+          formik.setFieldValue(`prescriptions.${index}.dosage`, dosage);
+         };
+         const handleDrugSelection = (id, name, index) => {
+          // setSelectedDrug({ id, index });
+          formik.setFieldValue(`prescriptions.${index}.name`, name);
+         };
+        const handleAddDrug = (id='', type='', instructions='') => {
+          const currentDrugs = Array.isArray(formik.values[type]) ? formik.values[type] : [];
           formik.setFieldValue(type, [
-            ...formik.values[type],
-            { drug: "", dosage: "" }, // Initialize with empty values
+            ...currentDrugs,
+            { drug: id, instructions: instructions }, // Initialize with empty values
           ]);
         };
         return (
@@ -229,7 +248,6 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
 
               {/* Add drug button */}
               {addDrugButton({ handleAddDrug }, "prescriptions")}
-
               <FieldArray name="prescriptions">
                 {(arrayHelpers) => (
                   <div>
@@ -237,26 +255,26 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
                       <div key={index} className="flex justify-between p-3 mt-2">
                         <div>
                           {index + 1}.
-                          <SearchBoxSmall key={index} userId={userId} setDrugOptions={setDrugOptions} />
-                          <select
-                            className={`${input_style} inline ml-4 pl-2`}
-                            name={`prescriptions.${index}.drug`}
-                            onChange={formik.handleChange}
-                            value={prescribe.drug}
-                          >
-                            <option value="">Select drug</option>
-                            {console.log("Inside man", drugOptions)}
-                            {drugOptions.map((drug) => (
-                              <option key={drug.id} value={drug.id}>
+
+                          <SearchBoxSmall key={index} setDrugOptions={setDrugOptions} />
+                          <div className="mt-2">
+                            {filteredDrugs.map((drug) => (
+                              <div
+                                key={drug.id}
+                                name={`prescriptions.${index}.name`}
+                                className="p-2 border border-gray-200 rounded-md cursor-pointer hover:bg-gray-100"
+                                onClick={() => handleDrugSelection(drug.id, drug.commercialName, index)}
+                                value={prescribe.drug}
+                              >
                                 {drug.commercialName}
-                              </option>
+                              </div>
                             ))}
-                          </select>
+                          </div>
                         </div>
                         <input
                           type="text"
                           name={`prescriptions.${index}.dosage`}
-                          onChange={formik.handleChange}
+                          onChange={(event) => handleDosageChange(event, index)}
                           value={prescribe.dosage}
                           className={`${input_style} p-3 h-12 w-[24rem]`}
                           placeholder="Dosage instructions"

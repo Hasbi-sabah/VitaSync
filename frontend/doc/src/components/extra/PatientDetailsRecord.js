@@ -1,12 +1,24 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Vital from "../patient/Vital";
+import {useGetProcedurePerformeddByIdMutation} from "../../features/procedure/procedureApiSlice"
 
 const PatientDetailsRecord = ({ data }) => {
-  // API call for vitals
-//   console.log("Details", data)
-  const reqVitals = {}; //status, temp, bp, bpm, weight, height, glucose, notes
-  const { status, temp, bp, bpm, weight, height, glucose, notes } = reqVitals;
+    const [sendProcedureRequest, { isLoading: isSendingRequest }] = useGetProcedurePerformeddByIdMutation();
+    const [requestSent, setRequestSent] = useState(false);
 
+    const sendRequest = () => {
+        if (!data.status && !requestSent) {
+          sendProcedureRequest(data.id)
+            .unwrap()
+            .then(() => {
+              setRequestSent(true);
+            })
+            .catch((error) => {
+              // Handle error
+              alert('Failed to send request:', error);
+            });
+        }
+     };
   return (
     <div className="w-screen sm:w-128">
       <div className="grid sm:items-center lg:items-baseline">
@@ -40,10 +52,15 @@ const PatientDetailsRecord = ({ data }) => {
             <hr />
             {data.notes}
         </div>}
-        {data.procedures && <div className="bg-white rounded-sm mx-auto w-full mt-5 ">
+        {data.name && <div className="bg-white rounded-sm mx-auto w-full mt-5 ">
+            <div className="flex justify">
             <h2 className="text-center text-2xl font-meduim">Procedures</h2>
+            <button className="bg-blue hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={sendRequest} disabled={data.status || requestSent || isSendingRequest}>
+                {data.status || requestSent ? 'Performed' : 'Mark as performed'}
+            </button>
+            </div>
             <hr />
-            {data.procedures}
+            {data.name}
         </div>}
         {data.vaccine && data.vaccine.length > 0 && <div className="bg-white rounded-sm mx-auto w-full mt-5 ">
             <h2 className="text-center text-2xl font-meduim">Vaccine</h2>

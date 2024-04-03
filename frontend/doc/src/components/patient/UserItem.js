@@ -3,7 +3,7 @@ import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
-const UserItem = ({ userId, sn, name, sex, age, contact, date, time }) => {
+const UserItem = ({ userId, sn, name, sex, dob, contact, date, time }) => {
   const location = useLocation();
   const isDashboard = location.pathname === "/dashboard";
   const bgColor = sn % 2 === 1 ? "bg-gray" : "";
@@ -17,12 +17,25 @@ const UserItem = ({ userId, sn, name, sex, age, contact, date, time }) => {
   };
 
   const isMobile = useMediaQuery({ maxWidth: 1024 });
+
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const currentDate = new Date();
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+  const age = calculateAge(dob);
+
   return (
     <tr
       className={`text-textGray text-xl lg:text-base text-center h-12 ${bgColor}`}
     >
       <td>{sn}</td>
-      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-left text-wrap mx-auto">
+      <td className="pl-2 sm:pl-3 py-2 sm:max-w-18 lg:max-w-24 text-center text-wrap mx-auto">
         {name}
       </td>
       <td>{sex}</td>

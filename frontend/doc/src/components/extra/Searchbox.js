@@ -1,20 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import ViewPatient from "../patient/ViewPatient";
+import LoadingScreen from '../../components/LoadingScreen';
+
 
 
 const LookUpPatient = ({ searchQuery }) => {
-    const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
+    const { data: patientInfo, isLoading, isError, error } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
-    console.log(patientInfo)
+
 
     useEffect(() => {
-        if (!isLoading && !isError && patientInfo) {
+        if (isLoading) {
+            return; // Do nothing if still loading
+        }
+        if (isError) {
+            alert("Patient not found.");
+            return;
+        }
+        if (patientInfo) {
             setShowPatientDetails(true);
         } else {
             setShowPatientDetails(false);
         }
-    }, [isLoading, isError, patientInfo, searchQuery])
+    }, [isLoading, isError, patientInfo, searchQuery, error]);
 
     return showPatientDetails ? (
         <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />
@@ -22,17 +31,32 @@ const LookUpPatient = ({ searchQuery }) => {
 }
 
 export const LookUpDrug = ({ searchQuery }) => {
-    const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
+    const { data: patientInfo, isLoading, isError, error } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
-    console.log(patientInfo)
+
 
     useEffect(() => {
-        if (!isLoading && !isError && patientInfo) {
+        if (isLoading) {
+            return; // Do nothing if still loading
+        }
+        if (isError) {
+            if (error.data && error.data.error === "not found") {
+                alert("Patient not found. Please check the details and try again.");
+            } else {
+                alert("An error occurred while looking up the patient.");
+            }
+            return;
+        }
+        if (patientInfo) {
             setShowPatientDetails(true);
         } else {
             setShowPatientDetails(false);
         }
-    }, [isLoading, isError, patientInfo, searchQuery])
+    }, [isLoading, isError, patientInfo, searchQuery, error]);
+
+    if (isLoading) {
+        return <LoadingScreen />
+    }
 
     return showPatientDetails ? (
         <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />

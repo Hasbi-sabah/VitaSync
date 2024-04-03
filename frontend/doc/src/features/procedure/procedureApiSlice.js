@@ -23,6 +23,13 @@ export const procedureApiSclice = apiSlice.injectEndpoints({
         getProcedureById: builder.query({
             query: (id) => ({
                 url: `/api/procedure/${id}`,
+                method: "GET",
+            }),
+        }),
+
+        getProcedurePerformeddById: builder.mutation({
+            query: (id) => ({
+                url: `/api/procedure/${id}/perform`,
                 method: "POST",
             }),
         }),
@@ -48,6 +55,7 @@ export const {
     useGetPatientProcedureByIdQuery,
     useAddPatientProcedureByIdMutation,
     useGetProcedureByIdQuery,
+    useGetProcedurePerformeddByIdMutation,
     useUpdateProcedureByIdMutation,
     useDeleteProcedureByIdMutation,
 } = procedureApiSclice;
