@@ -6,10 +6,10 @@ module.exports = {
       'white': '#ffffff',
       "black": "#000000",
       'gray': '#f6f4f4',
-      'blue': '#2AAB24',
-      'darkBlue': "#09571A",
-      'lightBlue2': "#0E7D2E",
-      'lightBlue': "#158742",
+      'blue': '#004D0F',
+      'darkBlue': "#00250B",
+      'lightBlue2': "#005F1D",
+      'lightBlue': "#007836",
       'textGray': "#3E3E3E",
       'red': '#FF0000',
       'actualLightBlue': '#0920F6',
@@ -17,6 +17,9 @@ module.exports = {
       // 'userColor1': "#909090"
     },
     extend: {
+      spacing: {
+        '128': '32rem',
+      },
       keyframes: {
         shake: {
           '0%, 100%': { transform: 'translateX(0)' },

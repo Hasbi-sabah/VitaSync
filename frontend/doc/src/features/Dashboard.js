@@ -5,6 +5,8 @@ import DisplayAppointments from '../components/patient/DisplayAppointments';
 import { useGetHCWAppointmentByIdQuery } from './appointment/appointmentApiSlice';
 import { useGetPatientQuery } from './patient/patientApiSlice';
 import LoadingScreen from '../components/LoadingScreen';
+import QrScan from "../components/QrScanner/QrScan";
+import { LookUpPatient } from "../components/extra/Searchbox";
 
 const Dashboard = () => {
   const currentDate = new Date();
@@ -23,12 +25,14 @@ const Dashboard = () => {
        setPatients(patientsData);
        setIsLoading(false);
      }
-  }, [patientList, patientsData]);
+  }, [patientList, patientsData])
   
+    const [activeQrScanner, setActiveQrScanner] = useState(false)  
+    const [callSearch, setCallSearch] = useState('');
+    
   if (isLoading) {
      return <LoadingScreen />
   }
-  
   if (patientsData && patientList) {
     const mergedArray = patientList.map(obj1 => {
       const matchedObj = patientsData.find(obj2 => obj1.patientId === obj2.id);
@@ -39,8 +43,10 @@ const Dashboard = () => {
   
     return (
       <div className='bg-gray pb-12 flex flex-col items-center justify-center'>
-        <CreateSearchPatient />
+        <CreateSearchPatient setActiveQrScanner={setActiveQrScanner}/>
+        {activeQrScanner && <QrScan setCallSearch={setCallSearch} setActiveQrScanner={setActiveQrScanner} />}
         {mergedArray && <DisplayAppointments data={mergedArray} label={label}/>}
+        {callSearch && <LookUpPatient searchQuery={callSearch} />}
       </div>
     );
   }
@@ -48,4 +54,4 @@ const Dashboard = () => {
   return null; // This will render nothing if there's no data and not loading
 }
 
-export default Dashboard;
+export default Dashboard

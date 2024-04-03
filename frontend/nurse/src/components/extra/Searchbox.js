@@ -5,7 +5,7 @@ import LoadingScreen from '../../components/LoadingScreen';
 
 
 
-const LookUpPatient = ({ searchQuery }) => {
+export const LookUpPatient = ({ searchQuery }) => {
     const { data: patientInfo, isLoading, isError, error } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
 
@@ -25,9 +25,11 @@ const LookUpPatient = ({ searchQuery }) => {
         }
     }, [isLoading, isError, patientInfo, searchQuery, error]);
 
-    return showPatientDetails ? (
-        <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />
-      ) : null;
+    return (
+        <>
+            {showPatientDetails && <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />}
+        </>
+      );
 }
 
 export const LookUpDrug = ({ searchQuery }) => {

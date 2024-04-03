@@ -1,11 +1,6 @@
 import React from "react";
 
 const PatientDetailsRecord = ({ data }) => {
-  // API call for vitals
-//   console.log("Details", data)
-  const reqVitals = {}; //status, temp, bp, bpm, weight, height, glucose, notes
-  const { status, temp, bp, bpm, weight, height, glucose, notes } = reqVitals;
-
   return (
     <div className="w-screen sm:w-128">
       <div className="grid sm:items-center lg:items-baseline">
@@ -39,10 +34,10 @@ const PatientDetailsRecord = ({ data }) => {
             <hr />
             {data.notes}
         </div>}
-        {data.procedures && <div className="bg-white rounded-sm mx-auto w-full mt-5 ">
+        {data.name && <div className="bg-white rounded-sm mx-auto w-full mt-5 ">
             <h2 className="text-center text-2xl font-meduim">Procedures</h2>
             <hr />
-            {data.procedures}
+            {data.name}
         </div>}
         {data.vaccine && data.vaccine.length > 0 && <div className="bg-white rounded-sm mx-auto w-full mt-5 ">
             <h2 className="text-center text-2xl font-meduim">Vaccine</h2>
