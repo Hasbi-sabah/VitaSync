@@ -28,6 +28,8 @@ Ensure you have the following installed on your system:
 - Python (v3.8 or later)
 - Flask (v1.1.2 or later)
 
+Ensure your system has more than 2GB available in RAM
+
 ### Backend Setup
 
 1. Navigate to the `backend` directory in your project root.
