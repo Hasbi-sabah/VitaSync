@@ -1,11 +1,23 @@
 import React from 'react';
+import { useGetPrescriptionByIdQuery } from "../../features/prescription/prescriptionApiSlice";
+import LoadingScreen from "../LoadingScreen";
 import PatientDetailsRecord from './PatientDetailsRecord';
 import PatientDetailsVital from './PatientVitalsRecord';
 
 const ViewPatientRecord = ({ data, handleCloseRecord}) => {
+  const { data: prscData, isLoading} = useGetPrescriptionByIdQuery(
+    data.prescriptionId
+  );  
+  if (isLoading) {
+    return (
+      <div className="fixed inset-0 flex justify-center items-center">
+        <LoadingScreen />
+      </div>
+    );
+  }
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-blue rounded-lg mb-10 shadow-lg sm:p-6 z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative ove">
+      <div className="bg-lightBlue rounded-lg mb-10 shadow-lg sm:p-6 z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative ove">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={handleCloseRecord}
@@ -22,7 +34,7 @@ const ViewPatientRecord = ({ data, handleCloseRecord}) => {
         </h1>
         <div className="mb-10">
           {data.assessedById ? (
-          <PatientDetailsRecord data={data} />
+          <PatientDetailsRecord data={data} prscData={prscData} />
           ) : (
           <PatientDetailsVital data={data} />
           )}

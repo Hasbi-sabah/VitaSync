@@ -1,28 +1,23 @@
 import React, { useState } from "react";
 import { useGetPrescriptionByIdQuery } from "../../features/prescription/prescriptionApiSlice";
 import LoadingScreen from "../LoadingScreen";
-import PrescriptionRecordItem from "./PrescriptionRecordItem";
 import { useGetPrescriptionFilledByIdMutation } from "../../features/prescription/prescriptionApiSlice";
 import { useGetHcwByIdQuery } from "../../features/hcw/hcwApiSlice";
 import { useGetDrugPrescriptionExtendedByIdQuery } from "../../features/prescription/prescriptionApiSlice";
 
-const PatientDetailsRecord = ({ data }) => {
-  const { data: filledByInfo, isLoading: f } = useGetHcwByIdQuery(
-    data.filledById || ""
-  );
-  const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(
-    data.prescribedById
-  );
+const PatientDetailsRecord = ({ data, prscData }) => {
+  const filledById = prscData?.filledById || "";
+  const prescribedById = prscData?.prescribedById || "";
+  const { data: filledByInfo, isLoading: f } = useGetHcwByIdQuery(filledById);
+  const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(prescribedById);
   const [sendProcedureRequest, { isLoading: isSendingRequest }] =
     useGetPrescriptionFilledByIdMutation();
   const [requestSent, setRequestSent] = useState(false);
 
-  const { data: prscData, isLoading: psc } = useGetPrescriptionByIdQuery(
-    data.prescriptionId
-  );
+
   const sendRequest = () => {
-    if (!data.status && !requestSent) {
-      sendProcedureRequest(data.id)
+    if (!prscData.status && !requestSent) {
+      sendProcedureRequest(data.prescriptionId)
         .unwrap()
         .then(() => {
           setRequestSent(true);
@@ -37,7 +32,7 @@ const PatientDetailsRecord = ({ data }) => {
   const { data: mergedArray, isLoading: isPrscDataLoading } =
     useGetDrugPrescriptionExtendedByIdQuery(data.prescriptionId);
 
-  if (f || p || psc || isPrscDataLoading) {
+  if (f || p || isPrscDataLoading) {
     return <LoadingScreen />;
   }
   return (
@@ -51,7 +46,7 @@ const PatientDetailsRecord = ({ data }) => {
                 onClick={sendRequest}
                 disabled={data.status || requestSent || isSendingRequest}
               >
-                {data.status || requestSent ? "Filled" : "Mark as filled"}
+                {prscData.status || requestSent ? "Filled" : "Mark as filled"}
               </button>
               
             <h2 className="text-center font-bold text-2xl font-meduim p-3">
@@ -60,36 +55,34 @@ const PatientDetailsRecord = ({ data }) => {
               </div>
             <tr
               className={`text-textGray p-1 lg:text-base text-center`}
-            >
-              <td className="text-center">{data.date}</td>
-              
+            >              
               <td className="text-left pl-3">
                 <div>
                   <h3 className="sm:text-[1.3rem] p-1 font-small">
-                    <span className="text-black mr-1">
+                    <span className="text-actualLightBlue mr-1">
                       Prescribed By:
                     </span>
                     Dr. {prescribedByInfo.lastName} {prescribedByInfo.firstName}
                   </h3>
                   <h3 className="sm:text-[1.3rem] p-1 font-small">
-                    <span className="text-black mr-1">
+                    <span className="text-actualLightBlue mr-1">
                       Date:
                     </span>
-                    {data.created_at}
+                    {prscData.created_at}
                   </h3>
-                  {data.status && (
+                  {prscData.status && (
                     <h3 className="sm:text-[1.3rem] p-1 font-small">
-                      <span className="text-black mr-1">
+                      <span className="text-actualLightBlue mr-1">
                         Filled By:
                       </span>
                       {filledByInfo.lastName} {filledByInfo.firstName}
                     </h3>
                   )}
                   <h3 className="sm:text-[1.3rem] p-1 font-small mb-3">
-                    <span className="text-black mr-2">
+                    <span className="text-actualLightBlue mr-2">
                       Prescription filled:
                     </span>
-                    {data.status ? (
+                    {prscData.status ? (
                       <span className="text-green">Filled</span>
                     ) : (
                       <span className="text-red">Pending</span>
@@ -110,25 +103,26 @@ const PatientDetailsRecord = ({ data }) => {
       </div>
       {data.diagnosis && (
           <div className="bg-white rounded-lg mx-auto w-full mt-5 ">
-            <h2 className="text-center font-bold text-2xl font-meduim p-3">Diagnosis</h2>
+            <h2 className="text-center text-2xl font-bold font-meduim p-3">Diagnosis</h2>
             <div className="p-3">{data.diagnosis}</div>
           </div>
         )}
         {data.notes && (
           <div className="bg-white rounded-lg mx-auto w-full mt-5 ">
-            <h2 className="text-center font-bold text-2xl font-meduim p-3">Notes</h2>
+            <h2 className="text-center text-2xl  font-bold font-meduim p-3">Notes</h2>
             {data.notes}
           </div>
         )}
         {data.name && (
           <div className="bg-white rounded-lg mx-auto w-full mt-5">
-              <h2 className="text-center font-bold text-2xl font-meduim p-3">Procedures</h2>
+              <h2 className="text-center text-2xl font-bold font-meduim">Procedures</h2>
+              
             <div className="p-3">{data.name}</div>
           </div>
         )}
         {data.vaccine && data.vaccine.length > 0 && (
           <div className="bg-white rounded-lg mx-auto w-full mt-5 ">
-            <h2 className="text-center font-bold text-2xl font-meduim">Vaccine</h2>
+            <h2 className="text-center text-2xl font-bold font-meduim">Vaccine</h2>
             <hr />
             <div className="table w-full">
               <div className="table-header-group w-full">

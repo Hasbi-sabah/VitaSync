@@ -1,25 +1,20 @@
 import React, { useState } from "react";
 import { useGetPrescriptionByIdQuery } from "../../features/prescription/prescriptionApiSlice";
 import LoadingScreen from "../LoadingScreen";
+import { useGetProcedurePerformeddByIdMutation } from "../../features/procedure/procedureApiSlice";
 import { useGetHcwByIdQuery } from "../../features/hcw/hcwApiSlice";
 import { useGetDrugPrescriptionExtendedByIdQuery } from "../../features/prescription/prescriptionApiSlice";
 
-const PatientDetailsRecord = ({ data }) => {
-  const { data: filledByInfo, isLoading: f } = useGetHcwByIdQuery(
-    data.filledById || ""
-  );
-  const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(
-    data.prescribedById
-  );
-
-  const { data: prscData, isLoading: psc } = useGetPrescriptionByIdQuery(
-    data.prescriptionId
-  );
+const PatientDetailsRecord = ({ data, prscData }) => {
+  const filledById = prscData?.filledById || "";
+  const prescribedById = prscData?.prescribedById || "";
+  const { data: filledByInfo, isLoading: f } = useGetHcwByIdQuery(filledById);
+  const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(prescribedById);
 
   const { data: mergedArray, isLoading: isPrscDataLoading } =
     useGetDrugPrescriptionExtendedByIdQuery(data.prescriptionId);
 
-  if (f || p || psc || isPrscDataLoading) {
+  if (f || p || isPrscDataLoading) {
     return <LoadingScreen />;
   }
   return (
@@ -31,9 +26,7 @@ const PatientDetailsRecord = ({ data }) => {
 
             <tr
               className={`text-textGray p-1 lg:text-base text-center`}
-            >
-              <td className="text-center">{data.date}</td>
-              
+            >              
               <td className="text-left pl-3">
                 <div>
                   <h3 className="sm:text-[1.3rem] p-1 font-small">
@@ -46,9 +39,9 @@ const PatientDetailsRecord = ({ data }) => {
                     <span className="text-actualLightBlue mr-1">
                       Date:
                     </span>
-                    {data.created_at}
+                    {prscData.created_at}
                   </h3>
-                  {data.status && (
+                  {prscData.status && (
                     <h3 className="sm:text-[1.3rem] p-1 font-small">
                       <span className="text-actualLightBlue mr-1">
                         Filled By:
@@ -60,7 +53,7 @@ const PatientDetailsRecord = ({ data }) => {
                     <span className="text-actualLightBlue mr-2">
                       Prescription filled:
                     </span>
-                    {data.status ? (
+                    {prscData.status ? (
                       <span className="text-green">Filled</span>
                     ) : (
                       <span className="text-red">Pending</span>
