@@ -29,7 +29,6 @@ SMTP_API_KEY = getenv('SMTP_API_KEY')
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SMTP_EMAIL'] = SMTP_EMAIL
 app.config['SMTP_API_KEY'] = SMTP_API_KEY
-
 # Register the API blueprint
 
 # Register the API blueprint
@@ -41,12 +40,12 @@ app.register_blueprint(api)
 cors_config = {
     "origins": [
         "https://nearly-valued-leopard.ngrok-free.app",
-        "https://vitasync.pagekite.me",
-        "https://api-vitasync.pagekite.me",
-        "https://doc-vitasync.pagekite.me",
-        "https://nurse-vitasync.pagekite.me",
-        "https://patient-vitasync.pagekite.me",
-        "https://pharmacy-vitasync.pagekite.me",
+        "https://thevitasync.pagekite.me",
+        "https://api-thevitasync.pagekite.me",
+        "https://doc-thevitasync.pagekite.me",
+        "https://nurse-thevitasync.pagekite.me",
+        "https://patient-thevitasync.pagekite.me",
+        "https://pharmacy-thevitasync.pagekite.me",
         ],
     "supports_credentials": True
 }

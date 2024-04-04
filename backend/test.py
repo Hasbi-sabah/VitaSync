@@ -17,7 +17,8 @@ import random
 
 from datetime import datetime
 
-patient1 = Patient(firstName='James', lastName='Smith', sex='Male', phoneNumber='123-456-7890', birthDate=datetime(2000, 1, 15).timestamp(), address='1234 Elm Street', role='patient', username='pat1', password='pat1')
+admin = HCW(firstName='Admin', lastName='Admin', username='admin', password='admin', role='admin')
+""" patient1 = Patient(firstName='James', lastName='Smith', sex='Male', phoneNumber='123-456-7890', birthDate=datetime(2000, 1, 15).timestamp(), address='1234 Elm Street', role='patient', username='pat1', password='pat1')
 patient2 = Patient(firstName='Emily', lastName='Johnson', sex='Female', phoneNumber='234-567-8901', birthDate=datetime(1995, 6, 22).timestamp(), address='5678 Oak Avenue', role='patient', username='pat2', password='pat2')
 patient3 = Patient(firstName='Michael', lastName='Williams', sex='Male', phoneNumber='345-678-9012', birthDate=datetime(1988, 12, 10).timestamp(), address='9101 Pine Lane', role='patient', username='pat3', password='pat3')
 patient4 = Patient(firstName='Emma', lastName='Brown', sex='Female', phoneNumber='456-789-0123', birthDate=datetime(1992, 9, 5).timestamp(), address='1212 Maple Drive', role='patient', username='pat4', password='pat4')
@@ -51,10 +52,10 @@ nurse6 = HCW(firstName='Emily', lastName='White', role='nurse', username='nurse6
 pharmacist5 = HCW(firstName='Andrew', lastName='Lopez', role='pharmacist', username='pharm5', password='pharm5', speciality='Community Pharmacy', workNumber='888-999-0000', workAddress='777 Maple St, City, Country')
 pharmacist6 = HCW(firstName='Madison', lastName='King', role='pharmacist', username='pharm6', password='pharm6', speciality='Geriatric Pharmacy', workNumber='000-111-2222', workAddress='444 Cedar St, City, Country')
 
-current_timestamp = int(time.time())
+current_timestamp = int(time.time()) """
 
 # Appointments for today at different times (assuming each appointment is one hour apart)
-appointment1 = Appointment(patientId=patient1.id, hcwId=doc1.id, time=current_timestamp + 0)
+""" appointment1 = Appointment(patientId=patient1.id, hcwId=doc1.id, time=current_timestamp + 0)
 appointment2 = Appointment(patientId=patient2.id, hcwId=doc1.id, time=current_timestamp + 3600)  # 1 hour later
 appointment3 = Appointment(patientId=patient3.id, hcwId=doc1.id, time=current_timestamp + 7200)  # 2 hours later
 appointment4 = Appointment(patientId=patient4.id, hcwId=doc1.id, time=current_timestamp + 10800)  # 3 hours later
@@ -63,7 +64,7 @@ appointment6 = Appointment(patientId=patient6.id, hcwId=doc1.id, time=current_ti
 appointment7 = Appointment(patientId=patient7.id, hcwId=doc1.id, time=current_timestamp + 21600)  # 6 hours later
 appointment8 = Appointment(patientId=patient8.id, hcwId=doc1.id, time=current_timestamp + 25200)  # 7 hours later
 appointment9 = Appointment(patientId=patient9.id, hcwId=doc1.id, time=current_timestamp + 28800)  # 8 hours later
-appointment10 = Appointment(patientId=patient10.id, hcwId=doc1.id, time=current_timestamp + 32400) 
+appointment10 = Appointment(patientId=patient10.id, hcwId=doc1.id, time=current_timestamp + 32400)  """
 # admin = HCW(username='admin', password='admin', role='admin')
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
@@ -76,7 +77,7 @@ appointment10 = Appointment(patientId=patient10.id, hcwId=doc1.id, time=current_
 # record4 = Record(diagnosis="Fractured leg", notes="Leg cast applied, follow-up appointment scheduled", patientId=patient2.id, assessedById=doc1.id)
 # record5 = Record(diagnosis="Migraine", notes="Prescribed pain medication, advised to rest in a quiet environment", patientId=patient2.id, assessedById=doc2.id)
 # record6 = Record(diagnosis="Common cold")
-
+""" 
 drugs = [
     Drug(commercialName='Aspirin', activeIngredient='Acetylsalicylic Acid', distributor='ABC Pharmaceuticals', description='Pain reliever and anti-inflammatory drug', dose='325 mg', form='Tablet', status=True, price=round(random.uniform(20, 100), 2)),
     Drug(commercialName='Aspirin', activeIngredient='Acetylsalicylic Acid', distributor='ABC Pharmaceuticals', description='Pain reliever and anti-inflammatory drug', dose='81 mg', form='Chewable tablet', status=True, price=round(random.uniform(20, 100), 2)),
@@ -174,7 +175,7 @@ drugs = [
     Drug(commercialName='Warfarin', activeIngredient='Warfarin Sodium', distributor='MediLife', description='Anticoagulant for blood clot prevention', dose='1 mg', form='Capsule', status=True, price=round(random.uniform(20, 100), 2)),
     Drug(commercialName='Warfarin', activeIngredient='Warfarin Sodium', distributor='MediLife', description='Anticoagulant for blood clot prevention', dose='5 mg', form='Injection', status=True, price=round(random.uniform(20, 100), 2))
 ]
-
+ """
 # drugs = [Drug(**entry) for entry in drug_entries]
 
 # vitals1 = Vital(takenById=doc1.id, takenForId=patient1.id)

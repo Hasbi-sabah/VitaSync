@@ -66,7 +66,10 @@ class DB:
         self.__engine = create_engine(
             "mysql+mysqldb://{}:{}@{}/{}".format(
                 MYSQL_USER, MYSQL_PWD, MYSQL_HOST, MYSQL_DB
-            )
+            ),
+            pool_size=20,            # Adjust pool size as needed
+            pool_timeout=30,         # Adjust pool timeout as needed
+            max_overflow=15
         )
         if ENV == "test":
             Base.metadata.drop_all(self.__engine)
