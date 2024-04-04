@@ -239,9 +239,9 @@ Paths are protected by token-based authentication, and role-based permissions ar
 
 In the VitaSync system, when an element is deleted, it is not permanently removed from the database. Instead, it is archived. Archiving is a process where records are marked as inactive or hidden from regular operations but are still retained in the database for historical purposes and potential future use. This approach ensures that no data is lost and that the integrity of the system is maintained.
 
-### Application Details
+# Application Details
 
-#### Auth
+## Auth
 
 - **Purpose**: Serves as the gateway to the VitaSync system, handling user authentication and session management. It plays a crucial role in ensuring secure access to the various healthcare management applications.
 - **Features**:
@@ -251,7 +251,9 @@ In the VitaSync system, when an element is deleted, it is not permanently remove
 
 The Auth platform is designed to be the first point of contact for users, setting the stage for a secure and efficient healthcare management experience.
 
-#### Doc
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/login.png?raw=true)
+
+## Doc
 
 - **Purpose**: Provides access to healthcare documentation and resources, serving as a comprehensive tool for healthcare professionals to manage patient information, records, and prescriptions.
 - **Features**:
@@ -267,7 +269,11 @@ The Auth platform is designed to be the first point of contact for users, settin
 
 The Doc platform is designed to support healthcare professionals in efficiently managing patient information, records, and prescriptions, ensuring that patient care is comprehensive and well-documented.
 
-#### Nurse
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/profile%20creation.png?raw=true)
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/doc%20drug.png?raw=true)
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/doc%20dashboard.png?raw=true)
+
+## Nurse
 
 - **Purpose**: Facilitates nurses in managing patient information and appointments, with a focus on day-to-day care and record-keeping.
 - **Features**:
@@ -284,7 +290,11 @@ The Doc platform is designed to support healthcare professionals in efficiently 
 
 The Nurse platform is designed to support nurses in efficiently managing patient information, records, and day-to-day care, ensuring that patient care is comprehensive and well-documented.
 
-#### Pharmacist
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/nurse%20patient.png?raw=true)
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/nurse%20records.png?raw=true)
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/nurse%20record%20details.png?raw=true)
+
+## Pharmacist
 
 - **Purpose**: Supports pharmacists in managing prescriptions and medications, ensuring that medications are accurately filled and dispensed according to prescriptions.
 - **Features**:
@@ -299,7 +309,10 @@ The Nurse platform is designed to support nurses in efficiently managing patient
 
 The Pharmacist platform is designed to support pharmacists in efficiently managing prescriptions and medications, ensuring that patient care is comprehensive and well-documented.
 
-#### Patient
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/pharm%20presc%20rec.png?raw=true)
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/pharm%20contact%20hcw.png?raw=true)
+
+## Patient
 
 - **Purpose**: Allows patients to access and manage their healthcare information.
 - **Features**:
@@ -313,6 +326,9 @@ The Pharmacist platform is designed to support pharmacists in efficiently managi
    - **Search HCW**: Enables the search for healthcare workers, with the ability to view their contact information and redirect to Google Maps for location details, facilitating easy access to healthcare providers.
 
 The Patient platform is designed to support patients in efficiently accessing and managing their healthcare information, ensuring that they have a clear understanding of their health status and can easily navigate their healthcare journey.
+
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/patient%20dashboard.png?raw=true)
+![alt text](https://github.com/Hasbi-sabah/VitaSync/blob/master/.pictures/pat%20presc.png?raw=true)
 
 ## License
 
