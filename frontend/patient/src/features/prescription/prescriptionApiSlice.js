@@ -30,21 +30,11 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
             }),
         }),
 
-        getPrintPrescriptionById: builder.query({
+        getPrescriptionFilledById: builder.mutation({
             query: (id) => ({
-                url: `/api/print_prescription/${id}`,
-                method: "GET",
-                headers: {
-                    'Accept': 'application/pdf',
-                  },
+                url: `/api/prescription/${id}/fill`,
+                method: "POST",
             }),
-            transformResponse: (response) => {
-                if (response.ok) {
-                    return response.blob(); // Handle the response as a Blob
-                } else {
-                    throw new Error('Network response was not ok');
-                }
-            },
         }),
 
         updatePrescriptionById: builder.mutation({
@@ -113,6 +103,7 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
 export const {
     useGetPatientPrescriptionByIdQuery,
     useAddPatientPrescriptionByIdMutation,
+    useGetPrescriptionFilledByIdMutation,
     useGetPrescriptionByIdQuery,
     useGetPrintPrescriptionByIdQuery,
     useGetPatientPrescriptionExtendedByIdQuery,
