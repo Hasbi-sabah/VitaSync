@@ -41,6 +41,9 @@ Ensure your system has more than 2GB available in RAM
 1. Navigate to the `frontend` directory in your project root.
 2. Install the dependencies for each application by running `npm install` in each application's directory.
 3. Start each frontend application by navigating to its directory and running `npm start`.
+(optional)
+3. make build.
+
 
 ## API Routes
 
