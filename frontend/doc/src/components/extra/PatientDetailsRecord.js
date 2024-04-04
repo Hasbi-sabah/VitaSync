@@ -42,7 +42,7 @@ const PatientDetailsRecord = ({ data }) => {
                   mergedArray.map((item, idx) => (
                     <div className="table-row w-full" key={idx}>
                       <div className="table-cell text-center">
-                        {item.activeIngredient}
+                      {item.commercialName} ({item.activeIngredient}), {item.form}, {item.dose} 
                       </div>
                       <div className="table-cell text-left">
                         {item.instructions}

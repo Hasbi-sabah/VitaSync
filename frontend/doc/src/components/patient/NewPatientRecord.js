@@ -201,7 +201,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           .then(() => {   
             addRecord({id: userId, data: recDict})
             .then(() => {
-              alert('rec created yay')         
+              // alert('rec created yay')         
               setSubmitting(false);
               resetForm();
               window.location.reload()
