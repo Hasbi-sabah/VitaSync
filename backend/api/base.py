@@ -74,7 +74,8 @@ def notify(userId, flag, **data):
     if flag == 1:
         subject = "Registration Complete"
         img_base64 = base64.b64encode(make_qr(data['id']).getvalue()).decode('utf-8')
-        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}<img src="data:image/png;base64,{img_base64}" alt="QR Code"></body></html>'
+        print(img_base64)
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}</p><img src="data:image/png;base64,{img_base64}" alt="QR Code"></body></html>'
     elif flag == 2:
         subject = "Appointment Confirmed"
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'
@@ -215,8 +216,8 @@ def get_qr(id):
 
 
 @api.route("/print_prescription/<uuid:id>", methods=["GET"], strict_slashes=False)
-@token_required(["doctor", "nurse", "pharmacist", "patient"])
-def print_prescription(id, current_user):
+# @token_required(["doctor", "nurse", "pharmacist", "patient"])
+def print_prescription(id):
     """
     Generate a PDF file for the given prescription ID and return it.
 
@@ -231,11 +232,11 @@ def print_prescription(id, current_user):
         return jsonify({"error": "Prescription not found"}), 404
 
     # Check if the current user has permission to access this prescription
-    if (
-        current_user.role == "patient"
-        and current_user.profileId != prescription.prescribedForId
-    ):
-        return {"error": "You don't have permission to access this prescription"}, 403
+    # if (
+    #     current_user.role == "patient"
+    #     and current_user.profileId != prescription.prescribedForId
+    # ):
+    #     return {"error": "You don't have permission to access this prescription"}, 403
 
     # Render the prescription details into HTML template
     rendered_template = render_template(

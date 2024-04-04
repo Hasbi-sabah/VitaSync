@@ -9,19 +9,42 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
             }),
         }),
 
-        addPatientPrescriptionById: builder.mutation({
-            query: (id, data) => ({
-                url: `/api/patient/${id}/prescription`,
-                method: "POST",
-                body: { ...data }
+        getPatientPrescriptionExtendedById: builder.query({
+            query: (id) => ({
+                url: `/api/patient/${id}/prescription_extended`,
+                method: "GET",
             }),
         }),
 
+        addPatientPrescriptionById: builder.mutation({
+            query: (id) => ({
+                url: `/api/patient/${id}/prescription`,
+                method: "POST"
+            }),
+        }),
+        
         getPrescriptionById: builder.query({
             query: (id) => ({
                 url: `/api/prescription/${id}`,
                 method: "GET",
             }),
+        }),
+
+        getPrintPrescriptionById: builder.query({
+            query: (id) => ({
+                url: `/api/print_prescription/${id}`,
+                method: "GET",
+                headers: {
+                    'Accept': 'application/pdf',
+                  },
+            }),
+            transformResponse: (response) => {
+                if (response.ok) {
+                    return response.blob(); // Handle the response as a Blob
+                } else {
+                    throw new Error('Network response was not ok');
+                }
+            },
         }),
 
         updatePrescriptionById: builder.mutation({
@@ -42,6 +65,13 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
         getDrugPrescriptionById: builder.query({
             query: (id) => ({
                 url: `/api/prescription/${id}/drug`,
+                method: "GET",
+            }),
+        }),
+        
+        getDrugPrescriptionExtendedById: builder.query({
+            query: (id) => ({
+                url: `/api/prescription/${id}/drug_extended`,
                 method: "GET",
             }),
         }),
@@ -84,6 +114,9 @@ export const {
     useGetPatientPrescriptionByIdQuery,
     useAddPatientPrescriptionByIdMutation,
     useGetPrescriptionByIdQuery,
+    useGetPrintPrescriptionByIdQuery,
+    useGetPatientPrescriptionExtendedByIdQuery,
+    useGetDrugPrescriptionExtendedByIdQuery,
     useUpdatePrescriptionByIdMutation,
     useDeletePrescriptionByIdMutation,
     useGetDrugPrescriptionByIdQuery,

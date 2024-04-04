@@ -172,6 +172,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           let promise = addProcedure({id: userId, data: proDict})
           .then((res) => {
             recDict['procedureId'] = res.data.id
+            console.log('procedure created')
           })
           .catch((error) => {
             alert(`Procedure reation failed: ${error.data.error}`);
@@ -189,12 +190,13 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
               prscDict['instructions'] = drug.instructions
               addPrescDrug({id: res.data.id, data: prscDict})
               .then(() => {
-                console.log('prsc done')
+                console.log('prescription created')
               })
             }
           })
           promises.push(promise)
         }
+        if (promises.length > 0){
         Promise.all(promises)
           .then(() => {   
             addRecord({id: userId, data: recDict})
@@ -208,7 +210,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           .catch((error) => {
             alert(`Initial request failed: ${error.data.error}`);
             setSubmitting(false);
-          })
+          })}
         
         if (values.followUp !== "") {
           const followUpDate = new Date(values.followUp);
