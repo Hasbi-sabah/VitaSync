@@ -52,8 +52,9 @@ const Prescriptions = () => {
 // console.log('n', latestPrescription)
   return (
     <div className="bg-gray mt-20 pb-12 sm:mt-24 lg:mt-32 mx-4">
+      {console.log("Lastest", latestPrescription)}
       {latestPrescription ? <LatestPrescription 
-        latestPrescriptions={latestPrescription}
+        latestPrescription={latestPrescription}
         /> : ""}
       <table className="w-full text-lg bg-white table-auto">
         <thead>
