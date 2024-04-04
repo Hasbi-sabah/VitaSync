@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import time
 from models.hcw import HCW
 from models.drug import Drug
 from models.drug_prescribed import DrugPrescribed
@@ -10,17 +11,59 @@ from models.vaccine import Vaccine
 from models.procedure import Procedure
 from models.record import Record
 from models.user import User
+from models.appointment import Appointment
 import random
 
 
-patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat1', password='pat1')
-patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient', username='pat2', password='pat2')
-doc1 = HCW(firstName='John', lastName='Doe', username='doc1', password='doc1', role='doctor')
-doc2 = HCW(firstName='Jane', lastName='Smith', role='doctor', username='doc2', password='doc2')
-nurse1 = HCW(firstName='Alice', lastName='Johnson', role='nurse', username='nurse1', password='nurse1')
-nurse2 = HCW(firstName='Bob', lastName='Williams', role='nurse', username='nurse2', password='nurse2')
-pharmacist1 = HCW(firstName='Eva', lastName='Davis', role='pharmacist', username='pharm1', password='pharm1')
-pharmacist2 = HCW(firstName='Tom', lastName='Jones', role='pharmacist', username='pharm2', password='pharm2')
+from datetime import datetime
+
+patient1 = Patient(firstName='James', lastName='Smith', sex='Male', phoneNumber='123-456-7890', birthDate=datetime(2000, 1, 15).timestamp(), address='1234 Elm Street', role='patient', username='pat1', password='pat1')
+patient2 = Patient(firstName='Emily', lastName='Johnson', sex='Female', phoneNumber='234-567-8901', birthDate=datetime(1995, 6, 22).timestamp(), address='5678 Oak Avenue', role='patient', username='pat2', password='pat2')
+patient3 = Patient(firstName='Michael', lastName='Williams', sex='Male', phoneNumber='345-678-9012', birthDate=datetime(1988, 12, 10).timestamp(), address='9101 Pine Lane', role='patient', username='pat3', password='pat3')
+patient4 = Patient(firstName='Emma', lastName='Brown', sex='Female', phoneNumber='456-789-0123', birthDate=datetime(1992, 9, 5).timestamp(), address='1212 Maple Drive', role='patient', username='pat4', password='pat4')
+patient5 = Patient(firstName='David', lastName='Jones', sex='Male', phoneNumber='567-890-1234', birthDate=datetime(1977, 3, 28).timestamp(), address='1414 Cedar Road', role='patient', username='pat5', password='pat5')
+patient6 = Patient(firstName='Olivia', lastName='Miller', sex='Female', phoneNumber='678-901-2345', birthDate=datetime(1985, 11, 17).timestamp(), address='1616 Birch Court', role='patient', username='pat6', password='pat6')
+patient7 = Patient(firstName='William', lastName='Davis', sex='Male', phoneNumber='789-012-3456', birthDate=datetime(1998, 4, 30).timestamp(), address='1818 Walnut Avenue', role='patient', username='pat7', password='pat7')
+patient8 = Patient(firstName='Ava', lastName='Garcia', sex='Female', phoneNumber='890-123-4567', birthDate=datetime(1990, 7, 12).timestamp(), address='2020 Pineapple Street', role='patient', username='pat8', password='pat8')
+patient9 = Patient(firstName='John', lastName='Rodriguez', sex='Male', phoneNumber='901-234-5678', birthDate=datetime(1982, 8, 25).timestamp(), address='2222 Cherry Lane', role='patient', username='pat9', password='pat9')
+patient10 = Patient(firstName='Sophia', lastName='Martinez', sex='Female', phoneNumber='012-345-6789', birthDate=datetime(1979, 2, 9).timestamp(), address='2424 Grapevine Road', role='patient', username='pat10', password='pat10')
+
+
+
+doc1 = HCW(firstName='John', lastName='Doe', username='doc1', password='doc1', role='doctor', speciality='Cardiology', workNumber='123-456-7890', workAddress='123 Main St, City, Country')
+doc2 = HCW(firstName='Jane', lastName='Smith', role='doctor', username='doc2', password='doc2', speciality='Pediatrics', workNumber='987-654-3210', workAddress='456 Elm St, City, Country')
+nurse1 = HCW(firstName='Alice', lastName='Johnson', role='nurse', username='nurse1', password='nurse1', speciality='Emergency Care', workNumber='111-222-3333', workAddress='789 Oak St, City, Country')
+nurse2 = HCW(firstName='Bob', lastName='Williams', role='nurse', username='nurse2', password='nurse2', speciality='Surgery', workNumber='444-555-6666', workAddress='101 Pine St, City, Country')
+pharmacist1 = HCW(firstName='Eva', lastName='Davis', role='pharmacist', username='pharm1', password='pharm1', speciality='Clinical Pharmacy', workNumber='777-888-9999', workAddress='321 Cedar St, City, Country')
+pharmacist2 = HCW(firstName='Tom', lastName='Jones', role='pharmacist', username='pharm2', password='pharm2', speciality='Hospital Pharmacy', workNumber='222-333-4444', workAddress='555 Maple St, City, Country')
+
+doc3 = HCW(firstName='Michael', lastName='Brown', role='doctor', username='doc3', password='doc3', speciality='Dermatology', workNumber='111-222-3333', workAddress='789 Oak St, City, Country')
+doc4 = HCW(firstName='Jessica', lastName='Taylor', role='doctor', username='doc4', password='doc4', speciality='Internal Medicine', workNumber='444-555-6666', workAddress='101 Pine St, City, Country')
+nurse3 = HCW(firstName='William', lastName='Martinez', role='nurse', username='nurse3', password='nurse3', speciality='Psychiatric Nursing', workNumber='777-888-9999', workAddress='321 Cedar St, City, Country')
+nurse4 = HCW(firstName='Olivia', lastName='Garcia', role='nurse', username='nurse4', password='nurse4', speciality='Emergency Care', workNumber='222-333-4444', workAddress='555 Maple St, City, Country')
+pharmacist3 = HCW(firstName='Daniel', lastName='Rodriguez', role='pharmacist', username='pharm3', password='pharm3', speciality='Retail Pharmacy', workNumber='123-456-7890', workAddress='123 Main St, City, Country')
+pharmacist4 = HCW(firstName='Sophia', lastName='Hernandez', role='pharmacist', username='pharm4', password='pharm4', speciality='Clinical Pharmacy', workNumber='987-654-3210', workAddress='456 Elm St, City, Country')
+
+doc5 = HCW(firstName='David', lastName='Wilson', role='doctor', username='doc5', password='doc5', speciality='Neurology', workNumber='555-666-7777', workAddress='888 Pine St, City, Country')
+doc6 = HCW(firstName='Sarah', lastName='Anderson', role='doctor', username='doc6', password='doc6', speciality='Oncology', workNumber='666-777-8888', workAddress='999 Oak St, City, Country')
+nurse5 = HCW(firstName='Matthew', lastName='Thomas', role='nurse', username='nurse5', password='nurse5', speciality='Pediatric Nursing', workNumber='333-444-5555', workAddress='111 Cedar St, City, Country')
+nurse6 = HCW(firstName='Emily', lastName='White', role='nurse', username='nurse6', password='nurse6', speciality='ICU Nursing', workNumber='777-888-9999', workAddress='555 Elm St, City, Country')
+pharmacist5 = HCW(firstName='Andrew', lastName='Lopez', role='pharmacist', username='pharm5', password='pharm5', speciality='Community Pharmacy', workNumber='888-999-0000', workAddress='777 Maple St, City, Country')
+pharmacist6 = HCW(firstName='Madison', lastName='King', role='pharmacist', username='pharm6', password='pharm6', speciality='Geriatric Pharmacy', workNumber='000-111-2222', workAddress='444 Cedar St, City, Country')
+
+current_timestamp = int(time.time())
+
+# Appointments for today at different times (assuming each appointment is one hour apart)
+appointment1 = Appointment(patientId=patient1.id, hcwId=doc1.id, time=current_timestamp + 0)
+appointment2 = Appointment(patientId=patient2.id, hcwId=doc1.id, time=current_timestamp + 3600)  # 1 hour later
+appointment3 = Appointment(patientId=patient3.id, hcwId=doc1.id, time=current_timestamp + 7200)  # 2 hours later
+appointment4 = Appointment(patientId=patient4.id, hcwId=doc1.id, time=current_timestamp + 10800)  # 3 hours later
+appointment5 = Appointment(patientId=patient5.id, hcwId=doc1.id, time=current_timestamp + 14400)  # 4 hours later
+appointment6 = Appointment(patientId=patient6.id, hcwId=doc1.id, time=current_timestamp + 18000)  # 5 hours later
+appointment7 = Appointment(patientId=patient7.id, hcwId=doc1.id, time=current_timestamp + 21600)  # 6 hours later
+appointment8 = Appointment(patientId=patient8.id, hcwId=doc1.id, time=current_timestamp + 25200)  # 7 hours later
+appointment9 = Appointment(patientId=patient9.id, hcwId=doc1.id, time=current_timestamp + 28800)  # 8 hours later
+appointment10 = Appointment(patientId=patient10.id, hcwId=doc1.id, time=current_timestamp + 32400) 
 # admin = HCW(username='admin', password='admin', role='admin')
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
