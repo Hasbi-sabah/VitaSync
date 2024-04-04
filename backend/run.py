@@ -6,6 +6,7 @@ from os import getenv
 import schedule
 import threading
 import time
+from flask import jsonify
 from api.base import check_appointments
 
 
@@ -39,7 +40,7 @@ app.register_blueprint(api)
 # as one link will take over
 cors_config = {
     "origins": [
-        "http://vitasync.me",
+        "https://nearly-valued-leopard.ngrok-free.app",
         "https://vitasync.pagekite.me",
         "https://api-vitasync.pagekite.me",
         "https://doc-vitasync.pagekite.me",
@@ -70,6 +71,15 @@ def job_scheduler():
 # Start the scheduler in a separate thread
 scheduler_thread = threading.Thread(target=job_scheduler)
 scheduler_thread.start()
+
+@app.route("/", methods=["GET"], strict_slashes=False)
+def home():
+    """
+    Display the home page of the API.
+    """
+    return jsonify({"message": "Welcome to VitaSync core API v4.1.1"})
+
+
 
 # Run the Flask app in debug mode
 if __name__ == '__main__':
