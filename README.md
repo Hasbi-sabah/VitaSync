@@ -49,6 +49,9 @@ Ensure your system has more than 2GB available in RAM
 
 This section provides an overview of all available API endpoints in the VitaSync backend.
 
+### home
+- `GET /`: json response about status and version of api
+ 
 ### Healthcare Workers (HCW)
 
 - `GET /hcw_extended`: Retrieve extended information about all healthcare workers.
