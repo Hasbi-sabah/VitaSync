@@ -51,7 +51,7 @@ This section provides an overview of all available API endpoints in the VitaSync
 
 ### home
 - `GET /`: json response about status and version of api
- 
+
 ### Healthcare Workers (HCW)
 
 - `GET /hcw_extended`: Retrieve extended information about all healthcare workers.
@@ -152,7 +152,7 @@ This section provides an overview of all available API endpoints in the VitaSync
 
 ## Email Notifications
 
-The VitaSync API is designed to enhance the user experience by sending automated emails to users at various stages of their interaction with the system. These emails are sent to notify users about important events such as registration, appointment creation, rescheduling, and cancellation. This feature ensures that users are kept informed and can take necessary actions promptly.
+The VitaSync API is designed to enhance the user experience by sending automated emails to users at various stages of their interaction with the system. These emails are sent to notify users about important events such as registration, appointment creation, rescheduling, and cancellation. This feature ensures that users are kept informed and can take necessary actions promptly, backed by a checker that runs both when triggered and in a loop.
 
 ### Registration Confirmation
 
