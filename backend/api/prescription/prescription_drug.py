@@ -45,6 +45,51 @@ def get_all_prescription_drugs(prescriptionId, current_user):
     # Return a JSON response containing a list of drugs in the prescription
     return jsonify([drug.to_dict() for drug in prescription.drugs if not drug.archived])
 
+@api.route(
+    "/prescription/<uuid:prescriptionId>/drug_extended", methods=["GET"], strict_slashes=False
+)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
+def get_all_prescription_drugs_extended(prescriptionId, current_user):
+    """
+    Get all drugs prescribed in a specific prescription.
+
+    Parameters:
+        prescriptionId (uuid): The ID of the prescription for which drugs are to be retrieved.
+        current_user: The user making the request with appropriate authorization token.
+
+    Returns:
+        A JSON response containing a list of all drugs in the prescription.
+
+    Raises:
+        404: If the specified prescription ID is not found.
+        403: If the user does not have sufficient privileges to access the prescription.
+    """
+    # Retrieve the prescription using the provided prescriptionId
+    prescription = database.get_by_id(Prescription, str(prescriptionId))
+
+    # Check if the prescription exists
+    if not prescription:
+        # Raise a 404 error if the prescription is not found
+        return jsonify({"error": "Prescription not found"}), 404
+
+    # Check user role and profile ID for authorization
+    if (
+        current_user.role == "prescription"
+        and current_user.profileId != prescription.prescribedForId
+    ):
+        # Raise a 403 error if the user doesn't have sufficient privileges
+        return {"error": "Insufficient privileges!"}, 403
+
+    res = []
+    for drug in prescription.drugs:
+        if not drug.archived:
+            drugDict = drug.to_dict()
+            for key in ['commercialName', 'dose', 'form', 'activeIngredient', 'price']:
+                drugDict[key] = getattr(drug.drug, key)
+            res.append(drugDict)
+    print(res)
+    # Return a JSON response containing a list of drugs in the prescription
+    return jsonify(res)
 
 @api.route(
     "/prescription/<uuid:prescriptionId>/drug", methods=["POST"], strict_slashes=False

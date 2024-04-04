@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
 import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
+import ViewPatient from "./ViewPatient";
+
 
   const label_style = "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
   const input_style =
@@ -119,9 +121,27 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
     );
   };
 
-  const SignUpForm = ({ closeOverlay }) => {
+  const SignUpForm = ({ closeOverlay, setPatientId }) => {
     const [addPatient, { isLoading, isError, error }] = useAddPatientMutation();
+    const [key, setKey] = useState(0); // Keep this for forcing re-render
+   
+    const handleSubmit = (values, { setSubmitting, resetForm }) => {
+       addPatient(values)
+         .unwrap()
+         .then((res) => {
+           setPatientId(res.id); // Use the prop function to update the state in CreateNewPatient
+           setKey(prevKey => prevKey + 1); // Force a re-render
+           setSubmitting(false);
+           resetForm();
+          //  closeOverlay();
+         })
+         .catch((error) => {
+           alert(`Creation failed: ${error.data.error}`);
+           setSubmitting(false);
+         });
+    };
     return (
+      <div key={key}>
       <Formik
         initialValues={{
           firstName: "",
@@ -153,24 +173,7 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
           username: Yup.string(),
           address: Yup.string().required("Required"),
         })}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
-          addPatient(values).unwrap()
-            .then(() => {
-              alert("New patient created");
-              setSubmitting(false);
-              resetForm();
-              closeOverlay();
-          })
-          .catch((error) => {
-            alert(`Creation failed: ${error.data.error}`);
-            setSubmitting(false);
-          })
-          // setTimeout(() => {
-          //   alert(JSON.stringify(values, null, 2));
-          //   setSubmitting(false);
-          //   resetForm();
-          // }, 400);
-        }}
+        onSubmit={handleSubmit}
       >
         <Form className="flex mt-4 lg:mt-2 flex-col gap-3 lg:gap-4">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4">
@@ -224,9 +227,6 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
             </MySelect>
             <MyDateInput label={"Date of Birth"} name="birthDate" />
           </div>
-
-          
-
           <MyTextBoxInput
             label={"Address"}
             name="address"
@@ -250,20 +250,33 @@ import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
           </div>
         </Form>
       </Formik>
+      </div>
     );
   };
 
   const CreateNewPatient = ({ closeOverlay }) => {
+    const [patientId, setPatientId] = useState(null);
+   
     return (
-      <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto lg:overflow-hidden">
-        <div className="flex justify-center items-center lg:mt-16 bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
-          <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-5 lg:mt-1 text-center mb-1">Create Patient Account</h1>
-            <div className="mb-12 sm:mb-5 h-[70vh] sm:h-[] sm:min-h-[60vh] overflow-auto ">{SignUpForm({ closeOverlay })}</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+      <>
+         <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto lg:overflow-hidden">
+           <div className="flex justify-center items-center lg:mt-16 bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
+             <div>
+               <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-5 lg:mt-1 text-center mb-1">Create Patient Account</h1>
+               <div className="mb-12 sm:mb-5 h-[70vh] sm:h-[] sm:min-h-[60vh] overflow-auto ">
+                 {/* Pass setPatientId as a prop */}
+                 <SignUpForm closeOverlay={closeOverlay} setPatientId={setPatientId} />
+               </div>
+             </div>
+           </div>
+         </div>
+         <div>
+           {patientId && (
+             <ViewPatient closeOverlay={closeOverlay} userId={patientId} />
+           )}
+         </div>
+      </>
+     );
+   };
 
   export default CreateNewPatient;

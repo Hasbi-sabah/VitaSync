@@ -10,17 +10,23 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
         }),
 
         addPatientPrescriptionById: builder.mutation({
-            query: (id, data) => ({
+            query: (id) => ({
                 url: `/api/patient/${id}/prescription`,
-                method: "POST",
-                body: { ...data }
+                method: "POST"
             }),
         }),
-
+        
         getPrescriptionById: builder.query({
             query: (id) => ({
                 url: `/api/prescription/${id}`,
                 method: "GET",
+            }),
+        }),
+
+        getPrescriptionFilledById: builder.mutation({
+            query: (id) => ({
+                url: `/api/prescription/${id}/fill`,
+                method: "POST",
             }),
         }),
 
@@ -42,6 +48,13 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
         getDrugPrescriptionById: builder.query({
             query: (id) => ({
                 url: `/api/prescription/${id}/drug`,
+                method: "GET",
+            }),
+        }),
+        
+        getDrugPrescriptionExtendedById: builder.query({
+            query: (id) => ({
+                url: `/api/prescription/${id}/drug_extended`,
                 method: "GET",
             }),
         }),
@@ -83,7 +96,9 @@ export const prescriptionApiSclice = apiSlice.injectEndpoints({
 export const {
     useGetPatientPrescriptionByIdQuery,
     useAddPatientPrescriptionByIdMutation,
+    useGetPrescriptionFilledByIdMutation,
     useGetPrescriptionByIdQuery,
+    useGetDrugPrescriptionExtendedByIdQuery,
     useUpdatePrescriptionByIdMutation,
     useDeletePrescriptionByIdMutation,
     useGetDrugPrescriptionByIdQuery,

@@ -6,12 +6,12 @@ const authLink = process.env.REACT_APP_AUTH_URL;
 const Logout = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    const handleLogOut = () => {
-      dispatch(logOut());
-      window.location.href = `${authLink}/login`;
-    };
+  const handleLogOut = () => {
+    dispatch(logOut());
+    window.location.href = "http://localhost:3000/login";
+  };
 
+  useEffect(() => {
     handleLogOut();
   }, [dispatch]);
 

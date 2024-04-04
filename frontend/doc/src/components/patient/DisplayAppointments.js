@@ -43,7 +43,7 @@ const DisplayAppointments = ({ data, label }) => {
                 sn={(currentPage - 1) * pageSize + idx + 1}
                 key={idx}
                 name={`${user.firstName} ${user.lastName}`}
-                sex={user.sex === "Male" ? "M" : user.sex === "Female" ? "F" : "N/A"}
+                sex={user.sex === "male" ? "M" : user.sex === "female" ? "F" : "N/A"}
                 dob={user.birthDate}
                 contact={user.phoneNumber}
                 date={user.time.split(' ')[2] + ' ' + user.time.split(' ')[3]}

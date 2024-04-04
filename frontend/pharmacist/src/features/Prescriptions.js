@@ -5,6 +5,8 @@ import { useMediaQuery } from "react-responsive";
 import LatestPrescription from "./LatestPrescription";
 
 const Prescriptions = ({ patientId }) => {
+  const { data: hcwInfo } = useGetHcwByIdQuery(data.assessedById || data.takenById)
+
   // API call to /api/patient/${id}/prescription
   // updatePrescriptionById
 

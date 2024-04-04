@@ -6,22 +6,30 @@ import ViewDrug from './ViewDrug';
 
 
 export const LookUpPatient = ({ searchQuery }) => {
-    console.log('Patient search');
-    const { data: patientInfo, isLoading, isError } = useGetPatientByIdQuery(searchQuery);
+    const { data: patientInfo, isLoading, isError, error } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
-    console.log(patientInfo)
+
 
     useEffect(() => {
-        if (!isLoading && !isError && patientInfo) {
+        if (isLoading) {
+            return; // Do nothing if still loading
+        }
+        if (isError) {
+            alert("Patient not found.");
+            return;
+        }
+        if (patientInfo) {
             setShowPatientDetails(true);
         } else {
             setShowPatientDetails(false);
         }
-    }, [isLoading, isError, patientInfo])
+    }, [isLoading, isError, patientInfo, searchQuery, error]);
 
-    return showPatientDetails ? (
-        <ViewPatient closeOverlay={() => setShowPatientDetails(false)} patientId={searchQuery} patientInfo={patientInfo}  />
-      ) : null;
+    return (
+        <>
+            {showPatientDetails && <ViewPatient closeOverlay={() => setShowPatientDetails(false)} userId={searchQuery} />}
+        </>
+      );
 }
 
 export const LookUpDrug = ({ searchQuery }) => {
@@ -35,6 +43,7 @@ export const LookUpDrug = ({ searchQuery }) => {
             setShowDrugDetails(true);
         } else {
             setShowDrugDetails(false);
+            alert("Drug not found.");
         }
     }, [isLoading, isError, drugInfo])
 
@@ -70,9 +79,11 @@ export const LookUpDrug = ({ searchQuery }) => {
     //         "description": "Advil is used to relieve pain from various conditions such as headache, dental pain, menstrual cramps, muscle aches, or arthritis."
     //     }
     // ]
-    return showDrugDetails ? (
-        <ViewDrug closeOverlay={() => setShowDrugDetails(false)} drugId={searchQuery} drugInfo={drugInfo} />
-      ) : null;
+    return (
+    <>
+        {showDrugDetails && <ViewDrug closeOverlay={() => setShowDrugDetails(false)} drugId={searchQuery} drugInfo={drugInfo} />}
+    </>
+    );
 }
 
 const Searchbox = () => {
@@ -108,7 +119,7 @@ const Searchbox = () => {
                 value={searchQuery} 
                 onChange={handleInputChange} 
                 onKeyDown={handleKeyPress}
-                className='rounded-[20px] p-2 text-center h-16 w-72 lg:w-[24rem]'
+                className='rounded-[20px] p-2 text-center h-16 w-72 lg:w-128'
             />
             <span className='inline absolute h-10 w-10 top-4 left-5'>
                 { svgIcon }

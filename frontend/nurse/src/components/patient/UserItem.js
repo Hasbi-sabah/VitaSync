@@ -3,9 +3,8 @@ import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
-const UserItem = ({ patientId, sn, name, sex, age, contact, date, time}) => {
+const UserItem = ({ patientId, sn, name, sex, dob, contact, date, time}) => {
   const location = useLocation();
-  age = new Date().getFullYear() - new Date(age).getFullYear() || 'N/A'
   const isDashboard = location.pathname === '/dashboard';
   const bgColor = sn % 2 === 1 ? "bg-gray" : "";
   const [showPatientDetails, setShowPatientDetails] = useState(false);
@@ -16,7 +15,17 @@ const UserItem = ({ patientId, sn, name, sex, age, contact, date, time}) => {
   const closeOverlay = () => {
     setShowPatientDetails(false);
   };
-
+  const calculateAge = (dob) => {
+    const birthDate = new Date(dob);
+    const currentDate = new Date();
+    let age = currentDate.getFullYear() - birthDate.getFullYear();
+    const monthDifference = currentDate.getMonth() - birthDate.getMonth();
+    if (monthDifference < 0 || (monthDifference === 0 && currentDate.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    return age;
+  };
+  const age = calculateAge(dob);
   const isMobile = useMediaQuery({maxWidth:1024});
   return (
     <tr className={`text-textGray text-xl lg:text-base text-center h-12 ${bgColor}`}>

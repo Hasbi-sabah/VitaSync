@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import PatientDetails from "./PatientDetails";
-import PatientPrescriptions from "./PatientPrescriptions";
-import Prescriptions from "../../features/Prescriptions";
 import Records from "../../features/Records";
 
 // API call for patient record
-const ViewPatient = ({ patientId, closeOverlay, patientInfo }) => {
+const ViewPatient = ({ userId, closeOverlay }) => {
   const [showHistory, setShowHistory] = useState(false);
 
   const toggleHistory = () => {
@@ -13,8 +11,8 @@ const ViewPatient = ({ patientId, closeOverlay, patientInfo }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
-      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-screen relative lg:min-w-[40rem]">
+    <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 pt-24">
+      <div className="bg-lightBlue2 rounded-lg shadow-lg sm:p-6 h-full z-20 overflow-auto pt-12 sm:max-w-full relative lg:min-w-[40rem] lg:ml-64 sm:ml-56 w-full sm:w-[80%]">
         <svg
           className="absolute top-2 right-2 cursor-pointer"
           onClick={closeOverlay}
@@ -31,7 +29,7 @@ const ViewPatient = ({ patientId, closeOverlay, patientInfo }) => {
         </h1>
         <div className="mb-4">
           {/* Add more patient details here */}
-          <PatientDetails patientId={patientId} closeOverlay={closeOverlay} patientInfo={patientInfo} />
+          <PatientDetails userId={userId} closeOverlay={closeOverlay} />
         </div>
         <div
           className="rounded-lg h-10 w-full mt-10 flex justify-between items-center cursor-pointer  bg-white"
@@ -63,11 +61,10 @@ const ViewPatient = ({ patientId, closeOverlay, patientInfo }) => {
           )}
         </div>
         {showHistory ? (
-          <Records patientId={patientId} />
+          <Records patientId={userId} />
         ) : (
           ""
         )}
-        <Prescriptions patientId={patientId} />
       </div>
     </div>
   );

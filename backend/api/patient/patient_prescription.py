@@ -46,6 +46,52 @@ def get_all_patient_prescriptions(patientId, current_user):
         ]
     )
 
+@api.route(
+    "/patient/<uuid:patientId>/prescription_extended", methods=["GET"], strict_slashes=False
+)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
+def get_all_patient_prescriptions_extended(patientId, current_user):
+    """
+    Get all prescriptions associated with a patient.
+
+    Parameters:
+    - patientId (uuid): The unique identifier of the patient.
+
+    Raises:
+    - 404: If the patient with the provided ID is not found.
+    - 403: If the current user does not have sufficient privileges to access the prescriptions.
+
+    Returns:
+    - JSON: A list of dictionaries representing the prescriptions associated with the patient.
+    """
+    # Retrieve the patient from the database using the patientId
+    patient = database.get_by_id(Patient, str(patientId))
+
+    # Check if the patient exists
+    if not patient:
+        # Return a 404 error response if the patient is not found
+        return jsonify({"error": "Patient not found"}), 404
+
+    # Check if the current user has sufficient privileges to access the prescriptions
+    if current_user.role == "patient" and current_user.profileId != str(patientId):
+        # Return a 403 error response if the user doesn't have sufficient privileges
+        return {"error": "Insufficient privileges!"}, 403
+
+    # Filter and jsonify the prescriptions associated with the patient
+    res = []
+    for prescription in patient.prescriptions:
+        if not prescription.archived:
+            prescDict = prescription.to_dict()
+            for drug in prescription.drugs:
+                if not drug.archived:
+                    prescDict['instructions'] = drug.instructions
+                    for key in ['commercialName', 'dose', 'form', 'activeIngredient', 'price']:
+                        prescDict[key] = getattr(drug.drug, key)
+            res.append(prescDict)
+            
+    return jsonify(res)
+
+
 
 @api.route(
     "/patient/<uuid:patientId>/prescription", methods=["POST"], strict_slashes=False

@@ -121,25 +121,27 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
-  const SignUpForm = ({ closeOverlay }) => {
+  const SignUpForm = ({ closeOverlay, setPatientId }) => {
     const [addPatient, { isLoading, isError, error }] = useAddPatientMutation();
-    const [patientId, setPatientId] = useState(null);
+    const [key, setKey] = useState(0); // Keep this for forcing re-render
+   
     const handleSubmit = (values, { setSubmitting, resetForm }) => {
-      addPatient(values)
-        .unwrap()
-        .then((res) => {
-          setPatientId(res.id);
-          setSubmitting(false);
-          resetForm();
-          closeOverlay();
-        })
-        .catch((error) => {
-          alert(`Creation failed: ${error.data.error}`);
-          setSubmitting(false);
-        });
+       addPatient(values)
+         .unwrap()
+         .then((res) => {
+           setPatientId(res.id); // Use the prop function to update the state in CreateNewPatient
+           setKey(prevKey => prevKey + 1); // Force a re-render
+           setSubmitting(false);
+           resetForm();
+          //  closeOverlay();
+         })
+         .catch((error) => {
+           alert(`Creation failed: ${error.data.error}`);
+           setSubmitting(false);
+         });
     };
     return (
-      <>
+      <div key={key}>
       <Formik
         initialValues={{
           firstName: "",
@@ -248,21 +250,33 @@ import ViewPatient from "./ViewPatient";
           </div>
         </Form>
       </Formik>
-      </>
+      </div>
     );
   };
 
   const CreateNewPatient = ({ closeOverlay }) => {
+    const [patientId, setPatientId] = useState(null);
+   
     return (
-      <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto lg:overflow-hidden">
-        <div className="flex justify-center items-center lg:mt-16 bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
-          <div>
-            <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-5 lg:mt-1 text-center mb-1">Create Patient Account</h1>
-            <div className="mb-12 sm:mb-5 h-[70vh] sm:h-[] sm:min-h-[60vh] overflow-auto ">{SignUpForm({ closeOverlay })}</div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+      <>
+         <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 overflow-auto lg:overflow-hidden">
+           <div className="flex justify-center items-center lg:mt-16 bg-lightBlue2 text-white lg:h-[85vh] rounded-xl shadow-lg w-screen sm:ml-56 lg:p-4 lg:w-auto overflow-auto">
+             <div>
+               <h1 className="text-2xl sm:text-3xl lg:text-xl font-semibold pt-5 lg:mt-1 text-center mb-1">Create Patient Account</h1>
+               <div className="mb-12 sm:mb-5 h-[70vh] sm:h-[] sm:min-h-[60vh] overflow-auto ">
+                 {/* Pass setPatientId as a prop */}
+                 <SignUpForm closeOverlay={closeOverlay} setPatientId={setPatientId} />
+               </div>
+             </div>
+           </div>
+         </div>
+         <div>
+           {patientId && (
+             <ViewPatient closeOverlay={closeOverlay} userId={patientId} />
+           )}
+         </div>
+      </>
+     );
+   };
 
   export default CreateNewPatient;
