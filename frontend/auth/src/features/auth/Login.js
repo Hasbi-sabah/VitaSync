@@ -100,7 +100,7 @@ const Login = () => {
           }}
         >
             <div className="flex flex-col justify-center items-center">
-              <h1 className="text-xl font-semibold">Login</h1>
+              <h1 className="text-xl font-semibold p-5">Login</h1>
               <Form className="">
                 <div className={"mb-5"}>
                   <MyTextInput label={"Username"} name="username" type="text" />
