@@ -7,10 +7,11 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from './features/auth/authSlice';
 import Logout from './components/Logout';
 
+const authLink = process.env.REACT_APP_AUTH_URL;
 function App() {
   const dispatch = useDispatch()
   const re_routeLogin = () => {
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = `${authLink}/login`;
     return null;
   };
 

@@ -1,11 +1,12 @@
 from datetime import datetime
-import threading
 from flask import Flask
 from flask_cors import CORS
 from api import api
 from os import getenv
 import schedule
+import threading
 import time
+from flask import jsonify
 from api.base import check_appointments
 
 
@@ -28,7 +29,6 @@ SMTP_API_KEY = getenv('SMTP_API_KEY')
 app.config['SECRET_KEY'] = SECRET_KEY
 app.config['SMTP_EMAIL'] = SMTP_EMAIL
 app.config['SMTP_API_KEY'] = SMTP_API_KEY
-
 # Register the API blueprint
 
 # Register the API blueprint
@@ -38,7 +38,15 @@ app.register_blueprint(api)
 # dev routes for frontend, to be removed in production
 # as one link will take over
 cors_config = {
-    "origins": ["http://localhost:5000", "http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://localhost:3003", "http://localhost:3004"],
+    "origins": [
+        "https://nearly-valued-leopard.ngrok-free.app",
+        "https://thevitasync.pagekite.me",
+        "https://api-thevitasync.pagekite.me",
+        "https://doc-thevitasync.pagekite.me",
+        "https://nurse-thevitasync.pagekite.me",
+        "https://patient-thevitasync.pagekite.me",
+        "https://pharmacy-thevitasync.pagekite.me",
+        ],
     "supports_credentials": True
 }
 CORS(app, **cors_config)
@@ -63,20 +71,16 @@ def job_scheduler():
 scheduler_thread = threading.Thread(target=job_scheduler)
 scheduler_thread.start()
 
+@app.route("/", methods=["GET"], strict_slashes=False)
+def home():
+    """
+    Display the home page of the API.
+    """
+    return jsonify({"message": "Welcome to VitaSync core API v4.1.1"})
 
 
+
+# Run the Flask app in debug mode
 if __name__ == '__main__':
-    """Run the app in debug mode."""
-    # Schedule job to run at specific time daily
-    # Schedule job to run at specific time daily
-    schedule.every().day.at("16:00").do(run_job, app)
-    
-    # Start the job scheduler
-    
-    # Start the job scheduler
-    job_scheduler()
-    
-    # Run the Flask app in debug mode
-    
-    # Run the Flask app in debug mode
-    app.run(debug=True, host=host, port=port)
+    with app.app_context():
+        app.run(debug=True, host=host, port=port)
