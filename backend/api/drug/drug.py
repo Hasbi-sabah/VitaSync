@@ -4,6 +4,45 @@ from api.auth_middleware import token_required
 from models import database
 from models.drug import Drug
 
+@api.route("/search_drug", methods=["POST"], strict_slashes=False)
+@token_required(["doctor", "nurse", "pharmacist", "patient"])
+def list_drugs(current_user):
+    """
+    Get details of all drugs.
+
+    Parameters:
+    - current_user (User): The user making the request (doctor, nurse, or pharmacist with token-based authentication).
+
+    Returns:
+    - JSON object containing details of all drugs.
+    """
+    content_type = request.headers.get("Content-Type")
+
+    # Parse the request data based on content type
+    if content_type == "application/json":
+        data = request.get_json()
+    else:
+        ids = request.args.get('ids', None)
+        if ids:
+            data = {'ids': ids.split(',')}
+        else:
+            data = None
+    print(data)
+    if data and data.get('ids', None) != None:
+        drugs_list = []
+        ids = data.get('ids', None)
+        for id in ids:
+            drug = database.get_by_id(Drug, id)
+            if drug:
+                drugs_list.append(drug)
+    else:
+    # Retrieve all drugs from the database and convert each drug object to a dictionary
+        drugs_list = database.get_all(Drug)
+
+    print('woo')
+    print([drug.to_dict() for drug in drugs_list])
+    # Return the list of drug dictionaries as a JSON response
+    return jsonify([drug.to_dict() for drug in drugs_list])
 
 @api.route("/drug", methods=["GET"], strict_slashes=False)
 @token_required(["doctor", "nurse", "pharmacist", "patient"])
@@ -69,7 +108,6 @@ def drug_lookup(current_user):
 
     # Perform drug lookup based on the provided name (if any)
     res = [drug.to_dict() for drug in database.drug_lookup(name=data.get("name", ""))]
-    print(res)
     # Return the list of drugs in JSON format
     return jsonify(res)
 

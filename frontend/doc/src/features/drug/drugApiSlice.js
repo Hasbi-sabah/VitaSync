@@ -2,6 +2,17 @@ import { apiSlice } from "../../app/api/apiSlice";
 
 export const drugApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
+        getSearchDrug: builder.query({
+            query: (data) => ({
+                url: "/api/search_drug",
+                method: "POST",
+                body: { ids: data },
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            }),
+        }),
+
         getDrug: builder.query({
             query: () => ({
                 url: "/api/drug",
@@ -52,6 +63,7 @@ export const drugApiSlice = apiSlice.injectEndpoints({
 });
 
 export const {
+    useGetSearchDrugQuery,
     useGetDrugQuery,
     useGetDrugByIdQuery,
     useAddDrugMutation,
