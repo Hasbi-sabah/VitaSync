@@ -6,7 +6,7 @@ function App() {
   return (
     <Routes>
       <Route path="login" element={<Login />} />
-      <Route index element={<Public />} />
+      <Route index element={<Login />} />
         {/* pulic routes*/}
         
         {/* private routes*/}

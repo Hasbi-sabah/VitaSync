@@ -1,11 +1,12 @@
 from datetime import datetime
-import threading
 from flask import Flask
 from flask_cors import CORS
 from api import api
 from os import getenv
 import schedule
+import threading
 import time
+from flask import jsonify
 from api.base import check_appointments
 
 
@@ -39,14 +40,14 @@ app.register_blueprint(api)
 # as one link will take over
 cors_config = {
     "origins": [
-        "http://localhost:3000",
-        "http://localhost:3001",
-        "http://localhost:3002",
-        "http://localhost:3003",
-        "http://localhost:3004",
-        "http://localhost:5000",
-    ],
-    
+        "https://nearly-valued-leopard.ngrok-free.app",
+        "https://vitasync.pagekite.me",
+        "https://api-vitasync.pagekite.me",
+        "https://doc-vitasync.pagekite.me",
+        "https://nurse-vitasync.pagekite.me",
+        "https://patient-vitasync.pagekite.me",
+        "https://pharmacy-vitasync.pagekite.me",
+        ],
     "supports_credentials": True
 }
 CORS(app, **cors_config)
@@ -62,30 +63,25 @@ def run_job():
         check_appointments()
 
 # Define job_scheduler function to run scheduled jobs continuously
-""" def job_scheduler():
+def job_scheduler():
     while True:
         schedule.run_pending()
         time.sleep(1)
 
-
 # Start the scheduler in a separate thread
 scheduler_thread = threading.Thread(target=job_scheduler)
-scheduler_thread.start() """
+scheduler_thread.start()
+
+@app.route("/", methods=["GET"], strict_slashes=False)
+def home():
+    """
+    Display the home page of the API.
+    """
+    return jsonify({"message": "Welcome to VitaSync core API v4.1.1"})
 
 
 
+# Run the Flask app in debug mode
 if __name__ == '__main__':
-    """Run the app in debug mode."""
-    # Schedule job to run at specific time daily
-    # Schedule job to run at specific time daily
-    """ schedule.every().day.at("16:00").do(run_job, app)
-    
-    # Start the job scheduler
-    
-    # Start the job scheduler
-    job_scheduler() """
-    
-    # Run the Flask app in debug mode
-    
-    # Run the Flask app in debug mode
-    app.run(debug=True, host=host, port=port)
+    with app.app_context():
+        app.run(debug=True, host=host, port=port)
