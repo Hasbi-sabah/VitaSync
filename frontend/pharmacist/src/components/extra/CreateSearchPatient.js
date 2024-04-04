@@ -2,7 +2,7 @@ import { useState } from "react";
 import CreateNewPatient from "../patient/CreateNewPatient";
 import Searchbox from "./Searchbox";
 
-const CreateSearchPatient = ({ setActiveQrScanner }) => {
+const CreateSearchPatient = ({ setActiveQrScanner, callSearch }) => {
   const [showAddPatient, setShowAddPatient] = useState(false);
   const handleOnClick = () => {
     setShowAddPatient(true);
@@ -35,9 +35,9 @@ const CreateSearchPatient = ({ setActiveQrScanner }) => {
         </span>
         <span className="pl-8">Scan QrCode</span>
       </button>
-        <Searchbox/>
-      </div>
-  )
-}
+      <Searchbox callSearch={callSearch} />
+    </div>
+  );
+};
 
 export default CreateSearchPatient;

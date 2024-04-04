@@ -6,6 +6,7 @@
     "@reduxjs/toolkit": "^2.2.1",
     "autoprefixer": "^10.4.19",
     "classnames": "^2.5.1",
+    "dotenv": "^16.4.5",
     "formik": "^2.4.5",
     "postcss": "^8.4.38",
     "react": "^18.2.0",

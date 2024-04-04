@@ -40,12 +40,12 @@ function App() {
     }
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
-      <Route index element={<Dashboard />} />
         {/* pulic routes*/}
         
         {/* private routes*/}
         <Route element={<RequireAuth />}>
+          <Route path="/" element={<Layout />}>
+          <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="contactHCW" element={<ContactHCW />} />
           <Route path="logout" element={<Logout />} />
