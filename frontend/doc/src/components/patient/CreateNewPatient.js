@@ -7,7 +7,7 @@ import ViewPatient from "./ViewPatient";
 
   const label_style = "lg:pl-2 text-lg sm:text-xl lg:text-lg lg:text-base font-medium lg:font-normal";
   const input_style =
-    "block rounded-xl text-black h-12 lg:h-7 w-[100%] lg:w-60 mt-1 lg:mt-0 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
+    "block rounded-xl text-black h-12 lg:h-10 w-[100%] lg:w-60 mt-1 lg:mt-0 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue";
   const button_style =
     "h-10 w-24 px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
@@ -106,7 +106,7 @@ import ViewPatient from "./ViewPatient";
           {label}
         </label>
         <input
-          className={`pl-5 ${input_style} ${
+          className={`p-5 ${input_style} ${
             meta.touched && meta.error ? "border border-red animate-shake" : ""
           }`}
           type="date"
