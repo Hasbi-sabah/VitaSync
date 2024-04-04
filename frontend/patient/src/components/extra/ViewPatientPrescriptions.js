@@ -1,6 +1,7 @@
 import React from "react";
 
 const ViewPatientPrescriptions = ({ data, handleClosePrescriptions }) => {
+  console.log('j', data)
   return (
     <div className="fixed inset-0 flex justify-center items-center backdrop-blur-sm backdrop-opacity-50 z-10 sm:mx-auto pt-24">
       <div className="bg-lightBlue2 rounded-lg mb-10 shadow-lg sm:p-6 z-20 overflow-auto pt-12 sm:max-w-screen sm:ml-56 lg:ml-64 relative">
@@ -37,10 +38,10 @@ const ViewPatientPrescriptions = ({ data, handleClosePrescriptions }) => {
                   data.drugs.map((item, idx) => (
                     <div className="table-row w-full h-8" key={idx}>
                       <div className="table-cell text-center p-2 sm:text-lg">
-                        {item.drug}
+                        {item.commercialName}
                       </div>
                       <div className="table-cell text-center p-2 sm:text-lg">
-                        {item.dosage}
+                        {item.intstructions}
                       </div>
                     </div>
                   ))}
