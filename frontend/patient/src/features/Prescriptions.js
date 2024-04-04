@@ -15,17 +15,19 @@ const Prescriptions = () => {
   const isMobile = useMediaQuery({ maxWidth: 640 });
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(isMobile ? 2 : 3);
-  const [view, setView] = useState(false);
 
   useEffect(() => {
     setPageSize(isMobile ? 2 : 3);
   }, [isMobile]);
 
+  // console.log("Base: ", prescriptions)
+    // FOCUS
   const latestPrescription = useMemo(() => {
     if (!prescriptions) return null;
     const sortedPrescriptions = prescriptions
        .filter(prescription => prescription.status === false)
        .sort((a, b) => new Date(b.created_at.replace(' at ', ' ')) - new Date(a.created_at.replace(' at ', ' ')));
+    console.log("Got here???")
     return sortedPrescriptions.length > 0 ? sortedPrescriptions[0] : null;
   }, [prescriptions]);
   const currentPageData = useMemo(() => {
@@ -42,21 +44,17 @@ const Prescriptions = () => {
     return p.slice(firstPageIndex, lastPageIndex);
  }, [currentPage, prescriptions, pageSize]);
 
-  const handleViewPrescriptions = useCallback(() => setView(true), []);
-  const handleClosePrescriptions = useCallback(() => setView(false), []);
 
   if (isLoading) {
     return <LoadingScreen />; 
  }
-console.log('n', latestPrescription)
+// console.log('CurrentPage', currentPageData)
+// console.log('n', latestPrescription)
   return (
     <div className="bg-gray mt-20 pb-12 sm:mt-24 lg:mt-32 mx-4">
-      <LatestPrescription 
+      {latestPrescription ? <LatestPrescription 
         latestPrescriptions={latestPrescription}
-        view={view}
-        handleViewPrescriptions={handleViewPrescriptions}
-        handleClosePrescriptions={handleClosePrescriptions}
-        />
+        /> : ""}
       <table className="w-full text-lg bg-white table-auto">
         <thead>
           <tr>
@@ -69,14 +67,12 @@ console.log('n', latestPrescription)
           </tr>
         </thead>
         <tbody className="">
+          {/* {console.log("H", currentPageData)} */}
           {currentPageData.map((prescribe, idx) => (
             <PrescriptionRecordItem
               sn={(currentPage - 1) * pageSize + idx + 1}
-              key={`${prescribe.prescribedForId} - ${prescribe.filledById}`}
+              key={prescribe.id}
               data={prescribe}
-              view={view}
-              handleViewPrescriptions={handleViewPrescriptions}
-              handleClosePrescriptions={handleClosePrescriptions}
             />
           ))}
         </tbody>
@@ -85,7 +81,7 @@ console.log('n', latestPrescription)
         <Pagination
           className={""}
           currentPage={currentPage}
-          totalCount={prescriptions.length}
+          totalCount={prescriptions?.length || 0}
           pageSize={pageSize}
           onPageChange={(page) => setCurrentPage(page)}
         />

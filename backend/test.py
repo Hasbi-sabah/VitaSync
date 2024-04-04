@@ -21,7 +21,7 @@ import random
 # nurse2 = HCW(firstName='Bob', lastName='Williams', role='nurse', username='nurse2', password='nurse2')
 # pharmacist1 = HCW(firstName='Eva', lastName='Davis', role='pharmacist', username='pharm1', password='pharm1')
 # pharmacist2 = HCW(firstName='Tom', lastName='Jones', role='pharmacist', username='pharm2', password='pharm2')
-admin = HCW(username='admin', password='admin', role='admin')
+# admin = HCW(username='admin', password='admin', role='admin')
 # patient3 = Patient(firstName='Charlie', lastName='Chaplin', sex='Male')
 # patient4 = Patient(firstName='Dorothy', lastName='Gale', sex='Female')
 # patient5 = Patient(firstName='Eddie', lastName='Murphy', sex='Male')

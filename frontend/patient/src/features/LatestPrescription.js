@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ViewPatientPrescriptions from "../components/extra/ViewPatientPrescriptions";
 import GenerateQRcode from "../components/extra/GenerateQRcode";
 import LoadingScreen from "../components/LoadingScreen";
@@ -7,12 +7,10 @@ import {useGetPrintPrescriptionByIdQuery} from './prescription/prescriptionApiSl
 
 const LatestPrescription = ({
   latestPrescriptions,
-  view,
-  handleViewPrescriptions,
-  handleClosePrescriptions,
 }) => {
   const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(latestPrescriptions.prescribedById)
   const { data: b, isLoading, error } = useGetPrintPrescriptionByIdQuery(latestPrescriptions.id);
+  const [view, setView] = useState(false);
 
  const handlePrintClick = () => {
     if (isLoading) {
@@ -74,14 +72,14 @@ const LatestPrescription = ({
             </h3>
             <span
               className="text-lg lg:text-sm text-blue hover:cursor-pointer"
-              onClick={handleViewPrescriptions}
+              onClick={() => setView(true)}
             >
               View
             </span>
             {view && (
               <ViewPatientPrescriptions
                 data={latestPrescriptions}
-                handleClosePrescriptions={handleClosePrescriptions}
+                handleClosePrescriptions={setView(false)}
               />
             )}
           </div>
