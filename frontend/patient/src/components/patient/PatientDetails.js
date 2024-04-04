@@ -108,7 +108,7 @@ const PatientDetails = ({ patientId }) => {
           </div>
           {isMobile && (location.pathname === "/dashboard") && <Caption />}
           <div className="bg-white rounded-3xl w-full min-h-10 mx-auto relative lg:w-[43rem] p-5">
-            <p className="text-2xl font-meduim text-left">Lastest Vitals</p>
+            <p className="text-2xl font-meduim text-left">Latest Vitals</p>
             <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 mt-5 text-left">
               {/* API call to get the vitals */}
               {created_at ? (
