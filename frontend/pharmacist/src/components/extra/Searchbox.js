@@ -86,7 +86,7 @@ export const LookUpDrug = ({ searchQuery }) => {
     );
 }
 
-const Searchbox = () => {
+const Searchbox = ({ callSearch }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [enterPressed, setEnterPressed] = useState(false);
 
@@ -137,6 +137,9 @@ const Searchbox = () => {
             </select>
             {enterPressed && (searchType === 'patient') && <LookUpPatient searchQuery={searchQuery} />}
             {enterPressed && (searchType === 'drug') && <LookUpDrug searchQuery={searchQuery} />}
+            {callSearch && (searchType === 'patient') && <LookUpPatient searchQuery={callSearch} />}
+            {callSearch && (searchType === 'drug') && <LookUpDrug searchQuery={callSearch} />}
+            
             {/* {console.log("Search comp", scannedId)} */}
             {/* {scannedId && <LookUp searchQuery={scannedId} />} */}
         </div>

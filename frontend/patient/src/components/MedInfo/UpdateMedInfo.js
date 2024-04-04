@@ -16,7 +16,7 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
           {label}
         </label>
         <input
-          className="h-12 p-5 block rounded-xl w-[23rem] mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
+          className="h-12 p-5 block rounded-xl w-full sm:w-[23rem] mt-1 bg-gray focus:outline-none focus:ring-2 focus:ring-lightBlue"
           {...field}
           {...props}
           disabled={!edit}
