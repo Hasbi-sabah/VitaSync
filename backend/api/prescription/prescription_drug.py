@@ -87,7 +87,7 @@ def get_all_prescription_drugs_extended(prescriptionId, current_user):
             for key in ['commercialName', 'dose', 'form', 'activeIngredient', 'price']:
                 drugDict[key] = getattr(drug.drug, key)
             res.append(drugDict)
-
+    print(res)
     # Return a JSON response containing a list of drugs in the prescription
     return jsonify(res)
 
