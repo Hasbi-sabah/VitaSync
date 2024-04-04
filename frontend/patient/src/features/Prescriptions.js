@@ -34,11 +34,9 @@ const Prescriptions = () => {
     if (!prescriptions) return [];
     const p = prescriptions
     ? prescriptions
-         .filter(prescription => prescription.status === false)
+          .map(prescription => ({ ...prescription }))
          .sort((a, b) => new Date(b.created_at.replace(' at ', ' ')) - new Date(a.created_at.replace(' at ', ' '))) : null
-    if (p && p.length > 0) {
-      p.shift();
-    }
+
     const firstPageIndex = (currentPage - 1) * pageSize;
     const lastPageIndex = firstPageIndex + pageSize;
     return p.slice(firstPageIndex, lastPageIndex);

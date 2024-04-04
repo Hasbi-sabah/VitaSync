@@ -172,6 +172,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           let promise = addProcedure({id: userId, data: proDict})
           .then((res) => {
             recDict['procedureId'] = res.data.id
+            console.log('procedure created')
           })
           .catch((error) => {
             alert(`Procedure reation failed: ${error.data.error}`);
@@ -189,7 +190,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
               prscDict['instructions'] = drug.instructions
               addPrescDrug({id: res.data.id, data: prscDict})
               .then(() => {
-                console.log('prsc done')
+                console.log('prescription created')
               })
             }
           })
@@ -199,7 +200,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           .then(() => {   
             addRecord({id: userId, data: recDict})
             .then(() => {
-              // alert('rec created yay')         
+              alert('rec created yay')         
               setSubmitting(false);
               resetForm();
               window.location.reload()

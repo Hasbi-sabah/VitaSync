@@ -9,7 +9,7 @@ const LatestPrescription = ({
   latestPrescription,
 }) => {
   const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(latestPrescription.prescribedById)
-  const { data: b, isLoading, error } = useGetPrintPrescriptionByIdQuery(latestPrescription.id);
+  const { data: prsc, isLoading, error } = useGetPrintPrescriptionByIdQuery(latestPrescription.id);
   const [view, setView] = useState(false);
 
  const handlePrintClick = () => {
@@ -22,15 +22,7 @@ const LatestPrescription = ({
       console.error('Error fetching prescription:', error);
       return;
     }
-    const url = URL.createObjectURL(b); // Create a URL for the Blob
-
-    // Optionally, create a link to download the PDF
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = 'filename.pdf'; // Set the filename for the download
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.print(prsc)
  };
   if (p) {
       return <LoadingScreen />; 

@@ -74,7 +74,8 @@ def notify(userId, flag, **data):
     if flag == 1:
         subject = "Registration Complete"
         img_base64 = base64.b64encode(make_qr(data['id']).getvalue()).decode('utf-8')
-        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}<img src="data:image/png;base64,{img_base64}" alt="QR Code"></body></html>'
+        print(img_base64)
+        html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>You have been registered successfully</p>Here are your login credentials:</p><strong>Username:</strong> {data["username"]}</p><strong>Password:</strong> {data["password"]}</p><img src="data:image/png;base64,{img_base64}" alt="QR Code"></body></html>'
     elif flag == 2:
         subject = "Appointment Confirmed"
         html_content = f'<html><head></head><body><p>Hello {data["name"]},</p>Your follow up appointment with Dr. {data["dr_name"]} has been successfully booked for {data["time"]}.</body></html>'
@@ -238,7 +239,7 @@ def print_prescription(id, current_user):
         return {"error": "You don't have permission to access this prescription"}, 403
 
     # Render the prescription details into HTML template
-    rendered_template = render_template(
+    return render_template(
         "file.html",
         prescription=prescription,
         patient=prescription.prescribedFor,
