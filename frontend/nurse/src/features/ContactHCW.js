@@ -57,8 +57,8 @@ const ContactHCW = () => {
         <h2 className="text-center text-2xl py-4 font-semibold">
           Find a healthcare worker
         </h2>
-        <form onSubmit={handleSumit} className="flex justify-evenly">
-          <select name="roles" onChange={handleFilterChange} className="min-w-48 min-h-12 text-center">
+        <form onSubmit={handleSumit} className="flex justify-evenly flex-wrap">
+          <select name="roles" onChange={handleFilterChange} className="lg:min-w-48 min-h-12 text-center">
           <option className="text-s" value="">
               Role: All
             </option>
@@ -68,7 +68,7 @@ const ContactHCW = () => {
               </option>
             ))}
           </select>
-          <select name="speciality" onChange={handleFilterChange} className="min-w-48 text-center">
+          <select name="speciality" onChange={handleFilterChange} className="lg:min-w-48 text-center">
             <option className="text-s" value="">
               Speciality: All
             </option>
