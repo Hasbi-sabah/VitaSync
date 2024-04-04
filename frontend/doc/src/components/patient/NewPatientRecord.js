@@ -196,6 +196,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           })
           promises.push(promise)
         }
+        if (promises.length > 0){
         Promise.all(promises)
           .then(() => {   
             addRecord({id: userId, data: recDict})
@@ -209,7 +210,7 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
           .catch((error) => {
             alert(`Initial request failed: ${error.data.error}`);
             setSubmitting(false);
-          })
+          })}
         
         if (values.followUp !== "") {
           const followUpDate = new Date(values.followUp);

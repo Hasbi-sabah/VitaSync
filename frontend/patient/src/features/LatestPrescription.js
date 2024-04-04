@@ -9,21 +9,26 @@ const LatestPrescription = ({
   latestPrescription,
 }) => {
   const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(latestPrescription.prescribedById)
-  const { data: prsc, isLoading, error } = useGetPrintPrescriptionByIdQuery(latestPrescription.id);
+  // const { data: prsc, isLoading, error } = useGetPrintPrescriptionByIdQuery(latestPrescription.id);
   const [view, setView] = useState(false);
-
- const handlePrintClick = () => {
-    if (isLoading) {
-      console.log('Loading...');
-      return;
-    }
-
-    if (error) {
-      console.error('Error fetching prescription:', error);
-      return;
-    }
-    window.print(prsc)
- };
+  const handlePrintClick = () => {
+    fetch(`/print_prescription/${latestPrescription.id}`, {
+      headers: {
+        Authorization: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMWEzNGQ0MzItY2VkMi00NjJhLTkzZmItMjYzNzU0NGYxOTQxIiwiaWF0IjoxNzEyMjIyMzY0LCJleHAiOjE3MTIzMDg3NjR9.vEgitgvJ1M9nsahMEVzLyJuHzGeSs41O87Y5tfl9nTU', // Add your access token here if needed
+      },
+    })
+      .then(response => response.blob())
+      .then(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'prescription.pdf';
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch(error => console.error('Error downloading prescription:', error));
+};
   if (p) {
       return <LoadingScreen />; 
   }
