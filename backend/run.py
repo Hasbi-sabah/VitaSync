@@ -39,14 +39,14 @@ app.register_blueprint(api)
 # as one link will take over
 cors_config = {
     "origins": [
-        "http://vitasync.me",
-        "https://vitasync.pagekite.me",
-        "https://api-vitasync.pagekite.me",
-        "https://doc-vitasync.pagekite.me",
-        "https://nurse-vitasync.pagekite.me",
-        "https://patient-vitasync.pagekite.me",
-        "https://pharmacy-vitasync.pagekite.me",
-        ],
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "http://localhost:3002",
+        "http://localhost:3003",
+        "http://localhost:3004",
+        "http://localhost:5000",
+    ],
+    
     "supports_credentials": True
 }
 CORS(app, **cors_config)
@@ -66,11 +66,11 @@ def run_job():
     while True:
         schedule.run_pending()
         time.sleep(1)
-"""
+
 
 # Start the scheduler in a separate thread
 scheduler_thread = threading.Thread(target=job_scheduler)
-scheduler_thread.start()
+scheduler_thread.start() """
 
 
 

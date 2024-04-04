@@ -13,8 +13,8 @@ from models.user import User
 import random
 
 
-# patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat', password='pat')
-# # patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient')
+patient1 = Patient(firstName='Bob', lastName='The Builder', sex='Male', email='bob.builder@example.com', role='patient', username='pat1', password='pat1')
+patient2 = Patient(firstName='Alice', lastName='Wonderland', sex='Female', email='alice.wonderland@example.com', role='patient', username='pat2', password='pat2')
 doc1 = HCW(firstName='John', lastName='Doe', username='doc1', password='doc1', role='doctor')
 doc2 = HCW(firstName='Jane', lastName='Smith', role='doctor', username='doc2', password='doc2')
 nurse1 = HCW(firstName='Alice', lastName='Johnson', role='nurse', username='nurse1', password='nurse1')
