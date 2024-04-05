@@ -2,15 +2,27 @@ import React, { useState } from "react";
 import ViewPatientRecord from "./ViewPatientRecord";
 import {useGetHcwByIdQuery } from "../../features/hcw/hcwApiSlice"
 
+/**
+ * Component representing a single record item in a table.
+ * 
+ * @param sn - Serial number of the record item.
+ * @param data - Data representing the record item.
+ * @returns - JSX element representing the record item.
+ */
 const RecordItem = ({ sn, data }) => {
   const { data: hcwInfo } = useGetHcwByIdQuery(data.assessedById || data.takenById)
   const bgColor = sn % 2 === 0 ? "bg-gray" : "";
   const [view, setView] = useState(false);
 
+  /**
+   * Handles the event when the user clicks to view the patient record.
+   * It sets the view state to true to display the record details.
+   */
   const handleViewRecord = () => setView(true);
+  // It sets the view state to false to display the record details
   const handleCloseRecord = () => {
     setView(false);
-    console.log("clicked")
+    // console.log("clicked")
   };
   return (
       <tr

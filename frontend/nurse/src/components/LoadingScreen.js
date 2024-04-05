@@ -1,5 +1,9 @@
 import React from 'react';
 
+/**
+ * Loading Screen Component
+ * @returns Loading screen component.
+ */
 const LoadingScreen = () => {
  return (
  <div className='flex space-x-2 justify-center items-center bg-blue-500 h-screen z-1000 backdrop-blur-md'>

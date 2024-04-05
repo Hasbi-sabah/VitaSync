@@ -79,21 +79,15 @@ const MyDateInput = ({ label, ...props }) => {
   );
 };
 
+/**
+ * Component for adding a new patient record.
+ * @param userId - The ID of the user for whom the record is being added.
+ * @param closeOverlay - Function to close the overlay.
+ * @returns- The component for adding a new patient record.
+ */
 const NewPatientRecord = ({ userId, closeOverlay }) => {
   // const [drugOptions, setDrugOptions] = useState([]);
   const [vaccineOptions, setVaccineOptions] = useState([]);
-
-  // // API calls
-  // const fetchDrugs = async () => {};
-  // const fetchVaccine = async () => {};
-
-  // useEffect(() => {
-  //   // Fetch drugs from API
-  //   fetchDrugs().then((data) => setDrugOptions(sampleDrugs));
-  //   fetchVaccine().then((data) => setVaccineOptions(sampleVaccines));
-  // }, []);
-
-
 
   const addDrugButton = ({ handleAddDrug }, type) => (
     <div
@@ -112,6 +106,8 @@ const NewPatientRecord = ({ userId, closeOverlay }) => {
       <p className="text-white text-lg pl-2">Add drug</p>
     </div>
  );
+
+ //API calls
   const [addAppt, { apptInfo }] = useAddPatientAppointmentByIdMutation()
   const [addRecord, { recInfo }] = useAddPatientRecordByIdMutation()
   const [addProcedure, { proInfo }] = useAddPatientProcedureByIdMutation()

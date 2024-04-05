@@ -4,6 +4,16 @@ import './pagination.css';
 import usePagination, { DOTS } from './usePagination';
 
 
+/**
+ * Pagination component for navigating through pages.
+ * @param onPageChange - Function to handle page change.
+ * @param totalCount - Total number of items.
+ * @param siblingCount - Number of siblings to display.
+ * @param currentPage - Current page number.
+ * @param pageSize - Number of items per page.
+ * @param props.className - Additional CSS classes.
+ * @returns - The JSX element representing the Pagination component.
+ */
 const Pagination = ({ 
     onPageChange, 
     totalCount, 
@@ -13,6 +23,7 @@ const Pagination = ({
     className,
 }) => {
 
+    // Generate pagination range
     const paginationRange = usePagination({
         currentPage, 
         totalCount, 
@@ -25,14 +36,17 @@ const Pagination = ({
         return null;
     };
 
+    // Handler for next page
     const onNext = () => {
         onPageChange(currentPage + 1);
     };
 
+    // Handler for previous page
     const onPrevious = () => {
         onPageChange(currentPage - 1);
     };
 
+    // Last page in pagination range
     let lastPage = paginationRange[paginationRange.length - 1];
 
   return (
@@ -72,6 +86,7 @@ const Pagination = ({
   );
 };
 
+// Default props
 Pagination.defaultProps ={
     siblingCount: 1,
     className: '',

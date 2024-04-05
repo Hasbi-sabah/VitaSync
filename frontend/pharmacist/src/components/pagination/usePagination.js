@@ -2,6 +2,14 @@ import React, { useMemo } from "react";
 
 export const DOTS = '';
 
+/**
+ * Custom hook to generate pagination range based on given parameters.
+ * @param totalCount - Total number of items.
+ * @param pageSize - Number of items per page.
+ * @param sibilingCount - Number of siblings to display.
+ * @param currentPage - Current page number.
+ * @returns - An array representing the pagination range.
+ */
 const usePagination = ({
   totalCount,
   pageSize,

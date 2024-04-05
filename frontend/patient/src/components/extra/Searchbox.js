@@ -1,5 +1,14 @@
 import { useState } from 'react';
 
+/**
+ * Searchbox Component
+ * 
+ * This component provides a search input field for looking up patient details.
+ * It allows users to enter a search query and triggers the LookUpPatient component
+ * when the Enter key is pressed.
+ * 
+ * @returns The search input field along with the LookUpPatient component if Enter key is pressed.
+ */
 const Searchbox = () => {
     const [searchQuery, setSearchQuery] = useState('');
 

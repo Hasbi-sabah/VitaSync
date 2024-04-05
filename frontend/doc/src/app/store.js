@@ -7,11 +7,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/auth/authSlice";
 
-    /**
-     * Defines the reducers used in the store.
-     * @property {Object} [apiSlice.reducerPath]: The reducer for the API slice.
-     * @property {Function} auth: The reducer for the authentication feature.
-     */
+/**
+ * Defines the reducers used in the store.
+ * @property {Object} [apiSlice.reducerPath]: The reducer for the API slice.
+ * @property {Function} auth: The reducer for the authentication feature.
+ */
 export const store = configureStore({
     /**
      * Configures the middleware for the store.

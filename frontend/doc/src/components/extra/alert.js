@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 
+/**
+ * Alert component.
+ * 
+ * This component displays an alert message with optional duration.
+ * 
+ * @param message - The message to be displayed in the alert.
+ * @param duration - The duration for which the alert should be visible (in milliseconds).
+ * @returnsThe JSX element representing the alert component.
+ */
 const Alert = ({ message, duration = 3000 }) => {
     const [visible, setVisible] = useState(true);
 

@@ -3,6 +3,18 @@ import ViewPatient from "./ViewPatient";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
+/**
+ * UserItem Component
+ * @param serId - The ID of the user.
+ * @param sn - Serial number of the user item.
+ * @param name - Name of the user.
+ * @param sex - Gender of the user.
+ * @param dob - Date of birth of the user.
+ * @param contact - Contact information of the user.
+ * @param date - Date related to the user.
+ * @param time - Time related to the user.
+ * @returns UserItem component.
+ */
 const UserItem = ({ userId, sn, name, sex, dob, contact, date, time }) => {
   const location = useLocation();
   const isDashboard = location.pathname === "/dashboard";

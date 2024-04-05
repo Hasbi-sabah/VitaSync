@@ -1,8 +1,3 @@
-import React from 'react'
-
-/**
- * Import React library.
- */
 import React from 'react';
 
 /**

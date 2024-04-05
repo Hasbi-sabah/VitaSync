@@ -4,6 +4,11 @@
  */
 import { apiSlice } from "../../app/api/apiSlice";
 
+/**
+ * Auth API slice.
+ * 
+ * This slice defines endpoints related to authentication, such as login.
+ */
 export const authApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         /**
@@ -24,10 +29,14 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
 });
 
-
 /**
  * Exports the login mutation hook for use in components.
  */
 export const {
+    /**
+     * Hook for performing login mutation.
+     * 
+     * @returns The login mutation hook.
+     */
     useLoginMutation
 } = authApiSlice;

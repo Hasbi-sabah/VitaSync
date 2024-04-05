@@ -4,6 +4,13 @@ import UserItem from "./UserItem";
 import { useMediaQuery } from "react-responsive";
 import { useLocation } from "react-router-dom";
 
+
+/**
+ * Component to display appointments with pagination.
+ * @param data - The array of appointment data to display.
+ * @param label - The label for the section.
+ * @returns - The component to display appointments.
+ */
 const DisplayAppointments = ({ data, label }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;

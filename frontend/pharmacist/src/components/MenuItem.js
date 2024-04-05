@@ -2,6 +2,11 @@ import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
 
+/**
+ * MenuItem Component
+ * @param label - The label for the menu item.
+ * @returns Menu item component.
+ */
 const MenuItem = ({ label }) => {
   const dashboardIcon = (
     <svg

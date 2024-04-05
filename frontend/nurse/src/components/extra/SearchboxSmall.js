@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import {useMediaQuery} from 'react-responsive';
 
+/**
+ * Component for a small search box to search for drugs.
+ */
 const SearchBoxSmall = () => {
     const [searchQuery, setSearchQuery] = useState('');
 

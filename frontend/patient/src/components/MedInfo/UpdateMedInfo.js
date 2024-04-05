@@ -4,10 +4,19 @@ import { useAddPatientMedInfoByIdMutation } from '../../features/medInfo/medInfo
 import * as Yup from "yup";
 
 const label_style = "pl-2 text-l font-normal";
-
+/**
+ * Component for updating medical information of a patient.
+ * @param edit - Flag indicating whether the component is in edit mode.
+ * @param setFunction - Function to set the state of the edit mode.
+ * @param medInfo - Object containing the medical information.
+ * @param userId - The ID of the user.
+ * @returns - The JSX element representing the component.
+ */
 const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
-  //<input>
+  //API call
   const [addPatientMedInfoByIdMutation, { data: responseData, loading, error }] = useAddPatientMedInfoByIdMutation();
+  
+  // Custom input field component
   const TextInput = ({ label, ...props }) => {
     const [field] = useField(props);
     return (

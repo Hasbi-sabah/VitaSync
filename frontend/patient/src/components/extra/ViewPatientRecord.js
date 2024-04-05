@@ -4,6 +4,12 @@ import LoadingScreen from "../LoadingScreen";
 import PatientDetailsRecord from './PatientDetailsRecord';
 import PatientDetailsVital from './PatientVitalsRecord';
 
+/**
+ * Component to view patient records.
+ * @param data - The data of the patient record.
+ * @param handleCloseRecord - Function to handle closing the record view.
+ * @returns - The JSX element representing the component.
+ */
 const ViewPatientRecord = ({ data, handleCloseRecord}) => {
   const { data: prscData, isLoading} = useGetPrescriptionByIdQuery(
     data.prescriptionId
