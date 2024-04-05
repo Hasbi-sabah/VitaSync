@@ -1,5 +1,14 @@
+ /**
+ * Import the apiSlice from the app's API configuration.
+ */
 import { apiSlice } from "../../app/api/apiSlice";
 
+/**
+ * Define the vitalApiSlice by injecting endpoints for various vital-related operations.
+ * This includes fetching patient vitals by ID, adding patient vitals, deleting vitals,
+ * fetching vitals by ID, and updating vitals by ID.
+ * @returns {Object} The vitalApiSlice object with defined endpoints.
+ */
 export const vitalApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getPatientVitalById: builder.query({
@@ -37,6 +46,10 @@ export const vitalApiSlice = apiSlice.injectEndpoints({
     }),
 });
 
+/**
+ * Export hooks generated from the vitalApiSlice for use in components.
+ * These hooks allow components to interact with the API endpoints defined above.
+ */
 export const {
     useGetPatientVitalByIdQuery,
     useAddPatientVitalByIdMutation,

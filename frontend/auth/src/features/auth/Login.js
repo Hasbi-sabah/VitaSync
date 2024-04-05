@@ -11,6 +11,12 @@ const input_style =
 const button_style =
   "h-10 w-[100%] px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
+/**
+ * Custom text input component for the login form.
+ * This component uses Formik's useField hook for form state management and validation.
+ * @param {Object} props - The props object containing label and other input attributes.
+ * @returns {JSX.Element} The rendered text input field with validation and error handling.
+ */
 const MyTextInput = ({ label, ...props }) => {
   const [field, meta] = useField(props);
   return (
@@ -52,14 +58,14 @@ const Login = () => {
   const nurseLink = process.env.REACT_APP_NUR_URL;
   const patientLink = process.env.REACT_APP_PAT_URL;
   const pharmacyLink = process.env.REACT_APP_PHA_URL;
-
+  
   /**
-   * Handles redirection after successful login.
-   * 
-   * @param userId - The ID of the logged-in user.
-   * @param role - The role of the logged-in user.
-   * @param token - The authentication token of the logged-in user.
-   * @param username - The username of the logged-in user.
+   * Handles the redirection of the user after successful login based on their role.
+   * @param {string} userId - The ID of the logged-in user.
+   * @param {string} role - The role of the logged-in user.
+   * @param {string} token - The authentication token for the logged-in user.
+   * @param {string} username - The username of the logged-in user.
+   * @returns {null} This function does not return anything. It performs a side effect of redirecting the user.
    */
   const handleRedirect = (userId, role, token, username) => {
     const params = `token=${token}&role=${role}&id=${userId}&username=${username}`;

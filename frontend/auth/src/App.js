@@ -3,11 +3,8 @@ import Public from './components/Public';
 import Login from './features/auth/Login';
 
 /**
- * The main component of the application.
- * 
- * This component represents the root of the application's UI hierarchy.
- * It defines the routing configuration using React Router's <Routes> and <Route> components.
- * 
+ * Main application component that sets up routing for the application.
+ * This component uses React Router to define public and private routes.
  */
 function App() {
   return (

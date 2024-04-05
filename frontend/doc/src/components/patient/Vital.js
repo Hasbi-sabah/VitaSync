@@ -1,11 +1,13 @@
-import React from 'react'
+import React from 'react';
 
 /**
- * Vital Component
- * @param Vitalreading - The reading value of the vital.
- * @param vitalName - The name of the vital.
- * @param currentDate - The date of the vital reading.
- * @returns Vital component to display vital information.
+ * Vital component displays vital readings, vital name, and current date.
+ * It checks if the Vitalreading includes 'undefined' to avoid rendering undefined values.
+ * @param {Object} props - The props object.
+ * @param {string} props.Vitalreading - The vital reading value.
+ * @param {string} props.vitalName - The name of the vital.
+ * @param {string} props.currentDate - The current date.
+ * @returns {JSX.Element} The Vital component.
  */
 const Vital = ({ Vitalreading, vitalName, currentDate }) => {
   if (!Vitalreading.includes('undefined')) {

@@ -1,3 +1,8 @@
+/**
+ * Redux store configuration for the application.
+ * This store is configured with the Redux Toolkit's configureStore function,
+ * including the apiSlice and authReducer.
+ */
 import { configureStore } from "@reduxjs/toolkit";
 import { apiSlice } from "./api/apiSlice";
 import authReducer from "../features/auth/authSlice";

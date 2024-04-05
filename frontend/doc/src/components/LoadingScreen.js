@@ -1,8 +1,13 @@
+/**
+ * Imports React for creating the LoadingScreen component.
+ * @module LoadingScreen
+ */
 import React from 'react';
 
 /**
- * Loading Screen Component
- * @returns Loading screen component.
+ * Renders a loading screen with animated bouncing circles.
+ * @function
+ * @returns {JSX.Element} The JSX element representing the loading screen.
  */
 const LoadingScreen = () => {
  return (
@@ -15,4 +20,8 @@ const LoadingScreen = () => {
  );
 };
 
+/**
+ * Exports the LoadingScreen component.
+ * @exports LoadingScreen
+ */
 export default LoadingScreen;

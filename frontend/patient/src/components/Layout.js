@@ -3,8 +3,8 @@ import SideMenu from "../features/SideMenu";
 import Header from "../features/Header";
 
 /**
- * Layout Component
- * @returns Main layout component.
+ * Layout component that renders the main layout of the application.
+ * It includes a SideMenu, Header, and an Outlet for nested routes.
  */
 const Layout = () => {
     return (
@@ -18,4 +18,4 @@ const Layout = () => {
       );
 }
 
-export default Layout
+export default Layout;

@@ -13,17 +13,17 @@ pids=()
 # Function to start React apps
 start_apps() {
   echo "Starting React apps..."
-  cd "$auth_app" && npm start &
+  cd "$auth_app" && npm start | grep -v "Compiled successfully" &
   pids+=($!)
-  cd "$doc_app" && npm start &
+  echo "Auth app started on port 3000"
   pids+=($!)
-  cd "$nurse_app" && npm start &
+  echo "Doc app started on port 3001"
   pids+=($!)
-  cd "$patient_app" && npm start &
+  echo "Nurse app started on port 3002"
   pids+=($!)
-  cd "$pharmacy_app" && npm start &
+  echo "Patient app started on port 3003"
   pids+=($!)
-}
+  echo "Pharmacy app started on port 3004"
 
 # Function to stop all background processes
 stop_processes() {
@@ -34,13 +34,12 @@ stop_processes() {
   exit 0
 }
 
-# Trap SIGINT signal (Ctrl+C) and call stop_processes function
-trap stop_processes SIGINT
+trap stop_processes SIGINT SIGQUIT
 
 # Main function
 main() {
   start_apps
-  # Wait for SIGINT signal (Ctrl+C)
+  # Wait for SIGINT or SIGQUIT signal (Ctrl+C or Ctrl+D)
   wait
 }
 

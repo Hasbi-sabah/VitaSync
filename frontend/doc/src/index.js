@@ -1,3 +1,4 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
@@ -7,10 +8,8 @@ import { store } from './app/store';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 /**
- * Root component rendering the application.
- * 
- * This component renders the entire application within the specified DOM element.
- * 
+ * Renders the main App component wrapped in Redux Provider and BrowserRouter.
+ * This setup allows the application to use Redux for state management and React Router for routing.
  */
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

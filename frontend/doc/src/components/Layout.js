@@ -1,10 +1,12 @@
+
 import { Outlet } from "react-router-dom";
 import SideMenu from "../features/SideMenu";
 import Header from "../features/Header";
 
 /**
- * Layout Component
- * @returns Main layout component.
+ * Layout component that renders the main layout of the application.
+ * It includes a side menu, a header, and an outlet for child routes.
+ * @returns {JSX.Element} The layout component.
  */
 const Layout = () => {
     return (

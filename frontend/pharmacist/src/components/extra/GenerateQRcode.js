@@ -1,14 +1,31 @@
 import React, { useEffect, useState } from "react";
 
+/**
+ * GenerateQRcode component generates and displays a QR code.
+ * This component uses React's useState and useEffect hooks to manage the QR code state and fetch the QR code image.
+ * @returns {JSX.Element} The rendered GenerateQRcode component, including a button to generate the QR code and the QR code image if generated.
+ */
 const GenerateQRcode = () => {
+    /**
+      * State to store the URL of the generated QR code image.
+      * Initialized to an empty string, indicating no QR code has been generated yet.
+      */
     const url = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Example'
     const [qrCode, setQRCode] = useState("");
+    /**
+      * Asynchronous function to fetch the QR code image from an external API.
+      * This function is called when the user clicks the button to generate the QR code.
+      */
     const fetchImage = async () => {
         const res = await fetch(url);
         const blob = await res.blob();
         const qrCodeURL = URL.createObjectURL(blob);
         setQRCode(qrCodeURL);
       };
+    /**
+      * Render the GenerateQRcode component.
+      * It includes a button to generate the QR code and an image element to display the QR code if it has been generated.
+      */
     
   return (
     <div className="mx-auto my-5 relative bg-white width min-h-16 pb-5 w-96">
