@@ -55,6 +55,11 @@ const MyDateInput = ({ label, ...props }) => {
   );
 };
 
+/**
+ * Component for adding a new patient record.
+ * @param closeOverlay - Function to close the overlay.
+ * @returns- The component for adding a new patient record.
+ */
 const NewPatientRecord = ({ closeOverlay }) => {
   useEffect(() => {
     // Fetch patient's record from API
