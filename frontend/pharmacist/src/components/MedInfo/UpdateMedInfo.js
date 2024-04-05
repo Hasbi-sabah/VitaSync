@@ -5,9 +5,19 @@ import * as Yup from "yup";
 
 const label_style = "pl-2 text-l font-normal";
 
+/**
+ * Component for updating medical information of a patient.
+ * @param edit - Flag indicating whether the component is in edit mode.
+ * @param setFunction - Function to set the state of the edit mode.
+ * @param medInfo - Object containing the medical information.
+ * @param userId - The ID of the user.
+ * @returns - The JSX element representing the component.
+ */
 const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
-  //<input>
+  //API call
   const [addPatientMedInfoByIdMutation, { data: responseData, loading, error }] = useAddPatientMedInfoByIdMutation();
+
+  // Custom input field component
   const TextInput = ({ label, ...props }) => {
     const [field] = useField(props);
     return (
@@ -37,7 +47,7 @@ const UpdateMedInfo = ({ edit, setFunction, medInfo, userId }) => {
       onSubmit={(values, { setSubmitting, resetForm }) => {
         addPatientMedInfoByIdMutation([userId, values]);
         medInfo.value = values[medInfo.label]
-        console.log(medInfo.value)
+        // console.log(medInfo.value)
         // alert(JSON.stringify(values, null, 2));
         setFunction(false)
         setSubmitting(false);
