@@ -1,5 +1,12 @@
 import React from 'react'
 
+/**
+ * Vital Component
+ * @param Vitalreading - The reading value of the vital.
+ * @param vitalName - The name of the vital.
+ * @param currentDate - The date of the vital reading.
+ * @returns Vital component to display vital information.
+ */
 const Vital = ({ Vitalreading, vitalName, currentDate }) => {
   if (!Vitalreading.includes('undefined')) {
     return (
