@@ -6,12 +6,14 @@ import { useGetPatientVitalByIdQuery } from '../../features/vital/vitalApiSlice'
 import { useGetPatientMedInfoByIdQuery, useAddPatientMedInfoByIdMutation } from '../../features/medInfo/medInfoApiSlice';
 import RecordVitals from "./RecordVitals";
 import LoadingScreen from '../../components/LoadingScreen';
+import { useMediaQuery } from 'react-responsive';
 
 const PatientDetails = ({ userId, closeOverlay }) => {
   const { data: patientInfo, isLoading: isPatientInfoLoading } = useGetPatientByIdQuery(userId);
   const { data: patientMedInfo, isLoading: isPatientMedInfoLoading } = useGetPatientMedInfoByIdQuery(userId);
   const { data: reqVitals, isLoading: isVitalsLoading } = useGetPatientVitalByIdQuery(userId);
 
+   const isMobile = useMediaQuery({ maxWidth: 400 });
   // Initialize state with an empty object to avoid undefined errors
   const [medDetails, setMedDetails] = useState({});
 
@@ -105,8 +107,8 @@ const PatientDetails = ({ userId, closeOverlay }) => {
 
     return (
       <div className="w-full">
-        <div className="flex flex-col justify-center flex-wrap items-center pl-7 lg:flex-row gap-11">
-          <div className="bg-white rounded-3xl relative mx-0 sm:mx-2 p-3 sm:p-5">
+        <div className="flex flex-col justify-center flex-wrap items-center lg:flex-row gap-11 w-full">
+          <div className="bg-white rounded-3xl relative w-[90%] sm:w-[26rem] mx-0 sm:mx-2 p-3 sm:p-5">
             <div className="">
               <h2 className="text-3xl pb-5 font-semibold text-center">
                 {firstName ? firstName : ""} {lastName ? lastName : ""}
@@ -121,7 +123,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
                 </p>
               </div>
             </div>
-            <div className="relative w-[23rem] text-left pt-3">
+            <div className="relative w-full sm:w-[23rem] text-left pt-3">
               <UpdateMedInfo
                 edit={editAllergies}
                 setFunction={setEditAllergies}
@@ -130,7 +132,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               />
               {editButton("allergies")}
             </div>
-            <div className="relative w-[23rem] text-left pt-3">
+            <div className="relative w-full sm:w-[23rem] text-left pt-3">
               <UpdateMedInfo
                 edit={editConditions}
                 setFunction={setEditConditions}
@@ -139,7 +141,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
               />
               {editButton("conditions")}
             </div>
-            <div className="relative w-[23rem] text-left pt-3">
+            <div className="relative w-full sm:w-[23rem] text-left pt-3">
               <UpdateMedInfo
                 edit={editNote}
                 setFunction={setEditNote}
@@ -200,7 +202,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
                   >
                     <path d="M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z"></path>
                   </svg>
-                  <p className="text-white text-lg pl-2">Record Vitals</p>
+                  {!isMobile && <p className="text-white text-lg pl-2">Record Vitals</p>}
                 </div>
             </div>
           </div>
