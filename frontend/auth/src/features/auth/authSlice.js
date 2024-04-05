@@ -1,6 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 
+/**
+ * Exports the actions from the auth slice.
+ */
 const authSlice = createSlice({
     name: "auth",
     initialState: {
@@ -30,10 +33,31 @@ const authSlice = createSlice({
     },
 });
 
+        /**
+ * Exports the actions from the auth slice.
+ */
 export const { setCredentials, logOut } = authSlice.actions;
 
+        /**
+ * Exports the reducer from the auth slice.
+ */
 export default authSlice.reducer;
 
+        /**
+ * Selector for getting the current user role from the Redux store.
+ * @param {Object} state - The current state of the Redux store.
+ * @returns {string|null} The role of the current user, or null if not logged in.
+ */
 export const selectCurrentRole = (state) => state.auth.role;
+        /**
+ * Selector for getting the current user token from the Redux store.
+ * @param {Object} state - The current state of the Redux store.
+ * @returns {string|null} The token of the current user, or null if not logged in.
+ */
 export const selectCurrentToken = (state) => state.auth.token;
+        /**
+ * Selector for getting the current user ID from the Redux store.
+ * @param {Object} state - The current state of the Redux store.
+ * @returns {string|null} The ID of the current user, or null if not logged in.
+ */
 export const selectCurrentUserId = (state) => state.auth.userId;

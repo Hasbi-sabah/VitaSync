@@ -2,6 +2,10 @@ import { Route, Routes } from 'react-router-dom';
 import Public from './components/Public';
 import Login from './features/auth/Login';
 
+/**
+ * Main application component that sets up routing for the application.
+ * This component uses React Router to define public and private routes.
+ */
 function App() {
   return (
     <Routes>
