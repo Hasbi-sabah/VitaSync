@@ -2,12 +2,29 @@ import { useState } from "react";
 import CreateNewPatient from "../patient/CreateNewPatient";
 import Searchbox from "./Searchbox";
 
+/**
+ * Component for creating and searching patients.
+ * 
+ * This component provides functionality to add a new patient,
+ * search for existing patients, and scan QR codes for patient
+ * identification.
+ * 
+ * @param setActiveQrScanner - Function to set the active state of the QR scanner.
+ * @returns The JSX element representing the component.
+ */
 const CreateSearchPatient = ({ setActiveQrScanner }) => {
   const [showAddPatient, setShowAddPatient] = useState(false);
+
+  /**
+   * Handles the click event for adding a new patient.
+   */
   const handleOnClick = () => {
     setShowAddPatient(true);
   };
 
+  /**
+   * Closes the overlay for adding a new patient.
+   */
   const closeOverlay = () => {
     setShowAddPatient(false);
   };
