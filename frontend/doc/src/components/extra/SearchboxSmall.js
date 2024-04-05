@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useDrugLookUpQuery } from '../../features/drug/drugApiSlice';
 
 
+/**
+ * Component to look up drug information based on a search query.
+ * @param searchQuery - The search query for the drug.
+ * @param setDrugOptions - Function to set the drug options based on the search results.
+ * @returns - The JSX element representing the component.
+ */
 const LookUpDrug = ({ searchQuery, setDrugOptions }) => {
     const { data: drugInfo, isLoading, isError } = useDrugLookUpQuery({'name': searchQuery});
 
@@ -14,6 +20,15 @@ const LookUpDrug = ({ searchQuery, setDrugOptions }) => {
     return null
 }
 
+/**
+ * Component for a small search box to search for drugs.
+ * @param key - The key for React rendering.
+ * @param setDrugOptions - Function to set the drug options based on the search results.
+ * @param setSearchListVisible - Function to set the visibility of the search list.
+ * @param searchValue - The current value of the search input.
+ * @param setSearchValue - Function to set the value of the search input.
+ * @returns - The JSX element representing the component.
+ */
 const SearchBoxSmall = ({ key, setDrugOptions, setSearchListVisible, searchValue, setSearchValue}) => {
 
     const handleInputChange = (event) => {
