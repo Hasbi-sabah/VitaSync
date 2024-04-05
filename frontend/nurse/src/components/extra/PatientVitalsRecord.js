@@ -1,9 +1,16 @@
 import React from "react";
 import Vital from "../patient/Vital";
 
+/**
+ * Component to display patient vital details.
+ * 
+ * This component fetches and displays patient vital details including
+ * temperature, blood pressure, heart rate, weight, height, blood glucose, and notes.
+ * 
+ * @param {Object} data - Patient vital data.
+ * @returns {JSX.Element} The JSX element representing the component.
+ */
 const PatientDetailsVital = ({ data }) => {
-  // API call for vitals
-//   console.log("Details", data)
   const { created_at, temp, bp, bpm, weight, height, glucose, notes } = data;
 
   return (
