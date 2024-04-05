@@ -3,7 +3,7 @@ import React from 'react';
 /**
  * LoadingScreen component displays a loading animation.
  * This component is used to indicate that some data is being loaded.
- * @returns {JSX.Element} The rendered LoadingScreen component.
+ * @returns The rendered LoadingScreen component.
  */
 const LoadingScreen = () => {
  return (
