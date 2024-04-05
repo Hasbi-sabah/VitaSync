@@ -2,6 +2,10 @@ import { Outlet } from "react-router-dom";
 import SideMenu from "../features/SideMenu";
 import Header from "../features/Header";
 
+/**
+ * Layout Component
+ * @returns Main layout component.
+ */
 const Layout = () => {
     return (
         <main className='App bg-gray min-h-screen flex'>
