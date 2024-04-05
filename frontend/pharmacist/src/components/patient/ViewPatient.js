@@ -2,7 +2,12 @@ import React, { useState } from "react";
 import PatientDetails from "./PatientDetails";
 import Records from "../../features/Records";
 
-// API call for patient record
+/**
+ * ViewPatient Component
+ * @param userId - The ID of the user.
+ * @param closeOverlay - Function to close the overlay.
+ * @returns ViewPatient component.
+ */
 const ViewPatient = ({ userId, closeOverlay }) => {
   const [showHistory, setShowHistory] = useState(false);
 

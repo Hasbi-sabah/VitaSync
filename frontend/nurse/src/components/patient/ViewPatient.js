@@ -4,7 +4,14 @@ import Records from "../../features/Records";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectPinnedIds } from '../../features/auth/authSlice'
 import {addPinnedId, removePinnedId} from "../../features/auth/authSlice"
-// API call for patient record
+
+
+/**
+ * ViewPatient Component
+ * @param userId - The ID of the user.
+ * @param closeOverlay - Function to close the overlay.
+ * @returns ViewPatient component.
+ */
 const ViewPatient = ({ userId, closeOverlay }) => {
   const [showHistory, setShowHistory] = useState(false);
 
