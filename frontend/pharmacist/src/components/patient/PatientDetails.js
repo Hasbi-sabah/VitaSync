@@ -8,16 +8,27 @@ import RecordVitals from "./RecordVitals";
 import LoadingScreen from '../../components/LoadingScreen';
 import { useMediaQuery } from 'react-responsive';
 
+/**
+ * PatientDetails Component
+ * @param userId - The ID of the patient.
+ * @param closeOverlay - Function to close the overlay.
+ * @returns PatientDetails component.
+ */
 const PatientDetails = ({ userId, closeOverlay }) => {
+  // Fetch patient details
   const { data: patientInfo, isLoading: isPatientInfoLoading } = useGetPatientByIdQuery(userId);
   const { data: patientMedInfo, isLoading: isPatientMedInfoLoading } = useGetPatientMedInfoByIdQuery(userId);
   const { data: reqVitals, isLoading: isVitalsLoading } = useGetPatientVitalByIdQuery(userId);
 
+  // Check if screen size is mobile
    const isMobile = useMediaQuery({ maxWidth: 400 });
+
   // Initialize state with an empty object to avoid undefined errors
   const [medDetails, setMedDetails] = useState({});
 
   const [isLoading, setIsLoading] = useState(true); // Initialize isLoading to true
+
+  // Calculate age based on birth date
   useEffect(() => {
     if (patientInfo && patientMedInfo) {
       const calculateAge = (dob) => {
@@ -41,18 +52,14 @@ const PatientDetails = ({ userId, closeOverlay }) => {
       setMedDetails(reqPatientDetails);
     }
   }, [patientInfo, patientMedInfo]);
+
+  // Set loading state when data is fetched
   useEffect(() => {
     if (!isPatientInfoLoading || !isPatientMedInfoLoading || !isVitalsLoading) {
       setIsLoading(false)
     }}, [isPatientInfoLoading, isPatientMedInfoLoading, isVitalsLoading]);
 
-  // const [addPatientMedInfoById] = useAddPatientMedInfoByIdMutation();
-
-  // useEffect(() => {
-  //   if (medDetails.medicalInfo) {
-  //     addPatientMedInfoById({ variables: { userId, medInfo: medDetails.medicalInfo } });
-  //   }
-  // }, [medDetails, addPatientMedInfoById, userId]);
+  // Destructure medical details
   const { medicalInfo, firstName, lastName, phoneNumber, sex, age } = medDetails;
   const { allergies, conditions, notes } = medicalInfo || {};
   const currentDate = new Date();
@@ -105,6 +112,7 @@ const PatientDetails = ({ userId, closeOverlay }) => {
     console.log(sortedVitals)
     const { created_at, temp, bp, bpm, weight, height, glucose, note } = sortedVitals.length > 0 ? sortedVitals[0] : {};
 
+    // Render patient details
     return (
       <div className="w-full">
         <div className="flex flex-col justify-center flex-wrap items-center lg:flex-row gap-11 w-full">
