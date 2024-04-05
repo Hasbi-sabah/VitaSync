@@ -9,14 +9,14 @@ const authLink = process.env.REACT_APP_AUTH_URL;
 const Logout = () => {
   const dispatch = useDispatch(); // Initializing dispatch function using useDispatch hook
 
-  // Function to handle logout
-  const handleLogOut = () => {
-    dispatch(logOut()); // Dispatching the logout action
-    window.location.href = `${authLink}/login`; // Redirecting user to login page after logout
-  };
-
   // Effect hook to trigger logout on component mount
   useEffect(() => {
+    // Function to handle logout
+    const handleLogOut = () => {
+      dispatch(logOut()); // Dispatching the logout action
+      window.location.href = `${authLink}/login`; // Redirecting user to login page after logout
+    };
+
     handleLogOut(); // Calling handleLogOut function when component mounts
   }, [dispatch]); // Dependency array with dispatch as the only dependency
 
@@ -24,4 +24,3 @@ const Logout = () => {
 };
 
 export default Logout; // Exporting the Logout component
-
