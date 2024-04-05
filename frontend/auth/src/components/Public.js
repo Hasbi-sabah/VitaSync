@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
 
+/**
+ * Public component for displaying public pages.
+ * This component includes a header, main content area, and footer.
+ * It is used for pages that do not require user authentication.
+ */
 const Public = () => {
     const dummy = (
         <section className="m-0 p-0 relative bg-gray">
@@ -19,4 +24,7 @@ const Public = () => {
     return dummy;
 };
 
+/**
+ * Exports the Public component.
+ */
 export default Public;
