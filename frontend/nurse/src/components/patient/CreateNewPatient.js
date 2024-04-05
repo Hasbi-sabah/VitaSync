@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { Form, Formik, useField } from "formik";
 import { useAddPatientMutation } from "../../features/patient/patientApiSlice";
@@ -11,7 +11,13 @@ import ViewPatient from "./ViewPatient";
   const button_style =
     "h-10 w-24 px-4 py-2 text-lg rounded-md shadow-md focus:outline-none focus:ring focus:ring-gray-400";
 
-  //<input>
+/**
+ * The text input component for forms.
+ * @param label - The label for the input.
+ * @param rows - The number of rows for the textarea (optional).
+ * @param props - The props object.
+ * @returns - The text input component.
+ */
   export const MyTextInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     return (
@@ -33,7 +39,13 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
-  //<Textbox>
+/**
+ * The text input component for forms.
+ * @param label - The label for the input.
+ * @param rows - The number of rows for the textarea (optional).
+ * @param props - The props object.
+ * @returns - The text input component.
+ */
   export const MyTextBoxInput = ({ label, rows = 3, ...props }) => {
     const [field, meta] = useField(props);
     return (
@@ -57,7 +69,11 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
-  // checkbox
+  /**
+ * The checkbox input component for forms.
+ * @param props - The props object.
+ * @returns - The checkbox input component.
+ */
   export const MyCheckBox = ({ children, ...props }) => {
     const [field, meta] = useField({ ...props, type: "checkbox" });
     return (
@@ -80,7 +96,12 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
-  // Select
+/**
+ * The select input component for forms.
+ * @param props - The props object.
+ * @param props.label - The label for the select input.
+ * @returns- The select input component.
+ */
   export const MySelect = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     return (
@@ -96,7 +117,12 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
-  //Date
+/**
+ * The select input component for forms.
+ * @param props - The props object.
+ * @param props.label - The label for the select input.
+ * @returns- The select input component.
+ */
   const MyDateInput = ({ label, ...props }) => {
     const [field, meta] = useField(props);
     const currentDateTime = new Date().toISOString().substring(0, 10);
@@ -121,6 +147,13 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
+/**
+ * The sign-up form component.
+ * @param {Object} props - The props object.
+ * @param {Function} props.closeOverlay - The function to close the overlay.
+ * @param {Function} props.setPatientId - The function to set the patient ID.
+ * @returns {JSX.Element} - The sign-up form component.
+ */
   const SignUpForm = ({ closeOverlay, setPatientId }) => {
     const [addPatient, { isLoading, isError, error }] = useAddPatientMutation();
     const [key, setKey] = useState(0); // Keep this for forcing re-render
@@ -254,6 +287,11 @@ import ViewPatient from "./ViewPatient";
     );
   };
 
+/**
+ * The component to create a new patient account.
+ * @param closeOverlay - The function to close the overlay.
+ * @returns - The component to create a new patient account.
+ */
   const CreateNewPatient = ({ closeOverlay }) => {
     const [patientId, setPatientId] = useState(null);
    
