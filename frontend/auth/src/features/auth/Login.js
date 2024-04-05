@@ -33,6 +33,11 @@ const MyTextInput = ({ label, ...props }) => {
   );
 };
 
+/**
+ * Component for user login.
+ * 
+ * This component provides a login form for users to authenticate.
+ */
 const Login = () => {
   const errRef = useRef();
   const [errMsg, setErrMsg] = useState("");
@@ -41,11 +46,21 @@ const Login = () => {
 
   const [login] = useLoginMutation();
 
+  // Environment variable links
   const authLink = process.env.REACT_APP_AUTH_URL;
   const docLink = process.env.REACT_APP_DOC_URL;
   const nurseLink = process.env.REACT_APP_NUR_URL;
   const patientLink = process.env.REACT_APP_PAT_URL;
   const pharmacyLink = process.env.REACT_APP_PHA_URL;
+
+  /**
+   * Handles redirection after successful login.
+   * 
+   * @param userId - The ID of the logged-in user.
+   * @param role - The role of the logged-in user.
+   * @param token - The authentication token of the logged-in user.
+   * @param username - The username of the logged-in user.
+   */
   const handleRedirect = (userId, role, token, username) => {
     const params = `token=${token}&role=${role}&id=${userId}&username=${username}`;
     setIsLoading(false);
@@ -60,7 +75,8 @@ const Login = () => {
     else window.location.href = `${authLink}/dashboard?${params}`;
     return null;
   }
-  
+
+  // Render loading screen if loading
   if (isLoading) {
     return <LoadingScreen />;
   }
