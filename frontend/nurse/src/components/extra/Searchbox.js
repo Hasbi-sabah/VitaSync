@@ -3,8 +3,16 @@ import { useGetPatientByIdQuery } from '../../features/patient/patientApiSlice'
 import ViewPatient from "../patient/ViewPatient";
 import LoadingScreen from '../../components/LoadingScreen';
 
-
-
+/**
+ * LookUpPatient Component
+ * 
+ * This component allows for looking up patient details based on the provided search query.
+ * It fetches patient information using the useGetPatientByIdQuery hook and displays the patient details
+ * if found. If the patient is not found or if there's an error, it shows an alert message.
+ * 
+ * @param searchQuery - The search string used to look up the patient.
+ * @returns The ViewPatient component if patient details are found, otherwise null.
+ */
 export const LookUpPatient = ({ searchQuery }) => {
     const { data: patientInfo, isLoading, isError, error } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
@@ -32,6 +40,15 @@ export const LookUpPatient = ({ searchQuery }) => {
       );
 }
 
+/**
+ * LookUpDrug Component
+ * 
+ * This component is similar to LookUpPatient but is intended for looking up drug details
+ * based on the provided search query.
+ * 
+ * @param searchQuery - The search string used to look up the drug.
+ * @returns The ViewPatient component if drug details are found, otherwise null.
+ */
 export const LookUpDrug = ({ searchQuery }) => {
     const { data: patientInfo, isLoading, isError, error } = useGetPatientByIdQuery(searchQuery);
     const [showPatientDetails, setShowPatientDetails] = useState(false);
@@ -65,6 +82,15 @@ export const LookUpDrug = ({ searchQuery }) => {
       ) : null;
 }
 
+/**
+ * Searchbox Component
+ * 
+ * This component provides a search input field for looking up patient details.
+ * It allows users to enter a search query and triggers the LookUpPatient component
+ * when the Enter key is pressed.
+ * 
+ * @returns The search input field along with the LookUpPatient component if Enter key is pressed.
+ */
 const Searchbox = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [enterPressed, setEnterPressed] = useState(false);
