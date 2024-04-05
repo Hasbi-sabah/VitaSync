@@ -1,10 +1,27 @@
 import React from "react";
 
+/**
+ * Component to display a profile card with contact information.
+ * 
+ * @param name - The name of the profile owner.
+ * @param speciality - The specialty of the profile owner.
+ * @param workNumber - The work phone number of the profile owner.
+ * @param workAddress - The work address of the profile owner.
+ * @returns The JSX element representing the component.
+ */
 const ProfileCard = ({ name, speciality, workNumber, workAddress }) => {
+  /**
+   * Handles the click event for the work phone number.
+   * It redirects the user to the phone dialer with the work number pre-filled.
+   */
     const handlePhoneClick = () => {
         window.location.href = `tel:${workNumber}`;
     };
 
+  /**
+   * Handles the click event for the work address.
+   * It opens a new tab with Google Maps showing the work address.
+   */
     const handleAddressClick = () => {
         window.open(`https://www.google.com/maps?q=${encodeURIComponent(workAddress)}`);
     }
