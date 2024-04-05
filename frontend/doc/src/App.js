@@ -8,6 +8,14 @@ import { setCredentials } from './features/auth/authSlice';
 import Logout from './components/Logout';
 
 const authLink = process.env.REACT_APP_AUTH_URL;
+
+/**
+ * Main component of the application.
+ * 
+ * This component handles authentication, sets user credentials, and defines routing.
+ * 
+ * @returns The JSX element representing the main application component.
+ */
 function App() {
   const dispatch = useDispatch()
   const re_routeLogin = () => {
@@ -15,10 +23,13 @@ function App() {
     return null;
   };
 
+  // Extract token, user ID, and role from URL parameters
   const urlParams = new URLSearchParams(window.location.search);
   const token = urlParams.get("token");
   const userId = urlParams.get("id");
   const role = urlParams.get("role");
+
+  // Set user credentials if present in URL parameters, otherwise from local storage
   if (token && userId && role) {
     dispatch(
       setCredentials({
