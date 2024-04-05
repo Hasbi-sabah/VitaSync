@@ -1,5 +1,8 @@
 import { apiSlice } from "../../app/api/apiSlice";
 
+/**
+ * patientApiSlice provides API endpoints for managing patient data.
+ */
 export const patientApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         /**
