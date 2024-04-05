@@ -1,8 +1,15 @@
+
 import React, { useEffect } from 'react';
 import MediaQuery from 'react-responsive';
 import { useGetHcwByIdQuery } from './hcw/hcwApiSlice';
 import logo from '../inverted_logo.jpg';
 
+/**
+ * Header component displays the header of the application.
+ * It fetches HCW information based on an ID stored in localStorage.
+ * It uses MediaQuery to adjust the layout for mobile devices.
+ * @returns {JSX.Element} The Header component.
+ */
 const Header = () => {
   const { data: hcwInfo, isLoading } = useGetHcwByIdQuery(localStorage.getItem("id"));
   const isMobile = MediaQuery({ maxWidth:640 })
