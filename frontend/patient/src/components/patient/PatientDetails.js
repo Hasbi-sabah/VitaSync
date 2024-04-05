@@ -54,6 +54,7 @@ const PatientDetails = ({ patientId }) => {
 
 
   const isMobile = useMediaQuery({maxWidth:640});
+  const isDesktop = useMediaQuery({minWidth:1500});
 
   const location = useLocation()
   if (patientInfo && medicalInfo && reqVitals){
@@ -70,8 +71,8 @@ const PatientDetails = ({ patientId }) => {
     console.log(patientInfo)
     const { created_at, temp, bp, bpm, weight, height, glucose, note } = sortedVitals.length > 0 ? sortedVitals[0] : {};
     return (
-      <div className="w-screen sm:w-[100%]">
-        <div className="flex flex-col lg:flex-row justify-evenly pl-10 sm:items-center lg:items-baseline">
+      <div className="w-screen sm:w-full">
+        <div className={`flex ${isDesktop ? 'flex-row items-baseline' : 'flex-col items-center' }  gap-10 justify-evenly lg:pl-10`}>
           <div className="bg-white rounded-3xl relative mx-4 sm:mx-2 sm:w-[26rem] p-3 sm:p-5 px-8">
             <div className="">
               <h2 className="text-3xl font-semibold text-center">
