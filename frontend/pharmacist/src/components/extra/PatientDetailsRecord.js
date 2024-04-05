@@ -44,7 +44,7 @@ const PatientDetailsRecord = ({ data, prscData }) => {
             <button
                 className="bg-blue hover:bg-blue-700 text-white font-bold h-10 px-4 mr-20 rounded"
                 onClick={sendRequest}
-                disabled={data.status || requestSent || isSendingRequest}
+                disabled={prscData.status || requestSent || isSendingRequest}
               >
                 {prscData.status || requestSent ? "Filled" : "Mark as filled"}
               </button>
