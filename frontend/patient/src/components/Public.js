@@ -1,5 +1,9 @@
 import { Link } from "react-router-dom";
 
+/**
+ * Public component that renders a public-facing page with a header and footer.
+ * It includes a login link in the header and a placeholder main section.
+ */
 const Public = () => {
     const dummy = (
         <section className="m-0 p-0 relative bg-gray">
