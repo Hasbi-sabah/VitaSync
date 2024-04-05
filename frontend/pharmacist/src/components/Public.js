@@ -1,10 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link } from "react-router-dom"; // Importing Link component from react-router-dom
 
+// Public component
 const Public = () => {
+    // Dummy content for the public page
     const dummy = (
         <section className="m-0 p-0 relative bg-gray">
             <header className="fixed top-0 left-0 h-20 w-full items-center flex bg-lightBlue text-white">
                 <span className="ml-auto pr-10 text-lg">
+                    {/* Link to login page */}
                     <Link to="/login">Login</Link>
                 </span>
             </header>
@@ -16,7 +19,7 @@ const Public = () => {
             </footer>
         </section>
     );
-    return dummy;
+    return dummy; // Returning the dummy content
 };
 
-export default Public;
+export default Public; // Exporting the Public component
