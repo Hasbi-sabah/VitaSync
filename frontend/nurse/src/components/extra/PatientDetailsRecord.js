@@ -1,13 +1,24 @@
 import React, { useState } from "react";
-import { useGetPrescriptionByIdQuery } from "../../features/prescription/prescriptionApiSlice";
 import LoadingScreen from "../LoadingScreen";
 import { useGetProcedurePerformeddByIdMutation } from "../../features/procedure/procedureApiSlice";
 import { useGetHcwByIdQuery } from "../../features/hcw/hcwApiSlice";
 import { useGetDrugPrescriptionExtendedByIdQuery } from "../../features/prescription/prescriptionApiSlice";
 
+/**
+ * Component to display patient details and records.
+ * 
+ * This component fetches and displays patient prescription details,
+ * diagnosis, notes, procedures, and vaccine records.
+ * 
+ * @param data - Patient data including prescription details.
+ * @param prscData - Prescription data associated with the patient.
+ * @returns The JSX element representing the component.
+ */
 const PatientDetailsRecord = ({ data, prscData }) => {
   const filledById = prscData?.filledById || "";
   const prescribedById = prscData?.prescribedById || "";
+  
+  // API Querys
   const { data: filledByInfo, isLoading: f } = useGetHcwByIdQuery(filledById);
   const { data: prescribedByInfo, isLoading: p } = useGetHcwByIdQuery(prescribedById);
   const [sendProcedureRequest, { isLoading: isSendingRequest }] =
@@ -15,6 +26,9 @@ const PatientDetailsRecord = ({ data, prscData }) => {
   const [requestSent, setRequestSent] = useState(false);
 
 
+  /**
+   * Sends a request to mark the procedure as performed.
+   */
   const sendRequest = () => {
     if (!data.status && !requestSent) {
       sendProcedureRequest(data.id)
